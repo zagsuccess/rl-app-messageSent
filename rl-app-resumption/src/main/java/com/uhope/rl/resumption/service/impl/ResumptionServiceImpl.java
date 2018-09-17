@@ -55,7 +55,6 @@ public class ResumptionServiceImpl implements ResumptionService {
         params.put("regionId", regionId);
         params.put("endTime",endTime);
         params.put("intervalMonths", intervalMonths);
-//        params.put("type", type);
         params.put("regionGrade",currentGrade);
         return resumptionMapper.findPersonPatrolNum(params);
     }

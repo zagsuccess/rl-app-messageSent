@@ -8,6 +8,7 @@ import com.uhope.bulletin.dto.BulletinDTO;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * @author: StivenYang
@@ -17,6 +18,7 @@ import java.text.ParseException;
 public interface BulletinService extends Service<Bulletin, BulletinDTO, String> {
     /**
      * 模糊查询列表
+     *
      * @param pageNumber
      * @param pageSize
      * @param type
@@ -30,12 +32,14 @@ public interface BulletinService extends Service<Bulletin, BulletinDTO, String> 
 
     /**
      * 根据id删除暗查暗访记录
+     *
      * @param id
      */
     public void delete(@RequestParam Integer id);
 
     /**
      * 查看暗查暗访记录详情
+     *
      * @param id
      * @return
      */
@@ -43,9 +47,11 @@ public interface BulletinService extends Service<Bulletin, BulletinDTO, String> 
 
     /**
      * 首页展示
+     *
      * @param type
      * @return
      */
-    public Bulletin selectByFirst(@RequestParam Integer type);
+    public List<Bulletin> selectByFirst(@RequestParam Integer type);
+
 
 }

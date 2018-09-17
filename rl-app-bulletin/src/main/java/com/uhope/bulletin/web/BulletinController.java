@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
+
 
 /**
  * @author: StivenYang
@@ -32,17 +35,14 @@ public class BulletinController {
     private FileManagerClient fileManagerClient;
 
 
-
-    @GetMapping("/search")
+    @GetMapping("/list")
     public Result<PageInfo<Bulletin>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                            @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
-                                           @RequestParam(defaultValue = "")Integer type,
-                                           @RequestParam(defaultValue = "")String year,
-                                           @RequestParam(defaultValue = "")String month) throws ParseException {
-        return ResponseMsgUtil.success(bulletinService.list(pageNumber,pageSize,type,year,month));
+                                           Integer type,
+                                           String year,
+                                           String month) throws ParseException {
+        return ResponseMsgUtil.success(bulletinService.list(pageNumber, pageSize, type, year, month));
     }
-
-
 
 
     @PostMapping("/add")
@@ -51,16 +51,11 @@ public class BulletinController {
                                 @RequestParam String detail,
                                 @RequestParam String postTime,
                                 @RequestParam String month,
-                                @RequestParam String year,
+                                @RequestParam(defaultValue = "") String year,
                                 @RequestParam String issuer,
-                                @RequestParam (value= "file", required = false)MultipartFile file,
-                                @RequestParam (defaultValue = "")String fileName) throws Exception{
-        Bulletin bulletin=new Bulletin();
-        if (file!=null){
-            byte[] data=file.getBytes();
-            Result<FileItem> files=fileManagerClient.upload(data,fileName);
-            bulletin.setAttandUrl(files.getData().getVirtualPath());
-        }
+                                @RequestParam(defaultValue = "") String attandUrl) {
+        Bulletin bulletin = new Bulletin();
+        bulletin.setAttandUrl(attandUrl);
         bulletin.setDetail(detail);
         bulletin.setPostTime(postTime);
         bulletin.setTitle(title);
@@ -85,14 +80,16 @@ public class BulletinController {
                                    @RequestParam String title,
                                    @RequestParam String issuer,
                                    @RequestParam String postTime,
-                                   @RequestParam String year,
+                                   @RequestParam(defaultValue = "") String year,
                                    @RequestParam String month,
-                                   @RequestParam String detail
-                                   ){
-        Bulletin bulletin=new Bulletin();
+                                   @RequestParam String detail,
+                                   @RequestParam(defaultValue = "") String attandUrl
+    ) {
+        Bulletin bulletin = new Bulletin();
         bulletin.setTitle(title);
         bulletin.setType(type);
         bulletin.setId(id);
+        bulletin.setAttandUrl(attandUrl);
         bulletin.setIssuer(issuer);
         bulletin.setPostTime(postTime);
         bulletin.setYear(year);
@@ -103,25 +100,15 @@ public class BulletinController {
     }
 
     @PostMapping("/upload")
-    public Result<Bulletin> upload(@RequestParam Integer id,
-                                   @RequestParam MultipartFile file,
-                                   @RequestParam String fileName){
-        return null;
-
-    }
-
-    @PostMapping("/updateFile")
-    public Result<Bulletin> updateFile(@RequestParam Integer id,
-                                       @RequestParam (required = false)MultipartFile file,
-                                       @RequestParam (defaultValue = "")String fileName) throws IOException {
-        Bulletin bulletin = new Bulletin();
+    public Result<FileItem> upload(
+            @RequestParam MultipartFile file,
+            @RequestParam String fileName) throws IOException {
         byte[] data = file.getBytes();
         Result<FileItem> files = fileManagerClient.upload(data, fileName);
-        bulletin.setAttandUrl(files.getData().getVirtualPath());
-        bulletin.setId(id);
-        bulletinService.update(bulletin);
-        return ResponseMsgUtil.success(bulletinService.findBy("attandUrl", bulletin.getAttandUrl()));
+        files.getData().setUrl(URLDecoder.decode(files.getData().getUrl()));
+        return files;
     }
+
 
     @GetMapping("/detail")
     public Result<Bulletin> detail(@RequestParam Integer id) {
@@ -130,9 +117,9 @@ public class BulletinController {
     }
 
     @GetMapping("/selectByFirst")
-    public Result<Bulletin> selectByFirst(@RequestParam Integer  type) {
-        Bulletin bulletin = bulletinService.selectByFirst(type);
-        return ResponseMsgUtil.success(bulletin);
+    public List<Bulletin> selectByFirst(@RequestParam(defaultValue = "") Integer type) {
+
+        return bulletinService.selectByFirst(type);
     }
 
 }
