@@ -27,12 +27,14 @@ public class BulletinServiceImpl extends AbstractService<Bulletin, BulletinDTO, 
     @Override
     public PageInfo<Bulletin> list(Integer pageNumber, Integer pageSize, Integer type, String year, String month) throws ParseException {
         PageHelper.startPage(pageNumber, pageSize);
-        Example example = new Example(Bulletin.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andLike("type","%"+type+"%");
-        criteria.andLike("year","%"+year+"%");
-        criteria.andLike("month","%"+month+"%");
-        List<Bulletin> list = bulletinMapper.selectByCondition(example);
+        List<Bulletin> list = null;
+        if (year != null) {
+            year = "%" + year + "%";
+        }
+        if (month != null) {
+            month = "%" + month + "%";
+        }
+        list = bulletinMapper.selectshujihui(type, year, month);
         PageInfo<Bulletin> pageInfo = new PageInfo(list);
         return pageInfo;
     }
@@ -49,8 +51,8 @@ public class BulletinServiceImpl extends AbstractService<Bulletin, BulletinDTO, 
     }
 
     @Override
-    public Bulletin selectByFirst(Integer type) {
-        Bulletin bulletin = bulletinMapper.selectByFirst(type);
+    public List<Bulletin> selectByFirst(Integer type) {
+        List<Bulletin>bulletin = bulletinMapper.selectByFirst(type);
         return bulletin;
     }
 
