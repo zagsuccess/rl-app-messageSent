@@ -55,12 +55,12 @@
                     WHERE 1=1
                     <if test="startTime != null">
                         <![CDATA[
-                     AND   mlc.`CREATETIME` >= #{startTime}
+                     AND   mlc.`CREATETIME` >= CONCAT(#{startTime},' 00:00:00')
                     ]]>
                     </if>
                     <if test="endTime != null">
                         <![CDATA[
-                     AND   mlc.`CREATETIME` <= #{endTime}
+                     AND   mlc.`CREATETIME` <= CONCAT(#{endTime},' 23:59:59')
                     ]]>
                     </if>
                     GROUP BY mlc.REACHID

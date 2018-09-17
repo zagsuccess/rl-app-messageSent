@@ -38,9 +38,9 @@ public class ResumptionServiceImpl implements ResumptionService {
     @Override
     public List<ReachPatrolNumStatisticDTO> findReachHadPatrolNumStatistic(Integer type,String regionId,String startTime, String endTime, Integer currentGrade,Integer pageNumber,Integer pageSize) {
         Map<String,Object> params = new HashMap<>(2);
-        params.put("startTime", DateUtil.StringToDate(startTime, "yyyy-MM-dd HH:mm:ss"));
+        params.put("startTime", startTime);
         params.put("regionId", regionId);
-        params.put("endTime",DateUtil.StringToDate(endTime, "yyyy-MM-dd HH:mm:ss"));
+        params.put("endTime",endTime);
         params.put("start", (pageNumber-1)*pageSize);
         params.put("pageSize", pageSize);
         params.put("type", type);
