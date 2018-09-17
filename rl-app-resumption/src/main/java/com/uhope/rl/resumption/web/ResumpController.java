@@ -18,11 +18,13 @@ import com.uhope.uip.dto.UserDTO;
 import com.uhope.uip.service.RoleService;
 import com.uhope.uip.service.TokenService;
 import com.uhope.uip.service.UserService;
+import org.apache.catalina.core.ApplicationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.rmi.CORBA.Util;
 import javax.servlet.http.HttpServletRequest;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -75,7 +77,7 @@ public class ResumpController {
             statTime = DateUtil.getDate(startTimeDate);
             endTime = DateUtil.getDate(endTimeDate);
         }
-        int intervalMonths=Math.abs(DateUtil.getIntervalMonths(statTime, endTime));
+        int intervalMonths=DateUtil.getIntervalDays(statTime, endTime)/30+1;
 
         //获取当前用户信息
         UserDTO userDTO = getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
@@ -130,7 +132,6 @@ public class ResumpController {
         //设置type预留字段
         list = setType(list, type);
 
-        request.setAttribute("grade", grade);
         PageInfo pageInfo = new PageInfo(list);
         return ResponseMsgUtil.success(pageInfo);
     }
@@ -226,7 +227,7 @@ public class ResumpController {
                 needNum = item.getVillageNeedPatrolNum();
                 item.setVillageNonePatrolNum(needNum-hadNum);
                 d = hadNum/(double)needNum;
-                item.setVillagePatrolRate(hadNum==0?0.0:Double.valueOf(df.format(d)));
+                item.setVillagePatrolRate(hadNum==0||needNum==0?0.0:Double.valueOf(df.format(d)));
             }
             if(grade<=4){
                 //设置镇级达标率
@@ -234,7 +235,7 @@ public class ResumpController {
                 needNum = item.getTownNeedPatrolNum();
                 item.setTownNonePatrolNum(needNum-hadNum);
                 d = hadNum/(double)needNum;
-                item.setTownPatrolRate(hadNum==0?0.0:Double.valueOf(df.format(d)));
+                item.setTownPatrolRate(hadNum==0||needNum==0?0.0:Double.valueOf(df.format(d)));
             }
             if (grade<=3){
                 //设置区级达标率
@@ -242,7 +243,7 @@ public class ResumpController {
                 hadNum = item.getCountyHasPatrolNum();
                 item.setCountyNonePatrolNum(needNum - hadNum);
                 d = hadNum / (double) needNum;
-                item.setCountyPatrolRate(hadNum == 0 ? 0.0 : Double.valueOf(df.format(d)));
+                item.setCountyPatrolRate(hadNum == 0 ||needNum==0? 0.0 : Double.valueOf(df.format(d)));
             }
         }
 

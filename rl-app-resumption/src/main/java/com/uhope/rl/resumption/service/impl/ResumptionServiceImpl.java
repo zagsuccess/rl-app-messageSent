@@ -4,6 +4,7 @@ import com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO;
 import com.uhope.rl.resumption.dto.statistics.ReachmanPatrolNumStatisticDTO;
 import com.uhope.rl.resumption.mapper.ResumptionMapper;
 import com.uhope.rl.resumption.service.ResumptionService;
+import com.uhope.rl.resumption.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,9 +38,9 @@ public class ResumptionServiceImpl implements ResumptionService {
     @Override
     public List<ReachPatrolNumStatisticDTO> findReachHadPatrolNumStatistic(Integer type,String regionId,String startTime, String endTime, Integer currentGrade,Integer pageNumber,Integer pageSize) {
         Map<String,Object> params = new HashMap<>(2);
-        params.put("startTime",startTime);
+        params.put("startTime", DateUtil.StringToDate(startTime, "yyyy-MM-dd HH:mm:ss"));
         params.put("regionId", regionId);
-        params.put("endTime",endTime);
+        params.put("endTime",DateUtil.StringToDate(endTime, "yyyy-MM-dd HH:mm:ss"));
         params.put("start", (pageNumber-1)*pageSize);
         params.put("pageSize", pageSize);
         params.put("type", type);
