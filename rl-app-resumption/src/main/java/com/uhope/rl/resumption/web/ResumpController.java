@@ -1,31 +1,26 @@
 package com.uhope.rl.resumption.web;
 
 import com.github.pagehelper.PageInfo;
-import com.netflix.discovery.converters.Auto;
 import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
 import com.uhope.rl.application.basicdata.dto.AdministrativeRegionDTO;
 import com.uhope.rl.application.basicdata.services.AdministrativeRegionService;
 import com.uhope.rl.resumption.dto.statistics.ProblemStatisticDTO;
+import com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO;
 import com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO;
 import com.uhope.rl.resumption.dto.statistics.ReachmanPatrolNumStatisticDTO;
 import com.uhope.rl.resumption.service.ResumptionService;
-import com.uhope.rl.resumption.utils.DateThis;
+import com.uhope.rl.resumption.utils.CommonUtil;
 import com.uhope.rl.resumption.utils.DateUtil;
 import com.uhope.rl.resumption.utils.TimeUtil;
-import com.uhope.uip.dto.RoleDTO;
 import com.uhope.uip.dto.UserDTO;
-import com.uhope.uip.service.RoleService;
 import com.uhope.uip.service.TokenService;
-import com.uhope.uip.service.UserService;
-import org.apache.catalina.core.ApplicationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.rmi.CORBA.Util;
 import javax.servlet.http.HttpServletRequest;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -189,16 +184,50 @@ public class ResumpController {
     }
 
     @GetMapping("/listProblemStatistic")
-    public Result<PageInfo<ProblemStatisticDTO>> listProblemStatistic(
+    public Result<List<ProblemStatisticDTO>> listProblemStatistic(
             HttpServletRequest request
-            ,@RequestParam(name = "regionId") String regionId
             ,@RequestParam(name = "startTime", required = false) String statTime
             ,@RequestParam(name = "endTime", required = false) String endTime
-            ,@RequestParam(name = "regionId") String eventSource
+            ,@RequestParam(name = "eventSource", required = false) String eventSource
     ){
-        //查询所有的分类列表
-        //将分类列表对应的值赋值到返回list中
-        return null;
+        //获取当前用户信息
+        UserDTO userDTO = getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
+        if(userDTO == null ){
+            return ResponseMsgUtil.failure("获取用户失败");
+        }
+
+        List<ProblemStatisticDTO> list = resumptionService.findAllRegionProblemStatistic(userDTO.getRegionId().toString());
+        //获取用户的regionId并解析其河长级别
+        //regionid 对应的结构为：22233  省，市，区，镇，村
+        //默认是村级
+        int grade = 0;
+        if(userDTO.getRegionId()%(1000*1000*100*100)==0){
+            //省级
+            grade=1;
+        }else if(userDTO.getRegionId()%(1000*1000*100)==0){
+            //市级
+            grade=2;
+            for (int i=0; i<list.size(); i++){
+                String regionId = list.get(i).getRegionId();
+                list.get(i).setList(resumptionService.findRegionTypeNumStatistic(regionId, grade, statTime, endTime));
+            }
+        }else if(userDTO.getRegionId()%(1000*1000)==0){
+            //区级
+            grade=3;
+            for (int i=0; i<list.size(); i++){
+                String regionId = list.get(i).getRegionId();
+                list.get(i).setList(resumptionService.findRegionTypeNumStatistic(regionId, grade, statTime, endTime));
+            }
+        }else if(userDTO.getRegionId()%(1000)==0){
+            //镇级
+            grade=4;
+            for (int i=0; i<list.size(); i++){
+                String regionId = list.get(i).getRegionId();
+                list.get(i).setList(resumptionService.findRegionTypeNumStatistic(regionId, grade, statTime, endTime));
+            }
+        }
+
+        return ResponseMsgUtil.success(list);
     }
 
     private List<ReachPatrolNumStatisticDTO> setType(List<ReachPatrolNumStatisticDTO> list, Integer type){
@@ -321,5 +350,17 @@ public class ResumpController {
             }
         }
         return targetList;
+    }
+
+    @GetMapping("/test")
+    public Result<Object> test(){
+
+        //获取所有的区
+        List<ProblemStatisticDTO> list = resumptionService.findAllRegionProblemStatistic( "120114000000");
+        for (int i=0; i<list.size(); i++){
+            String regionId = list.get(i).getRegionId();
+            list.get(i).setList(resumptionService.findRegionTypeNumStatistic(regionId, 3, null, null));
+        }
+        return ResponseMsgUtil.success(list);
     }
 }

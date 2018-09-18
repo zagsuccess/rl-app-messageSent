@@ -1,5 +1,7 @@
 package com.uhope.rl.resumption.service.impl;
 
+import com.uhope.rl.resumption.dto.statistics.ProblemStatisticDTO;
+import com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO;
 import com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO;
 import com.uhope.rl.resumption.dto.statistics.ReachmanPatrolNumStatisticDTO;
 import com.uhope.rl.resumption.mapper.ResumptionMapper;
@@ -57,5 +59,22 @@ public class ResumptionServiceImpl implements ResumptionService {
         params.put("intervalMonths", intervalMonths);
         params.put("regionGrade",currentGrade);
         return resumptionMapper.findPersonPatrolNum(params);
+    }
+
+    @Override
+    public List<ProblemTypeStatisticDTO> findRegionTypeNumStatistic(String regionId, int grade, String startTime, String endTime) {
+        Map<String, Object> params = new HashMap<>(2);
+        params.put("regionId", regionId);
+        params.put("grade", grade+1);
+        params.put("startTime", startTime);
+        params.put("endTime", endTime);
+        return resumptionMapper.findRegionNumStatistic(params);
+    }
+
+    @Override
+    public List<ProblemStatisticDTO> findAllRegionProblemStatistic(String parentId) {
+        Map<String, Object> params = new HashMap<>(2);
+        params.put("parentId", parentId);
+        return resumptionMapper.findAllRegionNumStatistic(params);
     }
 }

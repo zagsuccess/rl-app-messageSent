@@ -1,5 +1,7 @@
 package com.uhope.rl.resumption.service;
 
+import com.uhope.rl.resumption.dto.statistics.ProblemStatisticDTO;
+import com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO;
 import com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO;
 import com.uhope.rl.resumption.dto.statistics.ReachmanPatrolNumStatisticDTO;
 
@@ -35,4 +37,16 @@ public interface ResumptionService {
      * @return
      */
     List<ReachmanPatrolNumStatisticDTO> findPersonPatrolNum(Integer intervalMonths, String parentRegionId, String startTime, String endTime, Integer currentGrade);
+
+    /**
+     * 根据regionId查询区域下面的所有二级分类的统计信息
+     * @param regionId
+     * @return
+     */
+    List<ProblemTypeStatisticDTO> findRegionTypeNumStatistic(String regionId, int grade, String startTime, String endTime);
+
+    /**
+     * 获取所有的区并返回需要的对象
+     */
+    List<ProblemStatisticDTO> findAllRegionProblemStatistic(String parentId);
 }

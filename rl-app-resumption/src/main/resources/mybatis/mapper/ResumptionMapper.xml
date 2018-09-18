@@ -21,10 +21,7 @@
                 (
                     SELECT  su.`region_id` as region_code,mrcm.`CHAIRMANLEVEL`,mrcm.`chairman_role`
                     FROM sm_user su,md_reachchairman mrcm
-                    WHERE su.`id` = mrcm.`chairmanid` AND mrcm.CHAIRMANLEVEL=
-                    <if test="regionGrade == 3">3</if>
-                    <if test="regionGrade == 4">4</if>
-                    <if test="regionGrade == 5">5</if>
+                    WHERE su.`id` = mrcm.`chairmanid` AND mrcm.CHAIRMANLEVEL=#{regionGrade}
                 )t_rm
             LEFT JOIN am_check_standard achs ON t_rm.CHAIRMANLEVEL = achs.roleLevel AND t_rm.chairman_role = achs.roleId
             GROUP BY t_rm.region_code
@@ -66,10 +63,7 @@
                     GROUP BY mlc.REACHID
                 )t_n
                 LEFT JOIN md_reach mr ON mr.id=t_n.REACHID
-                WHERE mr.grade=
-                <if test="regionGrade == 3">3</if>
-                <if test="regionGrade == 4">4</if>
-                <if test="regionGrade == 5">5</if>
+                WHERE mr.grade=#{regionGrade}
             )t_rn GROUP BY regionStr
         )t_ro ON t_ro.regionStr=mar.area_code WHERE mar.grade=3
         <if test="regionId != null">
@@ -116,7 +110,94 @@
     )t_all
     WHERE regionStr=#{regionId};
     </select>
-    <select id="getTypelist" parameterType="java.util.Map" resultType="com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO">
 
+    <select id="findRegionNumStatistic" parameterType="java.util.Map" resultType="com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO">
+    SELECT t_b.areaCode as regionId, t_b.typeName as typeName, IFNULL(t_c.zaiban,0) as unfinishedNum, IFNULL(t_c.yiban,0) as finishedNum
+    from
+    (
+        select mar.area_name as areaName, et.typename as typeName, et.id as typeId, mar.id as areaCode
+        from eh_type et
+        LEFT JOIN md_administrative_region mar on 1=1
+        where et.type_level=2 and mar.grade=#{grade}
+    )t_b LEFT JOIN
+    (
+        SELECT t_d.zaiban,t_e.yiban,t_d.areaCode,t_d.typeId
+        FROM
+        (
+            SELECT t_a.type,t_a.typeId,t_a.areaCode,count(0) as zaiban  from
+            (
+                    select t_r.status,t_l.typeId,t_r.type,t_l.areaCode
+                    from
+                    (
+                        select et.id as typeId, mar.id as areaCode
+                        from eh_type et
+                        LEFT JOIN md_administrative_region mar on 1=1
+                        where et.type_level=2 and mar.grade=#{grade}
+                    )t_l
+                    LEFT JOIN
+                    (
+                        select ee.type, ee.eventresource, ee.status, ee.createtime,
+                        <if test="grade==3">CONCAT(LEFT(su.region_id,6),'000000')</if>
+                        <if test="grade==4">CONCAT(LEFT(su.region_id,9),'000')</if>
+                        <if test="grade==5">su.region_id</if>
+                         AS region_id
+                        from eh_event ee, sm_user su
+                        where ee.REPORTPERSONID=su.id
+                        <if test="startTime != null">
+                            <![CDATA[
+                             AND   ee.`CREATETIME` >= CONCAT(#{startTime},' 00:00:00')
+                            ]]>
+                        </if>
+                        <if test="endTime != null">
+                            <![CDATA[
+                             AND   ee.`CREATETIME` <= CONCAT(#{endTime},' 23:59:59')
+                            ]]>
+                        </if>
+                    )t_r ON t_r.region_id=t_l.areaCode AND t_r.type=t_l.typeId
+            )t_a WHERE t_a.status != 'Z'
+            GROUP BY typeId
+        )t_d LEFT JOIN
+        (
+            SELECT t_a.type1,t_a.typeId1,t_a.areaCode1,count(0) as yiban  from
+            (
+                select t_r.status1,t_l.typeId1,t_r.type1,t_l.areaCode1
+                from
+                (
+                    select et.id as typeId1, mar.id as areaCode1
+                    from eh_type et
+                    LEFT JOIN md_administrative_region mar on 1=1
+                    where et.type_level=2 and mar.grade=#{grade}
+                )t_l
+                LEFT JOIN
+                (
+                    select ee.type as type1, ee.eventresource as resource1, ee.status as status1, ee.createtime as createtime1,
+                    <if test="grade==3">CONCAT(LEFT(su.region_id,6),'000000')</if>
+                    <if test="grade==4">CONCAT(LEFT(su.region_id,9),'000')</if>
+                    <if test="grade==5">su.region_id</if>
+                    AS region_id1
+                    from eh_event ee, sm_user su
+                    where ee.REPORTPERSONID=su.id
+                    <if test="startTime != null">
+                        <![CDATA[
+                                 AND   ee.`CREATETIME` >= CONCAT(#{startTime},' 00:00:00')
+                                ]]>
+                    </if>
+                    <if test="endTime != null">
+                        <![CDATA[
+                                 AND   ee.`CREATETIME` <= CONCAT(#{endTime},' 23:59:59')
+                                ]]>
+                    </if>
+                )t_r ON t_r.region_id1=t_l.areaCode1 AND t_r.type1=t_l.typeId1
+            )t_a WHERE t_a.status1 = 'Z'
+            GROUP BY typeId1
+        )t_e ON t_d.areaCode=t_e.areaCode1 AND t_d.type=t_e.type1
+    )t_c
+    ON t_c.areaCode=t_b.areaCode AND t_c.typeId=t_b.typeId
+    WHERE t_b.areaCode = #{regionId}
     </select>
+
+    <select id="findAllRegionNumStatistic" parameterType="java.util.Map" resultType="com.uhope.rl.resumption.dto.statistics.ProblemStatisticDTO">
+      SELECT id as regionId, area_name as regionName from md_administrative_region WHERE parent_code = #{parentId}
+    </select>
+
 </mapper>

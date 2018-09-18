@@ -1,5 +1,6 @@
 package com.uhope.rl.resumption.mapper;
 
+import com.uhope.rl.resumption.dto.statistics.ProblemStatisticDTO;
 import com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO;
 import com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO;
 import com.uhope.rl.resumption.dto.statistics.ReachmanPatrolNumStatisticDTO;
@@ -36,6 +37,17 @@ public interface ResumptionMapper {
      */
     List<ReachmanPatrolNumStatisticDTO> findPersonPatrolNum(Map<String, Object> params);
 
-    @MapKey("regionId")
-    Map<String, ProblemTypeStatisticDTO> getTypelist(Map<String, Object> params);
+    /**
+     * 查询指定区下的所有二级分类的统计信息
+     * @param params
+     * @return
+     */
+    List<ProblemTypeStatisticDTO> findRegionNumStatistic(Map<String, Object> params);
+
+    /**
+     * 找到左右的区
+     * @param params
+     * @return
+     */
+    List<ProblemStatisticDTO> findAllRegionNumStatistic(Map<String, Object> params);
 }

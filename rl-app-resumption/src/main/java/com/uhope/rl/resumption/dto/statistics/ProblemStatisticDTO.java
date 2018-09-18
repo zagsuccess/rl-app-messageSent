@@ -13,27 +13,15 @@ import java.util.List;
 @Data
 public class ProblemStatisticDTO implements Serializable {
     /**
-     * 曲名
+     * 区名
      */
     private String regionName;
+    /**
+     * 区id
+     */
+    private String regionId;
     /**
      * 分类列表
      */
     private List<ProblemTypeStatisticDTO> list;
-    /**
-     * 各区已办结合计
-     */
-    private Integer finishedSumNum;
-    /**
-     * 各区在办合计
-     */
-    private Integer unfinishedSumNum;
-    /**
-     * 所有区已办结合计
-     */
-    private Integer allFinishedSumNum;
-    /**
-     * 所有区已办结合计
-     */
-    private Integer allUnfinishedSumNum;
 }

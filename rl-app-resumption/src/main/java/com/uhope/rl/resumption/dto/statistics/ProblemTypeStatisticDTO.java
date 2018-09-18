@@ -13,6 +13,14 @@ import java.io.Serializable;
 public class ProblemTypeStatisticDTO implements Serializable {
 
     /**
+     * 区域ID
+     */
+    private String regionId;
+    /**
+     * 分类名称
+     */
+    private String typeName;
+    /**
      * 已办结数量
      */
     private Integer finishedNum;
