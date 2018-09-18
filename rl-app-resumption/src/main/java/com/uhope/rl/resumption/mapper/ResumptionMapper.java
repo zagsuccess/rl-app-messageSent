@@ -1,7 +1,9 @@
 package com.uhope.rl.resumption.mapper;
 
+import com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO;
 import com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO;
 import com.uhope.rl.resumption.dto.statistics.ReachmanPatrolNumStatisticDTO;
+import org.apache.ibatis.annotations.MapKey;
 
 import java.util.List;
 import java.util.Map;
@@ -34,4 +36,6 @@ public interface ResumptionMapper {
      */
     List<ReachmanPatrolNumStatisticDTO> findPersonPatrolNum(Map<String, Object> params);
 
+    @MapKey("regionId")
+    Map<String, ProblemTypeStatisticDTO> getTypelist(Map<String, Object> params);
 }

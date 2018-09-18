@@ -70,34 +70,17 @@ public class ResumpController {
             ,@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber
             ,@RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize
     ){
-        int intervalMonths = 0;
-        if (statTime != null && endTime != null){
-            //如果按时间查询
-            intervalMonths=DateUtil.getIntervalDays(statTime, endTime)/30+1;
-        }else if (statTime == null && endTime == null){
-            //没有按时间进行查询，设置默认时间
-            String startTimeDate = null;
-            String endTimeDate = null;
-            if (1==type) {
-                startTimeDate = new DateThis().thisYear();
-                endTimeDate = new DateThis().thisYearEnd();
-                intervalMonths = 12;
-            }
-            if (2==type){
-                startTimeDate = new DateThis().thisMonth();
-                endTimeDate = new DateThis().thisMonthEnd();
-                intervalMonths = 1;
-            }
-            if (3==type){
-                startTimeDate = DateUtil.DateToString(TimeUtil.getStartTime(3), "yyyy-MM-dd");
-                endTimeDate = DateUtil.DateToString(TimeUtil.getEndTime(3), "yyyy-MM-dd");
-                intervalMonths =1;
-            }
+        if (statTime == null && endTime == null){
+            Date startTimeDate = TimeUtil.getStartTime(type);
+            Date endTimeDate = TimeUtil.getEndTime(type);
 
             statTime = DateUtil.getDate(startTimeDate);
             endTime = DateUtil.getDate(endTimeDate);
         }
-
+        int intervalMonths=DateUtil.getIntervalDays(statTime, endTime)/30;
+        if (type==2){
+            intervalMonths = 1;
+        }
 
         //获取当前用户信息
         UserDTO userDTO = getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
@@ -186,7 +169,7 @@ public class ResumpController {
             statTime = DateUtil.getDate(startTimeDate);
             endTime = DateUtil.getDate(endTimeDate);
         }
-        int intervalMonths=Math.abs(DateUtil.getIntervalMonths(statTime, endTime));
+        int intervalMonths=DateUtil.getIntervalDays(statTime, endTime)/30;
 
         //查找统计数值
         List<ReachmanPatrolNumStatisticDTO> list = resumptionService.findPersonPatrolNum(intervalMonths, regionId, statTime, endTime, grade);

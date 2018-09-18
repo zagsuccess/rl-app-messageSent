@@ -19,9 +19,9 @@
             #{intervalMonths}*count(t_rm.region_code)*IFNULL(achs.patrolMarkMonth,IFNULL(achs.patrolMarkTenDay*3,IFNULL(achs.patrolMarkWeek * 4, IFNULL(achs.patrolMarkDay * 30,0)))) AS needReachNum
                 FROM
                 (
-                    SELECT  mrc.`region_code`,mrc.`id`,mrcm.`CHAIRMANLEVEL`,mrcm.`chairman_role`
-                    FROM md_reach mrc,md_reachchairman mrcm
-                    WHERE mrc.`id` = mrcm.`REACHID` AND mrcm.CHAIRMANLEVEL=
+                    SELECT  su.`region_id` as region_code,mrcm.`CHAIRMANLEVEL`,mrcm.`chairman_role`
+                    FROM sm_user su,md_reachchairman mrcm
+                    WHERE su.`id` = mrcm.`chairmanid` AND mrcm.CHAIRMANLEVEL=
                     <if test="regionGrade == 3">3</if>
                     <if test="regionGrade == 4">4</if>
                     <if test="regionGrade == 5">5</if>
@@ -103,17 +103,20 @@
             WHERE 1=1
             <if test="startTime != null">
                 <![CDATA[
-                 AND   mlr.`CREATETIME` >= #{startTime}
+                 AND   mlr.`CREATETIME` >= CONCAT(#{startTime},' 00:00:00')
                 ]]>
             </if>
             <if test="endTime != null">
                 <![CDATA[
-                 AND   mlr.`CREATETIME` <= #{endTime}
+                 AND   mlr.`CREATETIME` <= CONCAT(#{endTime},' 23:59:59')
                 ]]>
             </if>
             GROUP BY mlr.USERID
         )t_ur ON t_rn.CHAIRMANID=t_ur.USERID
     )t_all
     WHERE regionStr=#{regionId};
+    </select>
+    <select id="getTypelist" parameterType="java.util.Map" resultType="com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO">
+
     </select>
 </mapper>
