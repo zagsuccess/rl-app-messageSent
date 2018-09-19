@@ -6,10 +6,7 @@ import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
 import com.uhope.rl.application.basicdata.dto.AdministrativeRegionDTO;
 import com.uhope.rl.application.basicdata.services.AdministrativeRegionService;
-import com.uhope.rl.resumption.dto.statistics.ProblemStatisticDTO;
-import com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO;
-import com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO;
-import com.uhope.rl.resumption.dto.statistics.ReachmanPatrolNumStatisticDTO;
+import com.uhope.rl.resumption.dto.statistics.*;
 import com.uhope.rl.resumption.service.ResumptionService;
 import com.uhope.rl.resumption.utils.CommonUtil;
 import com.uhope.rl.resumption.utils.DateUtil;
@@ -228,6 +225,15 @@ public class ResumpController {
         }
 
         return ResponseMsgUtil.success(list);
+    }
+
+    /**
+     * 找到本周问题较多河道，取前10条
+     * @return 前10个问题较多河道信息
+     */
+    @GetMapping("/listWithMoreProblemReach")
+    public Result<List<ProblemNumStatistic>> listWithMoreProblemReach(){
+        return ResponseMsgUtil.success(resumptionService.findWithMoreProblemReach());
     }
 
     private List<ReachPatrolNumStatisticDTO> setType(List<ReachPatrolNumStatisticDTO> list, Integer type){

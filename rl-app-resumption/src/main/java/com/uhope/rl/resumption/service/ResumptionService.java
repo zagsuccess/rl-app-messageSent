@@ -1,9 +1,6 @@
 package com.uhope.rl.resumption.service;
 
-import com.uhope.rl.resumption.dto.statistics.ProblemStatisticDTO;
-import com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO;
-import com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO;
-import com.uhope.rl.resumption.dto.statistics.ReachmanPatrolNumStatisticDTO;
+import com.uhope.rl.resumption.dto.statistics.*;
 
 import java.util.List;
 
@@ -47,6 +44,13 @@ public interface ResumptionService {
 
     /**
      * 获取所有的区并返回需要的对象
+     * @return 返回对象列表
      */
     List<ProblemStatisticDTO> findAllRegionProblemStatistic(String parentId);
+
+    /**
+     * 找到本周问题较多河道，取前10条
+     * @return 返回对象列表
+     */
+    List<ProblemNumStatistic> findWithMoreProblemReach();
 }

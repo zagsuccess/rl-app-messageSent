@@ -1,9 +1,6 @@
 package com.uhope.rl.resumption.service.impl;
 
-import com.uhope.rl.resumption.dto.statistics.ProblemStatisticDTO;
-import com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO;
-import com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO;
-import com.uhope.rl.resumption.dto.statistics.ReachmanPatrolNumStatisticDTO;
+import com.uhope.rl.resumption.dto.statistics.*;
 import com.uhope.rl.resumption.mapper.ResumptionMapper;
 import com.uhope.rl.resumption.service.ResumptionService;
 import com.uhope.rl.resumption.utils.DateUtil;
@@ -76,5 +73,10 @@ public class ResumptionServiceImpl implements ResumptionService {
         Map<String, Object> params = new HashMap<>(2);
         params.put("parentId", parentId);
         return resumptionMapper.findAllRegionNumStatistic(params);
+    }
+
+    @Override
+    public List<ProblemNumStatistic> findWithMoreProblemReach() {
+        return resumptionMapper.findWithMoreProblemReach();
     }
 }
