@@ -252,7 +252,7 @@ public class ResumpController {
         if(grade == 5){
             return list;
         }
-        DecimalFormat df = new DecimalFormat("#.#");
+        DecimalFormat df = new DecimalFormat("0.00");
         double d=0.0;
         //计算未巡次数、达标率
         for (int i=0; i<list.size(); i++){
@@ -263,12 +263,12 @@ public class ResumpController {
                 //设置村级达标率
                 hadNum = item.getVillageHasPatrolNum();
                 needNum = item.getVillageNeedPatrolNum();
-                item.setVillageNonePatrolNum(needNum-hadNum);
+                item.setVillageNonePatrolNum(Math.abs(needNum-hadNum));
                 d = hadNum/(double)needNum;
                 if (hadNum == 0 || needNum ==0){
                     d=0.0;
-                }else if (d>=1){
-                    d=1;
+                }else if (d>=1.0){
+                    d=1.0*100;
                 }else{
                     d=d*100;
                 }
@@ -278,16 +278,12 @@ public class ResumpController {
                 //设置镇级达标率
                 hadNum = item.getTownHasPatrolNum();
                 needNum = item.getTownNeedPatrolNum();
-                item.setTownNonePatrolNum(needNum-hadNum);
-                d = hadNum/(double)needNum;
-                hadNum = item.getVillageHasPatrolNum();
-                needNum = item.getVillageNeedPatrolNum();
-                item.setVillageNonePatrolNum(needNum-hadNum);
+                item.setTownNonePatrolNum(Math.abs(needNum-hadNum));
                 d = hadNum/(double)needNum;
                 if (hadNum == 0 || needNum ==0){
                     d=0.0;
-                }else if (d>=1){
-                    d=1;
+                }else if (d>=1.0){
+                    d=1.0*100;
                 }else{
                     d=d*100;
                 }
@@ -297,16 +293,12 @@ public class ResumpController {
                 //设置区级达标率
                 needNum = item.getCountyNeedPatrolNum();
                 hadNum = item.getCountyHasPatrolNum();
-                item.setCountyNonePatrolNum(needNum - hadNum);
-                d = hadNum / (double) needNum;
-                hadNum = item.getVillageHasPatrolNum();
-                needNum = item.getVillageNeedPatrolNum();
-                item.setVillageNonePatrolNum(needNum-hadNum);
+                item.setCountyNonePatrolNum(Math.abs(needNum-hadNum));
                 d = hadNum/(double)needNum;
                 if (hadNum == 0 || needNum ==0){
                     d=0.0;
-                }else if (d>=1){
-                    d=1;
+                }else if (d>=1.0){
+                    d=1.0*100;
                 }else{
                     d=d*100;
                 }
