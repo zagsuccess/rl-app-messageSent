@@ -201,20 +201,20 @@
     </select>
 
     <select id="findWithMoreProblemReach" resultType="com.uhope.rl.resumption.dto.statistics.ProblemNumStatistic">
-    SELECT t_b.id,t_b.reach_name,COUNT(0) AS num, t_b.grade, t_b.chairman_name  FROM
+    SELECT t_b.id AS regionId ,t_b.reach_name AS reachName,COUNT(0) AS problemNum, t_b.grade AS grade, t_b.chairman_name AS reachManName FROM
     (
     SELECT ee.EVENTREACHID FROM eh_event ee, md_reach mr
     WHERE ee.eventreachid=mr.id AND create_time >= date_sub(curdate(),interval WEEKDAY(curdate()) day)
     )t_a
     LEFT JOIN
     (
-        SELECT mr.id,mr.reach_name, mr.grade, mrcm.chairman_name
-        FROM md_reach mr,md_reachchairman mrcm
-        WHERE mr.id=mrcm.REACHID
+            SELECT mr.id,mr.reach_name, mr.grade, mrcm.chairman_name
+            FROM md_reach mr,md_reachchairman mrcm
+            WHERE mr.id=mrcm.REACHID
     )t_b
     ON t_a.EVENTREACHID=t_b.id
     GROUP BY t_b.id
-    ORDER BY num DESC
+    ORDER BY problemNum DESC
     LIMIT 10;
     </select>
 </mapper>
