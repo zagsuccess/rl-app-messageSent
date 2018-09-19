@@ -204,7 +204,7 @@
     SELECT t_b.id AS regionId ,t_b.reach_name AS reachName,COUNT(0) AS problemNum, t_b.grade AS grade, t_b.chairman_name AS reachManName FROM
     (
     SELECT ee.EVENTREACHID FROM eh_event ee, md_reach mr
-    WHERE ee.eventreachid=mr.id AND create_time >= date_sub(curdate(),interval WEEKDAY(curdate()) day)
+    WHERE ee.eventreachid=mr.id AND ee.createtime >= date_sub(curdate(),interval WEEKDAY(curdate()) day)
     )t_a
     LEFT JOIN
     (
