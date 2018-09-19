@@ -167,13 +167,20 @@ public class ResumpController {
         List<ReachmanPatrolNumStatisticDTO> list = resumptionService.findPersonPatrolNum(intervalMonths, regionId, statTime, endTime, grade);
         //计算达标率
         double d=0.0;
-        DecimalFormat df = new DecimalFormat("#.####");
+        DecimalFormat df = new DecimalFormat("0.00");
         for (int i=0; i<list.size(); i++){
             ReachmanPatrolNumStatisticDTO item = list.get(i);
             Integer hadReachNum = item.getHadReachNum();
             Integer needReachNum = item.getNeedReachNum();
             d = hadReachNum/(double) needReachNum;
-            item.setPatrolRate(hadReachNum==0?0.0:Double.valueOf(df.format(d)));
+            if (hadReachNum == 0 || needReachNum ==0){
+                d=0.0;
+            }else if (d>=1.0){
+                d=1.0*100;
+            }else{
+                d=d*100;
+            }
+            item.setPatrolRate(Double.valueOf(df.format(d)));
         }
 
         PageInfo pageInfo = new PageInfo(list);
