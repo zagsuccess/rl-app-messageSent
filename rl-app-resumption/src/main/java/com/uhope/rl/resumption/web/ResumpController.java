@@ -6,10 +6,7 @@ import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
 import com.uhope.rl.application.basicdata.dto.AdministrativeRegionDTO;
 import com.uhope.rl.application.basicdata.services.AdministrativeRegionService;
-import com.uhope.rl.resumption.dto.statistics.ProblemStatisticDTO;
-import com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO;
-import com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO;
-import com.uhope.rl.resumption.dto.statistics.ReachmanPatrolNumStatisticDTO;
+import com.uhope.rl.resumption.dto.statistics.*;
 import com.uhope.rl.resumption.service.ResumptionService;
 import com.uhope.rl.resumption.utils.CommonUtil;
 import com.uhope.rl.resumption.utils.DateUtil;
@@ -230,6 +227,15 @@ public class ResumpController {
         return ResponseMsgUtil.success(list);
     }
 
+    /**
+     * 找到本周问题较多河道，取前10条
+     * @return 前10个问题较多河道信息
+     */
+    @GetMapping("/listWithMoreProblemReach")
+    public Result<List<ProblemNumStatistic>> listWithMoreProblemReach(){
+        return ResponseMsgUtil.success(resumptionService.findWithMoreProblemReach());
+    }
+
     private List<ReachPatrolNumStatisticDTO> setType(List<ReachPatrolNumStatisticDTO> list, Integer type){
         for (int i=0; i<list.size(); i++){
             list.get(i).setType(type);
@@ -246,7 +252,7 @@ public class ResumpController {
         if(grade == 5){
             return list;
         }
-        DecimalFormat df = new DecimalFormat("#.####");
+        DecimalFormat df = new DecimalFormat("0.00");
         double d=0.0;
         //计算未巡次数、达标率
         for (int i=0; i<list.size(); i++){
@@ -257,25 +263,46 @@ public class ResumpController {
                 //设置村级达标率
                 hadNum = item.getVillageHasPatrolNum();
                 needNum = item.getVillageNeedPatrolNum();
-                item.setVillageNonePatrolNum(needNum-hadNum);
+                item.setVillageNonePatrolNum(Math.abs(needNum-hadNum));
                 d = hadNum/(double)needNum;
-                item.setVillagePatrolRate(hadNum==0||needNum==0?0.0:Double.valueOf(df.format(d)));
+                if (hadNum == 0 || needNum ==0){
+                    d=0.0;
+                }else if (d>=1.0){
+                    d=1.0*100;
+                }else{
+                    d=d*100;
+                }
+                item.setVillagePatrolRate(Double.valueOf(df.format(d)));
             }
             if(grade<=4){
                 //设置镇级达标率
                 hadNum = item.getTownHasPatrolNum();
                 needNum = item.getTownNeedPatrolNum();
-                item.setTownNonePatrolNum(needNum-hadNum);
+                item.setTownNonePatrolNum(Math.abs(needNum-hadNum));
                 d = hadNum/(double)needNum;
-                item.setTownPatrolRate(hadNum==0||needNum==0?0.0:Double.valueOf(df.format(d)));
+                if (hadNum == 0 || needNum ==0){
+                    d=0.0;
+                }else if (d>=1.0){
+                    d=1.0*100;
+                }else{
+                    d=d*100;
+                }
+                item.setTownPatrolRate(Double.valueOf(df.format(d)));
             }
             if (grade<=3){
                 //设置区级达标率
                 needNum = item.getCountyNeedPatrolNum();
                 hadNum = item.getCountyHasPatrolNum();
-                item.setCountyNonePatrolNum(needNum - hadNum);
-                d = hadNum / (double) needNum;
-                item.setCountyPatrolRate(hadNum == 0 ||needNum==0? 0.0 : Double.valueOf(df.format(d)));
+                item.setCountyNonePatrolNum(Math.abs(needNum-hadNum));
+                d = hadNum/(double)needNum;
+                if (hadNum == 0 || needNum ==0){
+                    d=0.0;
+                }else if (d>=1.0){
+                    d=1.0*100;
+                }else{
+                    d=d*100;
+                }
+                item.setCountyPatrolRate(Double.valueOf(df.format(d)));
             }
         }
 

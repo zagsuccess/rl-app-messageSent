@@ -1,9 +1,6 @@
 package com.uhope.rl.resumption.mapper;
 
-import com.uhope.rl.resumption.dto.statistics.ProblemStatisticDTO;
-import com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO;
-import com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO;
-import com.uhope.rl.resumption.dto.statistics.ReachmanPatrolNumStatisticDTO;
+import com.uhope.rl.resumption.dto.statistics.*;
 import org.apache.ibatis.annotations.MapKey;
 
 import java.util.List;
@@ -50,4 +47,10 @@ public interface ResumptionMapper {
      * @return
      */
     List<ProblemStatisticDTO> findAllRegionNumStatistic(Map<String, Object> params);
+
+    /**
+     * 找到本周问题较多河道，取前10条
+     * @return 返回对象列表
+     */
+    List<ProblemNumStatistic> findWithMoreProblemReach();
 }
