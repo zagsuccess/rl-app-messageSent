@@ -26,39 +26,41 @@
         <if test="regionId != null">
             AND t_ro.regionId=#{regionId}
         </if>
+    ORDER BY regionId
     </select>
 
     <!-- 按区为单位统计各级河长已巡次数 -->
     <select id="findHadPatrolNum"  parameterType="java.util.Map" resultType="com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO">
-    SELECT mar.area_code AS regionId, mar.area_name AS regionName, mar.grade as regionGrade,IFNULL(t_ro.hadNum,0) as
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, mar.grade as regionGrade,IFNULL(t_ro.hadNum,0) as
         <if test="regionGrade == 3">countyHasPatrolNum</if>
         <if test="regionGrade == 4">townHasPatrolNum</if>
         <if test="regionGrade == 5">villageHasPatrolNum</if>
-    FROM md_administrative_region mar
-    LEFT JOIN
-    (
+        FROM md_administrative_region mar
+        LEFT JOIN
+        (
         SELECT t_rn.regionId,t_rn.chairmanlevel, SUM(t_rn.hadNum) as hadNum
         FROM
         (
         SELECT CONCAT(LEFT(mr.region_code,6),'000000') AS regionId,mrcm.chairmanlevel,COUNT(mlc.REACHID) as hadNum
         FROM md_locusrecord mlc, md_reachchairman mrcm, md_reach mr
-        WHERE mlc.REACHID=mrcm.reachid AND mrcm.chairmanlevel=3 AND mr.id=mlc.reachid
-            <if test="startTime != null">
-                <![CDATA[
+        WHERE mlc.REACHID=mrcm.reachid AND mrcm.chairmanlevel=#{regionGrade} AND mr.id=mlc.reachid
+        <if test="startTime != null">
+            <![CDATA[
                  AND   mlc.`CREATETIME` >= CONCAT(#{startTime},' 00:00:00')
                 ]]>
-            </if>
-            <if test="endTime != null">
-                <![CDATA[
+        </if>
+        <if test="endTime != null">
+            <![CDATA[
                  AND   mlc.`CREATETIME` <= CONCAT(#{endTime},' 23:59:59')
                 ]]>
-            </if>
+        </if>
         GROUP BY mlc.REACHID
         )t_rn GROUP BY t_rn.regionId
-    )t_ro ON t_ro.regionId=mar.area_code WHERE mar.grade=3
-    <if test="regionId != null">
-        AND t_ro.regionId=#{regionId}
-    </if>
+        )t_ro ON t_ro.regionId=mar.area_code WHERE mar.grade=3
+            <if test="regionId != null">
+                AND t_ro.regionId=#{regionId}
+            </if>
+        ORDER BY regionId
     </select>
 
     <!-- 查找各级河长各自的巡河情况 -->
@@ -72,7 +74,7 @@
             SELECT su.region_id AS region_code,mrcm.chairman_name, mrcm.CHAIRMANLEVEL,mrcm.CHAIRMANID,
               #{intervalMonths}*COUNT(0)*IFNULL(ach.patrolMarkMonth,IFNULL(ach.patrolMarkTenDay*3,IFNULL(ach.patrolMarkWeek * 4, IFNULL(ach.patrolMarkDay * 30,0)))) AS needReachNum
             FROM md_reachchairman mrcm, am_check_standard ach, sm_user su
-            WHERE mrcm.chairmanid=su.id AND ach.roleLevel = mrcm.CHAIRMANLEVEL AND ach.roleId = mrcm.chairman_role AND mrcm.chairmanlevel=#{regionGrade} AND su.region_id=#{regionId}
+            WHERE mrcm.chairmanid=su.id AND ach.roleLevel = mrcm.CHAIRMANLEVEL AND ach.roleId = mrcm.chairman_role AND mrcm.chairmanlevel=#{regionGrade}
             GROUP BY mrcm.CHAIRMANID
         )t_rn
         LEFT JOIN
