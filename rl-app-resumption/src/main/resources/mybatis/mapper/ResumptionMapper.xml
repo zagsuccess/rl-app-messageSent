@@ -9,66 +9,56 @@
         <if test="regionGrade == 3">countyNeedPatrolNum</if>
         <if test="regionGrade == 4">townNeedPatrolNum</if>
         <if test="regionGrade == 5">villageNeedPatrolNum</if>
-	FROM md_administrative_region mar
+    FROM md_administrative_region mar
     LEFT JOIN
     (
-        SELECT CONCAT(LEFT(t_rn.region_code,6),'000000') AS regionStr, SUM(t_rn.needReachNum) as needNum
+        SELECT t_rn.regionId, SUM(t_rn.needReachNum) as needNum
         FROM
         (
-            SELECT t_rm.region_code,
-            #{intervalMonths}*count(t_rm.region_code)*IFNULL(achs.patrolMarkMonth,IFNULL(achs.patrolMarkTenDay*3,IFNULL(achs.patrolMarkWeek * 4, IFNULL(achs.patrolMarkDay * 30,0)))) AS needReachNum
-                FROM
-                (
-                    SELECT  su.`region_id` as region_code,mrcm.`CHAIRMANLEVEL`,mrcm.`chairman_role`
-                    FROM sm_user su,md_reachchairman mrcm
-                    WHERE su.`id` = mrcm.`chairmanid` AND mrcm.CHAIRMANLEVEL=#{regionGrade}
-                )t_rm
-            LEFT JOIN am_check_standard achs ON t_rm.CHAIRMANLEVEL = achs.roleLevel AND t_rm.chairman_role = achs.roleId
-            GROUP BY t_rm.region_code
-            )t_rn GROUP BY regionStr
-    )t_ro ON t_ro.regionStr=mar.area_code WHERE mar.grade=3
+            SELECT CONCAT(LEFT(su.region_id,6),'000000') AS regionId,mrcm.CHAIRMANLEVEL, mrcm.chairman_role,
+                #{intervalMonths}*COUNT(0)*IFNULL(ach.patrolMarkMonth,IFNULL(ach.patrolMarkTenDay*3,IFNULL(ach.patrolMarkWeek * 4, IFNULL(ach.patrolMarkDay * 30,0)))) AS needReachNum
+            FROM md_reachchairman mrcm, sm_user su, am_check_standard ach
+            WHERE mrcm.CHAIRMANLEVEL=#{regionGrade} AND su.ID=mrcm.CHAIRMANID AND ach.roleLevel = mrcm.CHAIRMANLEVEL AND ach.roleId = mrcm.chairman_role
+            GROUP BY mrcm.CHAIRMANID
+        )t_rn
+        GROUP BY t_rn.regionId
+    )t_ro ON t_ro.regionId=mar.area_code WHERE mar.grade=3
         <if test="regionId != null">
-            AND t_ro.regionStr=#{regionId}
+            AND t_ro.regionId=#{regionId}
         </if>
     </select>
 
     <!-- 按区为单位统计各级河长已巡次数 -->
     <select id="findHadPatrolNum"  parameterType="java.util.Map" resultType="com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO">
     SELECT mar.area_code AS regionId, mar.area_name AS regionName, mar.grade as regionGrade,IFNULL(t_ro.hadNum,0) as
-    <if test="regionGrade == 3">countyHasPatrolNum</if>
-    <if test="regionGrade == 4">townHasPatrolNum</if>
-    <if test="regionGrade == 5">villageHasPatrolNum</if>
+        <if test="regionGrade == 3">countyHasPatrolNum</if>
+        <if test="regionGrade == 4">townHasPatrolNum</if>
+        <if test="regionGrade == 5">villageHasPatrolNum</if>
     FROM md_administrative_region mar
-        LEFT JOIN
+    LEFT JOIN
+    (
+        SELECT t_rn.regionId,t_rn.chairmanlevel, SUM(t_rn.hadNum) as hadNum
+        FROM
         (
-            SELECT CONCAT(LEFT(t_rn.regionStr,6),'000000') AS regionStr, SUM(t_rn.hadNum) as hadNum
-            FROM
-            (
-                SELECT mr.region_code AS regionStr, t_n.hadNum, mr.grade
-                FROM
-                (
-                    SELECT mlc.REACHID,COUNT(mlc.REACHID) as hadNum
-                    FROM md_locusrecord mlc
-                    WHERE 1=1
-                    <if test="startTime != null">
-                        <![CDATA[
-                     AND   mlc.`CREATETIME` >= CONCAT(#{startTime},' 00:00:00')
-                    ]]>
-                    </if>
-                    <if test="endTime != null">
-                        <![CDATA[
-                     AND   mlc.`CREATETIME` <= CONCAT(#{endTime},' 23:59:59')
-                    ]]>
-                    </if>
-                    GROUP BY mlc.REACHID
-                )t_n
-                LEFT JOIN md_reach mr ON mr.id=t_n.REACHID
-                WHERE mr.grade=#{regionGrade}
-            )t_rn GROUP BY regionStr
-        )t_ro ON t_ro.regionStr=mar.area_code WHERE mar.grade=3
-        <if test="regionId != null">
-            AND t_ro.regionStr=#{regionId}
-        </if>
+        SELECT CONCAT(LEFT(mr.region_code,6),'000000') AS regionId,mrcm.chairmanlevel,COUNT(mlc.REACHID) as hadNum
+        FROM md_locusrecord mlc, md_reachchairman mrcm, md_reach mr
+        WHERE mlc.REACHID=mrcm.reachid AND mrcm.chairmanlevel=3 AND mr.id=mlc.reachid
+            <if test="startTime != null">
+                <![CDATA[
+                 AND   mlc.`CREATETIME` >= CONCAT(#{startTime},' 00:00:00')
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+                 AND   mlc.`CREATETIME` <= CONCAT(#{endTime},' 23:59:59')
+                ]]>
+            </if>
+        GROUP BY mlc.REACHID
+        )t_rn GROUP BY t_rn.regionId
+    )t_ro ON t_ro.regionId=mar.area_code WHERE mar.grade=3
+    <if test="regionId != null">
+        AND t_ro.regionId=#{regionId}
+    </if>
     </select>
 
     <!-- 查找各级河长各自的巡河情况 -->
@@ -79,36 +69,35 @@
         SELECT CONCAT(LEFT(t_rn.region_code,6),'000000') AS regionStr,t_rn.chairman_name, t_rn.CHAIRMANLEVEL,  t_rn.needReachNum, IFNULL(t_ur.hadReachNum,0) AS hadReachNum
         FROM
         (
-            SELECT t_rm.region_code,t_rm.CHAIRMANID, t_rm.chairman_name,t_rm.CHAIRMANLEVEL,
-                   #{intervalMonths}*t_rm.num*IFNULL(achs.patrolMarkMonth,IFNULL(achs.patrolMarkTenDay*3,IFNULL(achs.patrolMarkWeek * 4, IFNULL(achs.patrolMarkDay * 30,0)))) AS needReachNum
-            FROM
-            (
-                SELECT mr.region_code,COUNT(0) as num, mrcm.chairman_name, mrcm.REACHID, mrcm.CHAIRMANLEVEL,  mrcm.chairman_role,mrcm.CHAIRMANID
-                FROM md_reachchairman mrcm, md_reach mr
-                WHERE mrcm.chairmanlevel=#{regionGrade} AND mr.id=mrcm.REACHID
-                GROUP BY mrcm.CHAIRMANID
-            )t_rm
-            LEFT JOIN am_check_standard achs ON t_rm.CHAIRMANLEVEL = achs.roleLevel AND t_rm.chairman_role = achs.roleId
+            SELECT su.region_id AS region_code,mrcm.chairman_name, mrcm.CHAIRMANLEVEL,mrcm.CHAIRMANID,
+              #{intervalMonths}*COUNT(0)*IFNULL(ach.patrolMarkMonth,IFNULL(ach.patrolMarkTenDay*3,IFNULL(ach.patrolMarkWeek * 4, IFNULL(ach.patrolMarkDay * 30,0)))) AS needReachNum
+            FROM md_reachchairman mrcm, am_check_standard ach, sm_user su
+            WHERE mrcm.chairmanid=su.id AND ach.roleLevel = mrcm.CHAIRMANLEVEL AND ach.roleId = mrcm.chairman_role AND mrcm.chairmanlevel=#{regionGrade} AND su.region_id=#{regionId}
+            GROUP BY mrcm.CHAIRMANID
         )t_rn
         LEFT JOIN
         (
-            SELECT mlr.USERID,COUNT(0) AS hadReachNum
-            FROM md_locusrecord mlr
-            WHERE 1=1
-            <if test="startTime != null">
-                <![CDATA[
-                 AND   mlr.`CREATETIME` >= CONCAT(#{startTime},' 00:00:00')
-                ]]>
-            </if>
-            <if test="endTime != null">
-                <![CDATA[
-                 AND   mlr.`CREATETIME` <= CONCAT(#{endTime},' 23:59:59')
-                ]]>
-            </if>
-            GROUP BY mlr.USERID
-        )t_ur ON t_rn.CHAIRMANID=t_ur.USERID
+            SELECT t_r.chairmanid,t_r.chairman_name,region_code,SUM(t_r.hadNum) AS hadReachNum
+            FROM
+            (
+                SELECT mrcm.chairmanid,mrcm.chairman_name,mr.region_code,mrcm.chairmanlevel,COUNT(mlc.REACHID) as hadNum
+                FROM md_locusrecord mlc, md_reach mr, md_reachchairman mrcm
+                WHERE mlc.REACHID=mrcm.reachid AND mrcm.chairmanlevel=#{regionGrade} AND mr.id=mlc.reachid
+                    <if test="startTime != null">
+                    <![CDATA[
+                         AND   mlc.`CREATETIME` >= CONCAT(#{startTime},' 00:00:00')
+                    ]]>
+                    </if>
+                    <if test="endTime != null">
+                    <![CDATA[
+                         AND   mlc.`CREATETIME` <= CONCAT(#{endTime},' 23:59:59')
+                    ]]>
+                    </if>
+                GROUP BY mlc.REACHID
+            )t_r GROUP BY t_r.chairmanid
+        )t_ur ON t_rn.CHAIRMANID=t_ur.chairmanid
     )t_all
-    WHERE regionStr=#{regionId};
+    WHERE regionStr=#{regionId}
     </select>
 
     <select id="findRegionNumStatistic" parameterType="java.util.Map" resultType="com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO">

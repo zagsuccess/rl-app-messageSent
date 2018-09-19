@@ -70,7 +70,7 @@ public class ResumpController {
             endTime = DateUtil.getDate(endTimeDate);
         }
         int intervalMonths=DateUtil.getIntervalDays(statTime, endTime)/30;
-        if (type==2){
+        if (type==2 || intervalMonths==0){
             intervalMonths = 1;
         }
 
@@ -145,7 +145,7 @@ public class ResumpController {
     @GetMapping("/findPersonReachNum")
     public Result<PageInfo<ReachmanPatrolNumStatisticDTO>> findPersonReachNum(
             HttpServletRequest request
-            ,@RequestParam(name = "regionId") String regionId
+            ,@RequestParam(name = "regionId", required = true) String regionId
             ,@RequestParam(name = "grade",required = true) Integer grade
             ,@RequestParam(name = "type", required = false) Integer type
             ,@RequestParam(name = "startTime", required = false) String statTime
@@ -162,6 +162,9 @@ public class ResumpController {
             endTime = DateUtil.getDate(endTimeDate);
         }
         int intervalMonths=DateUtil.getIntervalDays(statTime, endTime)/30;
+        if (type==2 || intervalMonths==0){
+            intervalMonths = 1;
+        }
 
         //查找统计数值
         List<ReachmanPatrolNumStatisticDTO> list = resumptionService.findPersonPatrolNum(intervalMonths, regionId, statTime, endTime, grade);
