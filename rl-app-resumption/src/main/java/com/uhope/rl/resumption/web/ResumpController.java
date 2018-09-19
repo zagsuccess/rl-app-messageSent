@@ -273,7 +273,7 @@ public class ResumpController {
                 //设置村级达标率
                 hadNum = item.getVillageHasPatrolNum();
                 needNum = item.getVillageNeedPatrolNum();
-                item.setVillageNonePatrolNum(Math.abs(needNum-hadNum));
+                item.setVillageNonePatrolNum((needNum-hadNum)<0?0:(needNum-hadNum));
                 d = hadNum/(double)needNum;
                 if (hadNum == 0 || needNum ==0){
                     d=0.0;
@@ -288,7 +288,7 @@ public class ResumpController {
                 //设置镇级达标率
                 hadNum = item.getTownHasPatrolNum();
                 needNum = item.getTownNeedPatrolNum();
-                item.setTownNonePatrolNum(Math.abs(needNum-hadNum));
+                item.setTownNonePatrolNum((needNum-hadNum)<0?0:(needNum-hadNum));
                 d = hadNum/(double)needNum;
                 if (hadNum == 0 || needNum ==0){
                     d=0.0;
@@ -303,7 +303,7 @@ public class ResumpController {
                 //设置区级达标率
                 needNum = item.getCountyNeedPatrolNum();
                 hadNum = item.getCountyHasPatrolNum();
-                item.setCountyNonePatrolNum(Math.abs(needNum-hadNum));
+                item.setCountyNonePatrolNum((needNum-hadNum)<0?0:(needNum-hadNum));
                 d = hadNum/(double)needNum;
                 if (hadNum == 0 || needNum ==0){
                     d=0.0;
