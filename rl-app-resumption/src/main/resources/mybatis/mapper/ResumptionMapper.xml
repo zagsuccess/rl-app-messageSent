@@ -118,7 +118,7 @@
         select mar.area_name as areaName, et.typename as typeName, et.id as typeId, mar.id as areaCode
         from eh_type et
         LEFT JOIN md_administrative_region mar on 1=1
-        where et.type_level=2 and mar.grade=#{grade}
+        where et.type_level=1 and mar.grade=#{grade}
     )t_b LEFT JOIN
     (
         SELECT t_d.zaiban,t_e.yiban,t_d.areaCode,t_d.typeId
@@ -132,7 +132,7 @@
                         select et.id as typeId, mar.id as areaCode
                         from eh_type et
                         LEFT JOIN md_administrative_region mar on 1=1
-                        where et.type_level=2 and mar.grade=#{grade}
+                        where et.type_level=1 and mar.grade=#{grade}
                     )t_l
                     LEFT JOIN
                     (
@@ -166,7 +166,7 @@
                     select et.id as typeId1, mar.id as areaCode1
                     from eh_type et
                     LEFT JOIN md_administrative_region mar on 1=1
-                    where et.type_level=2 and mar.grade=#{grade}
+                    where et.type_level=1 and mar.grade=#{grade}
                 )t_l
                 LEFT JOIN
                 (
