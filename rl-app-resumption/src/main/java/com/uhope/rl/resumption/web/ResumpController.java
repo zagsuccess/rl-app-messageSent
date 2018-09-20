@@ -4,11 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
-import com.uhope.rl.application.basicdata.dto.AdministrativeRegionDTO;
-import com.uhope.rl.application.basicdata.services.AdministrativeRegionService;
 import com.uhope.rl.resumption.dto.statistics.*;
 import com.uhope.rl.resumption.service.ResumptionService;
-import com.uhope.rl.resumption.utils.CommonUtil;
 import com.uhope.rl.resumption.utils.DateUtil;
 import com.uhope.rl.resumption.utils.TimeUtil;
 import com.uhope.uip.dto.UserDTO;
@@ -40,6 +37,8 @@ public class ResumpController {
 
     @Autowired
     private TokenService tokenService;
+
+
 
     /**
      * 根据区域 、时间统计巡查次数 河长巡河统计分析-巡查达标率
@@ -244,6 +243,40 @@ public class ResumpController {
     @GetMapping("/listWithMoreProblemReach")
     public Result<List<ProblemNumStatistic>> listWithMoreProblemReach(){
         return ResponseMsgUtil.success(resumptionService.findWithMoreProblemReach());
+    }
+
+    /**
+     * 获取当前登陆用户的等级
+     * @param request
+     * @return
+     */
+    @GetMapping("/findCurrentUserGrade")
+    public Result<Integer> findCurrentUserGrade(HttpServletRequest request){
+        //获取当前用户信息
+        UserDTO userDTO = getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
+        if(userDTO == null ){
+            return ResponseMsgUtil.failure("获取用户等级失败");
+        }
+
+        //默认是村级
+        int grade = 5;
+        if(userDTO.getRegionId()%(1000)==0){
+            //镇级
+            grade=4;
+        }
+        if(userDTO.getRegionId()%(1000*1000)==0){
+            //区级
+            grade=3;
+        }
+        if(userDTO.getRegionId()%(1000*1000*100)==0){
+            //市级
+            grade=2;
+        }
+        if(userDTO.getRegionId()%(1000*1000*100*100)==0){
+            //省级
+            grade=1;
+        }
+        return ResponseMsgUtil.success(grade);
     }
 
     private List<ReachPatrolNumStatisticDTO> setType(List<ReachPatrolNumStatisticDTO> list, Integer type){
