@@ -124,7 +124,7 @@ public class    BulletinController {
         return bulletinService.selectByFirst(type);
     }
 
-    @GetMapping ("/download")
+    /*@GetMapping ("/download")
     public void download(@RequestParam String attandUrl,HttpServletResponse res) {
         try{
             String[] str=attandUrl.split("_");
@@ -142,6 +142,6 @@ public class    BulletinController {
             e.printStackTrace();
         }
 
-    }
+    }*/
 
 }
