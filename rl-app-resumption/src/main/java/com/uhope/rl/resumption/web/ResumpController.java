@@ -302,7 +302,7 @@ public class ResumpController {
             ReachPatrolNumStatisticDTO item = list.get(i);
             Integer needNum = 0;
             Integer hadNum = 0;
-            if (grade <= 5) {
+            if (grade < 5) {
                 //设置村级达标率
                 hadNum = item.getVillageHasPatrolNum();
                 needNum = item.getVillageNeedPatrolNum();
@@ -317,7 +317,7 @@ public class ResumpController {
                 }
                 item.setVillagePatrolRate(Double.valueOf(df.format(d)));
             }
-            if(grade<=4){
+            if(grade<4){
                 //设置镇级达标率
                 hadNum = item.getTownHasPatrolNum();
                 needNum = item.getTownNeedPatrolNum();
@@ -332,7 +332,7 @@ public class ResumpController {
                 }
                 item.setTownPatrolRate(Double.valueOf(df.format(d)));
             }
-            if (grade<=3){
+            if (grade<3){
                 //设置区级达标率
                 needNum = item.getCountyNeedPatrolNum();
                 hadNum = item.getCountyHasPatrolNum();
