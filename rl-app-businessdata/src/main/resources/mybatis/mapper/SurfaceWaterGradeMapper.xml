@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.template.mapper.SurfaceWaterGradeMapper">
+    <resultMap id="BaseResultMap" type="com.uhope.template.domain.SurfaceWaterGrade">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="popedom" jdbcType="VARCHAR" property="popedom" />
+        <result column="grade" jdbcType="VARCHAR" property="grade" />
+        <result column="parentId" jdbcType="VARCHAR" property="parentid" />
+    </resultMap>
+
+</mapper>
