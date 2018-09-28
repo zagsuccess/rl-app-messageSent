@@ -54,7 +54,7 @@ public class ResumpController {
     @GetMapping("/listReachPatrolNumStatistic")
     public Result<PageInfo<ReachPatrolNumStatisticDTO>> listReachPatrolNumStatistic(
             HttpServletRequest request
-            ,@RequestParam(name = "type",defaultValue = "2") Integer type
+            ,@  RequestParam(name = "type",defaultValue = "2") Integer type
             ,@RequestParam(name = "regionId", required = false) String regionId
             ,@RequestParam(name = "startTime", required = false) String statTime
             ,@RequestParam(name = "endTime", required = false) String endTime
