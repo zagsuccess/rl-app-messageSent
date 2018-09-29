@@ -18,7 +18,7 @@
             SELECT CONCAT(LEFT(mr.region_code,6),'000000') AS regionId,mrcm.CHAIRMANLEVEL, mrcm.chairman_role,
                 #{intervalMonths}*COUNT(0)*IFNULL(ach.patrolMarkMonth,IFNULL(ach.patrolMarkTenDay*3,IFNULL(ach.patrolMarkWeek * 4, IFNULL(ach.patrolMarkDay * 30,0)))) AS needReachNum
             FROM md_reachchairman mrcm, md_reach mr, am_check_standard ach
-            WHERE mrcm.CHAIRMANLEVEL=3 AND mr.ID=mrcm.REACHID AND ach.roleLevel = mrcm.CHAIRMANLEVEL AND ach.roleId = mrcm.chairman_role
+            WHERE mrcm.CHAIRMANLEVEL=#{regionGrade} AND mr.ID=mrcm.REACHID AND ach.roleLevel = mrcm.CHAIRMANLEVEL AND ach.roleId = mrcm.chairman_role
             GROUP BY mrcm.CHAIRMANID
         )t_rn
         GROUP BY t_rn.regionId
