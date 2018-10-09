@@ -124,13 +124,13 @@ public class    BulletinController {
         return bulletinService.selectByFirst(type);
     }
 
-    /*@GetMapping ("/download")
-    public void download(@RequestParam String attandUrl,HttpServletResponse res) {
+    @GetMapping ("/lookload")
+    public void lookload(@RequestParam String attandUrl,HttpServletResponse res) {
         try{
             String[] str=attandUrl.split("_");
             String fileName=str[1];
         // 最需要注意的是  告诉浏览器只保存文件  不用在页面展示
-        res.setHeader("content-disposition", "attachment;filename="+URLEncoder.encode(fileName,"UTF-8"));
+        res.setHeader("content-disposition", "inline;filename="+URLEncoder.encode(fileName,"UTF-8"));
             byte[] bs = fileManagerClient.download(attandUrl).getData();
             res.getOutputStream().write(bs);
             res.flushBuffer();
@@ -142,6 +142,6 @@ public class    BulletinController {
             e.printStackTrace();
         }
 
-    }*/
+    }
 
 }
