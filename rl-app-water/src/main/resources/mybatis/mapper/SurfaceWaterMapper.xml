@@ -10,11 +10,12 @@
         <result column="remark" jdbcType="VARCHAR" property="remark"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
     </resultMap>
+
     <select id="selectList" resultType="com.uhope.template.domain.SurfaceWater">
         select * from surface_water
         <where>
-            <if test="issue1 != null and issue2 != null">
-                and issue BETWEEN #{issue1} and #{issue2}
+            <if test="issue != null ">
+                and issue = #{issue}
             </if>
             <if test="status != null">
                 AND status=#{status}
@@ -22,6 +23,23 @@
             <if test="createUser != null">
                 AND createUser like CONCAT('%',#{createUser},'%')
             </if>
+            <if test="num !=null">
+                and status !=#{num}
+            </if>
         </where>
+    </select>
+
+    <!-- 查询市河长办的账号-->
+    <select id="selectSHZB" resultType="java.lang.String">
+        select sm_user.ID from sm_user INNER JOIN
+        (select sur.USER_ID from sm_role sr INNER JOIN sm_user_role sur on sr.id=sur.ROLE_ID where sr.id='fca74e7d677111e7968ef01fafcf3a37'
+        )s on sm_user.id =s.USER_ID where sm_user.region_id='120100000000';
+    </select>
+
+    <!--查询市河长办的账号-->
+    <select id="selectSHBJ" resultType="java.lang.String">
+        select sm_user.ID from sm_user INNER JOIN
+        (select sur.USER_ID from sm_role sr INNER JOIN sm_user_role sur on sr.id=sur.ROLE_ID where sr.id='bfa66b4306e54cd696904a42f7e09412'
+        )s on sm_user.id =s.USER_ID
     </select>
 </mapper>

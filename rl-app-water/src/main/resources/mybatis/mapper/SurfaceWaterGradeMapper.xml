@@ -7,5 +7,18 @@
         <result column="grade" jdbcType="VARCHAR" property="grade" />
         <result column="parentId" jdbcType="VARCHAR" property="parentid" />
     </resultMap>
+    <!--删除指定报告下的得分条目-->
+    <delete id="deletelist">
+        delete from surface_water_grade where parentId =#{parentid}
+    </delete>
+    <select id="selectList" resultType="com.uhope.template.domain.SurfaceWaterGrade">
+        select * from surface_water_grade where parentId=#{parentid}
+    </select>
+
+    <!--查询所有的区-->
+    <select id="districtlist" resultType="java.lang.String">
+        select mar.area_name FROM md_administrative_region mar
+        where id%1000000=0 and area_name like CONCAT('%','区')
+    </select>
 
 </mapper>

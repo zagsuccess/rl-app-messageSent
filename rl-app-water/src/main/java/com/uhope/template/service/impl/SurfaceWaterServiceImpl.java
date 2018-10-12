@@ -25,10 +25,20 @@ public class SurfaceWaterServiceImpl extends AbstractService<SurfaceWater, Surfa
     private SurfaceWaterMapper surfaceWaterMapper;
 
     @Override
-    public PageInfo<SurfaceWater> list(Integer pageNumber, Integer pageSize, String issue1, String issue2, Integer status, String createUser) {
+    public PageInfo<SurfaceWater> list(Integer pageNumber, Integer pageSize, String issue, Integer status, String createUser,Integer num) {
         PageHelper.startPage(pageNumber, pageSize);
-        List<SurfaceWater> list=surfaceWaterMapper.selectList(issue1,issue2,status,createUser);
+        List<SurfaceWater> list=surfaceWaterMapper.selectList(issue,status,createUser,num);
         PageInfo<SurfaceWater> pageInfo = new PageInfo(list);
         return pageInfo;
+    }
+
+    @Override
+    public String selectSHZB() {
+        return surfaceWaterMapper.selectSHZB();
+    }
+
+    @Override
+    public String selectSHBJ() {
+        return surfaceWaterMapper.selectSHBJ();
     }
 }
