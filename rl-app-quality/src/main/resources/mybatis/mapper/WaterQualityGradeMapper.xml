@@ -58,7 +58,7 @@
     </select>
 
     <select id="haveSection" resultType="com.uhope.template.domain.WaterQualityGrade">
-        select name from  water_quality_grade where parentId={parentid}
+        select name from  water_quality_grade where parentId=#{parentid}
     </select>
     <select id="selectRiver" resultType="java.lang.String">
         select RIVERNAME from md_section where name=#{name}

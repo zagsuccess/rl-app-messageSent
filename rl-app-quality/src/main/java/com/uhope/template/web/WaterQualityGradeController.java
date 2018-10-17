@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -159,9 +160,6 @@ public class WaterQualityGradeController {
            //=sheetAt.getRow(i).getCell(1).getStringCellValue();;
             String name = sheetAt.getRow(i).getCell(1).getStringCellValue();
             String riverName=sheetAt.getRow(i).getCell(2).getStringCellValue();
-            /*Cell cell1 = sheetAt.getRow(i).getCell(3);
-            cell1.setCellType(CellType.STRING);
-            String samplingTime=cell1.getStringCellValue();*/
             Date samplingTime=null;
             if(sheetAt.getRow(i).getCell(3).getCellType() == Cell.CELL_TYPE_NUMERIC) {
                 short format = sheetAt.getRow(i).getCell(3).getCellStyle().getDataFormat();
@@ -181,9 +179,6 @@ public class WaterQualityGradeController {
             Double ammonia_nitrogen=sheetAt.getRow(i).getCell(6).getNumericCellValue();
             Double permanganate_index=sheetAt.getRow(i).getCell(7).getNumericCellValue();
             Double DO=sheetAt.getRow(i).getCell(8).getNumericCellValue();
-            /*Cell cell = sheetAt.getRow(i).getCell(2);
-            cell.setCellType(CellType.STRING);
-            grade=cell.getStringCellValue();*/
             waterQualityGrade.setParentId(parentid);
             waterQualityGrade.setId(UUID.randomUUID().toString().replace("-",""));
             waterQualityGrade.setCode(waterQualityGrade.getId());
@@ -228,12 +223,26 @@ public class WaterQualityGradeController {
     // 查询mangodb中的月数据
     @GetMapping("/selectMonthly")
     public Result<Map<String,Object>> selectMonthly(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
-                                                           @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
-                                                    @RequestParam String time){
+                                                    @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
+                                                    @RequestParam String time) throws ParseException {
         Map<String, Object> map = new HashMap<>();
         Query query = new Query();
-        Pattern pattern= Pattern.compile(".*?" +time+ ".*", Pattern.CASE_INSENSITIVE);
-        query.addCriteria(Criteria.where("statisticaltime").regex(pattern));
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+        date.setDate(01);
+        date.setHours(00);
+        date.setMinutes(00);
+        date.setSeconds(00);
+        long ts = date.getTime()/1000;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+        date1.setDate(calendar.getActualMaximum(Calendar.DATE));
+        date1.setHours(23);
+        date1.setMinutes(59);
+        date1.setSeconds(59);
+        long ts1 = date1.getTime()/1000;
+        query.addCriteria(Criteria.where("timestamp").gte(ts).lte(ts1));
         List<WaterqualityMonthly> list = temp.find(query.skip((pageNumber-1)*pageSize).limit(pageSize),WaterqualityMonthly.class);
         for (WaterqualityMonthly w:list) {
             String riverName=waterQualityGradeService.selectRiverName(w.getCode());
@@ -252,18 +261,18 @@ public class WaterQualityGradeController {
                                                            @RequestParam String time  ) throws ParseException {
         Map<String, Object> map = new HashMap<>();
         Query query = new Query();
-        /*Pattern pattern= Pattern.compile("^.*"+time+".*$", Pattern.CASE_INSENSITIVE);
-        query.addCriteria(Criteria.where("statisticaltime").regex(pattern));*/
-        String[] str=time.split("-");
-        int startYear= Integer.parseInt(str[0]);
-        int startMonth= Integer.parseInt(str[1]);
-        int startDay= Integer.parseInt(str[2]);
-        //new Date(startYear, startMonth, startDay+1);
-        //BasicDBObject ageObj = new BasicDBObject("insertTime",new BasicDBObject("$eq",new Date(startYear - 1900, startMonth - 1, startDay)));
-        query.addCriteria(Criteria.where("statisticaltime").is(new Date(startYear, startMonth, startDay+1)));
-        query.limit(pageSize);
-        query.skip((pageNumber-1)*pageSize);
-        List<WaterqualityDaily> list = temp.find(query,WaterqualityDaily.class);
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+        date.setHours(00);
+        date.setMinutes(00);
+        date.setSeconds(00);
+        long ts = date.getTime()/1000;
+        Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+        date1.setHours(23);
+        date1.setMinutes(59);
+        date1.setSeconds(59);
+        long ts1 = date1.getTime()/1000;
+        query.addCriteria(Criteria.where("timestamp").gte(ts).lte(ts1));
+        List<WaterqualityDaily> list = temp.find(query.skip((pageNumber-1)*pageSize).limit(pageSize),WaterqualityDaily.class);
         for (WaterqualityDaily w:list) {
             String riverName=waterQualityGradeService.selectRiverName(w.getCode());
             w.setRiverName(riverName);
@@ -277,17 +286,29 @@ public class WaterQualityGradeController {
 
     // 查询mangodb中的实时数据
     @GetMapping("/selectRealTime")
-    public Result<PageInfo<WaterqualityRealTime>> selectRealTime(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
-                                                             @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize){
-        PageHelper.startPage(pageNumber, pageSize);
+    public Result<Map<String,Object>> selectRealTime(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
+                                                     @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
+                                                     @RequestParam String time) throws ParseException {
+        Map<String, Object> map = new HashMap<>();
         Query query = new Query();
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+        date.setMinutes(00);
+        date.setSeconds(00);
+        long ts = date.getTime()/1000;
+        Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+        date1.setMinutes(59);
+        date1.setSeconds(59);
+        long ts1 = date1.getTime()/1000;
+        query.addCriteria(Criteria.where("timestamp").gte(ts).lte(ts1));
         List<WaterqualityRealTime> list = temp.find(query.skip((pageNumber-1)*pageSize).limit(pageSize),WaterqualityRealTime.class);
         for (WaterqualityRealTime w:list) {
             String riverName=waterQualityGradeService.selectRiverName(w.getCode());
             w.setRiverName(riverName);
         }
-        PageInfo<WaterqualityRealTime> pageInfo = new PageInfo(list);
-        return ResponseMsgUtil.success(pageInfo);
+        Long sum=temp.count(query,WaterqualityRealTime.class);
+        map.put("total", sum);
+        map.put("rows",list);
+        return ResponseMsgUtil.success(map);
     }
 
     @GetMapping("/selectRiver")
@@ -295,86 +316,4 @@ public class WaterQualityGradeController {
         return ResponseMsgUtil.success(waterQualityGradeService.selectRiver(name));
     }
 
-    // 导出
-    //@GetMapping("/down")
-    /*public void down(@RequestParam String[]ids,@RequestParam String num , HttpServletResponse res) throws IOException {
-        //1 设置响应体内容
-        res.setContentType("application/octet-stream");
-        res.setHeader("content-Disposition","attachament;filename=1.xls");
-        //2 编写poi代码
-        HSSFWorkbook workbook=new HSSFWorkbook();
-        //创建工作薄
-        HSSFSheet sheet = workbook.createSheet("student");
-        HSSFRow row = sheet.createRow(0);
-        row.createCell(0).setCellValue("断面编码");
-        row.createCell(1).setCellValue("断面名称");
-        row.createCell(2).setCellValue("河流");
-        row.createCell(3).setCellValue("采样日期");
-        row.createCell(4).setCellValue("水温（℃）");
-        row.createCell(5).setCellValue("总磷（mg/L）");
-        row.createCell(6).setCellValue("氨氮（mg/L）");
-        row.createCell(7).setCellValue("高锰酸盐指数（mg/L）");
-        row.createCell(8).setCellValue("溶解氧（mg/L）");
-        if("0".equals(num) ){
-            List<WaterqualityRealTime>list=null;
-            for (String s:ids ) {
-                WaterqualityRealTime wqr=temp.findById(s,WaterqualityRealTime.class);
-                list.add(wqr);
-            }
-            for(int i=0;i<list.size();i++){
-                HSSFRow row1 = sheet.createRow(i+1);
-                row1.createCell(0).setCellValue(list.get(i).getCode());
-                row1.createCell(1).setCellValue(list.get(i).getSectionname());
-                row1.createCell(2).setCellValue("");
-                row1.createCell(3).setCellValue(list.get(i).getStatisticaltime());
-                row1.createCell(4).setCellValue(list.get(i).getWt());
-                row1.createCell(5).setCellValue(list.get(i).getTotalphosphorus());
-                row1.createCell(6).setCellValue(list.get(i).getAmmonium());
-                row1.createCell(7).setCellValue(list.get(i).getPermanganate());
-                row1.createCell(8).setCellValue(list.get(i).getDissolvedoxygen());
-            }
-        }
-        if("1".equals(num)){
-            List<WaterqualityDaily>list=null;
-            for (String s:ids ) {
-                WaterqualityDaily wqr=temp.findById(s,WaterqualityDaily.class);
-                list.add(wqr);
-            }
-            for(int i=0;i<list.size();i++){
-                HSSFRow row1 = sheet.createRow(i+1);
-                row1.createCell(0).setCellValue(list.get(i).getCode());
-                row1.createCell(1).setCellValue(list.get(i).getSectionname());
-                row1.createCell(2).setCellValue("");
-                row1.createCell(3).setCellValue(list.get(i).getStatisticaltime());
-                row1.createCell(4).setCellValue(list.get(i).getWt());
-                row1.createCell(5).setCellValue(list.get(i).getTotalphosphorus());
-                row1.createCell(6).setCellValue(list.get(i).getAmmonium());
-                row1.createCell(7).setCellValue(list.get(i).getPermanganate());
-                row1.createCell(8).setCellValue(list.get(i).getDissolvedoxygen());
-            }
-        }
-        if("2".equals(num)){
-            List<WaterqualityMonthly>list=null;
-            for (String s:ids ) {
-                WaterqualityMonthly wqr=temp.findById(s,WaterqualityMonthly.class);
-                list.add(wqr);
-            }
-            for(int i=0;i<list.size();i++){
-                HSSFRow row1 = sheet.createRow(i+1);
-                row1.createCell(0).setCellValue(list.get(i).getCode());
-                row1.createCell(1).setCellValue(list.get(i).getSectionname());
-                row1.createCell(2).setCellValue("");
-                row1.createCell(3).setCellValue(list.get(i).getStatisticaltime());
-                row1.createCell(4).setCellValue(list.get(i).getWt());
-                row1.createCell(5).setCellValue(list.get(i).getTotalphosphorus());
-                row1.createCell(6).setCellValue(list.get(i).getAmmonium());
-                row1.createCell(7).setCellValue(list.get(i).getPermanganate());
-                row1.createCell(8).setCellValue(list.get(i).getDissolvedoxygen());
-            }
-        }
-        ServletOutputStream out = res.getOutputStream();
-        workbook.write(out);
-        out.flush();
-        out.close();
-    }*/
 }
