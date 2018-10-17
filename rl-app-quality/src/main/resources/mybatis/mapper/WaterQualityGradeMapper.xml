@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.template.mapper.WaterQualityGradeMapper">
+    <resultMap id="MenuMap" type="com.uhope.template.dto.MdSectionDTO">
+        <result column="NAME" property="name"/>
+        <association property="mdSection" javaType="com.uhope.template.dto.MdSectionDTO" >
+            <result column="RIVERNAME" property="riverName"/>
+        </association>
+    </resultMap>
+
+    <insert id="insert1">
+        insert into water_quality_grade values
+        (#{id},#{code},#{oldCode},#{name},#{riverName},#{samplingTime},#{water_temperature},
+        #{total_phosphorus},#{ammonia_nitrogen},#{permanganate_index},#{DO},#{parentId})
+    </insert>
+
+    <update id="update1">
+        update water_quality_grade set samplingTime=#{samplingTime},water_temperature=#{water_temperature},
+        total_phosphorus=#{total_phosphorus},ammonia_nitrogen=#{ammonia_nitrogen},
+        permanganate_index=#{permanganate_index},DO=#{DO} where id=#{id}
+    </update>
+
+    <!--删除指定报告下的得分条目-->
+    <delete id="deletelist">
+        delete from water_quality_grade where parentId =#{parentid}
+    </delete>
+
+    <select id="selectList" resultType="com.uhope.template.domain.WaterQualityGrade">
+        select * from water_quality_grade <where>
+        <if test="parentid != null ">
+            and parentId = #{parentid}
+        </if>
+        <if test="riverName != null">
+            AND riverName=#{riverName}
+        </if>
+        <if test="name !=null">
+            and name =#{name}
+        </if>
+    </where>
+    </select>
+
+    <!--查询所有的区-->
+    <select id="districtlist" resultType="java.lang.String">
+        select mar.area_name FROM md_administrative_region mar
+        where id%1000000=0 and area_name like CONCAT('%','区')
+    </select>
+
+    <select id="selectCascade" resultMap="MenuMap">
+        select ms.name, m.rivername from md_section ms INNER JOIN md_section m on ms.id=m.id
+    </select>
+
+    <select id="selectRiverName" resultType="java.lang.String">
+        select RIVERNAME from md_section where id = #{code}
+    </select>
+
+    <select id="get1" resultType="com.uhope.template.domain.WaterQualityGrade">
+        select * from water_quality_grade where id=#{id}
+    </select>
+
+    <select id="haveSection" resultType="com.uhope.template.domain.WaterQualityGrade">
+        select name from  water_quality_grade where parentId={parentid}
+    </select>
+    <select id="selectRiver" resultType="java.lang.String">
+        select RIVERNAME from md_section where name=#{name}
+    </select>
+
+</mapper>
