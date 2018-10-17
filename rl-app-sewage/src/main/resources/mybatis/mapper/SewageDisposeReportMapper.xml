@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.template.mapper.SewageDisposeReportMapper">
+    <!--删除指定报告下的得分条目-->
+    <delete id="deletelist">
+        delete from sewage_dispose_report where parentId =#{parentid}
+    </delete>
+    <select id="selectList" resultType="com.uhope.template.domain.SewageDisposeReport">
+        select * from sewage_dispose_report where parentId=#{parentid}
+    </select>
+
+    <!--查询所有的区-->
+    <select id="districtlist" resultType="java.lang.String">
+        select mar.area_name FROM md_administrative_region mar
+        where id%1000000=0 and area_name like CONCAT('%','区')
+    </select>
+
+    <select id="haveSewage" resultType="com.uhope.template.domain.SewageDisposeReport">
+        select name from sewage_dispose_report where parentId=#{parentid}
+    </select>
+
+    <!--查询所有的污水处理厂-->
+    <select id="selectWorks" resultType="java.lang.String">
+        select name from md_component where SUBCLASSID='80020000000000000000000000000000' GROUP BY name
+    </select>
+
+</mapper>
