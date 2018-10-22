@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.assessment.mapper.AssessGradeTypeMapper">
+  <resultMap id="BaseResultMap" type="com.uhope.assessment.domain.AssessGradeType">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="GRADETYPE" jdbcType="VARCHAR" property="gradetype" />
+    <result column="GRADELEVEL" jdbcType="INTEGER" property="gradelevel" />
+    <result column="WEIGHT" jdbcType="INTEGER" property="weight" />
+    <result column="TOTALPOINTS" jdbcType="INTEGER" property="totalpoints" />
+    <result column="SORT" jdbcType="INTEGER" property="sort" />
+    <result column="PARENTID" jdbcType="VARCHAR" property="parentid" />
+  </resultMap>
+</mapper>
