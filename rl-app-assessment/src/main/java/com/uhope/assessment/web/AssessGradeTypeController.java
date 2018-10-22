@@ -3,6 +3,7 @@ package com.uhope.assessment.web;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.uhope.assessment.domain.AssessGradeType;
+import com.uhope.assessment.dto.AssessGradeTypeDTO;
 import com.uhope.assessment.service.AssessGradeTypeService;
 import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
@@ -74,8 +75,8 @@ public class AssessGradeTypeController {
      * @param pageSize   分页大小，如果小于1，则查出所有的记录,默认{@link com.uhope.base.constants.Constant#DEFAULT_PAGE_SIZE}条
      * @return
      */
-    @GetMapping("/list")
-    public Result<List<AssessGradeType>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
+    @GetMapping("/list1")
+    public Result<List<AssessGradeType>> list1(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                               @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize){
         PageHelper.startPage(pageNumber, pageSize);
         List<AssessGradeType> list = assessGradeTypeService.find();
@@ -83,4 +84,29 @@ public class AssessGradeTypeController {
         return ResponseMsgUtil.success(list);
     }
 
+
+    @GetMapping("/list")
+    public Result<List<AssessGradeTypeDTO>> list(){
+        List<AssessGradeTypeDTO> list = assessGradeTypeService.listDTO("");
+
+        for (AssessGradeTypeDTO assessGradeTypeDTO : list) {
+            assessGradeTypeDTO.setChildren(getChild(assessGradeTypeDTO.getId()));
+        }
+
+        return ResponseMsgUtil.success(list);
+    }
+
+    private List<AssessGradeTypeDTO> getChild(String parentid) {
+        List<AssessGradeTypeDTO> childList = assessGradeTypeService.listDTO(parentid);
+
+        if (childList.size()==0){
+            return null;
+        }
+
+        for (AssessGradeTypeDTO assessGradeTypeDTO : childList) {
+            assessGradeTypeDTO.setChildren(getChild(assessGradeTypeDTO.getId()));
+        }
+
+        return childList;
+    }
 }

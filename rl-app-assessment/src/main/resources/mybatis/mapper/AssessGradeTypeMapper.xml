@@ -10,4 +10,9 @@
     <result column="SORT" jdbcType="INTEGER" property="sort" />
     <result column="PARENTID" jdbcType="VARCHAR" property="parentid" />
   </resultMap>
+  <select id="listDTO" parameterType="java.util.Map" resultType="com.uhope.assessment.dto.AssessGradeTypeDTO">
+    select *
+    from assess_grade_type
+    where parentid=#{parentId}
+  </select>
 </mapper>
