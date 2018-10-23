@@ -14,5 +14,6 @@
     select *
     from assess_grade_type
     where parentid=#{parentId}
+    order by `sort`
   </select>
 </mapper>
