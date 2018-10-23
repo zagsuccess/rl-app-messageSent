@@ -64,7 +64,6 @@ public class IllegalXizeController {
         illegalXize.setGradeway(gradeway);
         illegalXize.setDeductMarks(deductMarks);
         illegalXize.setProcessLimitted(processLimitted);
-        illegalXizeService.update(illegalXize);
         illegalXize.setLevel(3);
         illegalXizeService.insert(illegalXize);
         return ResponseMsgUtil.success(illegalXize);
@@ -118,8 +117,6 @@ public class IllegalXizeController {
 
         for (IllegalXizeDTO illegalXizeDTO : list) {
             illegalXizeDTO.setChildList(getChild(illegalXizeDTO.getId()));
-            System.out.println(illegalXizeDTO.getId());
-            System.out.println(illegalXizeDTO.getChildList());
         }
 
         return ResponseMsgUtil.success(list);
