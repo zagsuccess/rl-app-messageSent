@@ -20,5 +20,12 @@
         select * from illegal_xize where PARENTID is null
     </select>
 
+    <!-- 查询市河长办的账号-->
+    <select id="selectSHZB" resultType="java.lang.String">
+        select sm_user.ID from sm_user INNER JOIN
+        (select sur.USER_ID from sm_role sr INNER JOIN sm_user_role sur on sr.id=sur.ROLE_ID where sr.id='fca74e7d677111e7968ef01fafcf3a37'
+        )s on sm_user.id =s.USER_ID where sm_user.region_id='120100000000';
+    </select>
+
 
 </mapper>

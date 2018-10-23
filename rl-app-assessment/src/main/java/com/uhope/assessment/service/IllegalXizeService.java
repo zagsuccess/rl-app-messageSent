@@ -16,4 +16,6 @@ public interface IllegalXizeService extends Service<IllegalXize, IllegalXizeDTO,
     List<IllegalXizeDTO> list(String parentid);
 
     List<IllegalXizeDTO> list1();
+
+    public String selectSHZB();
 }

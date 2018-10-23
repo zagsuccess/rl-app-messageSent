@@ -11,4 +11,6 @@ public interface IllegalXizeMapper extends Mapper<IllegalXize> {
     List<IllegalXizeDTO> list(HashMap<String, Object> maps);
 
     List<IllegalXizeDTO> list1();
+
+    public String selectSHZB();
 }

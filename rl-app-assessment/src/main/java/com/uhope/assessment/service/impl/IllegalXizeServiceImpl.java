@@ -34,4 +34,9 @@ public class IllegalXizeServiceImpl extends AbstractService<IllegalXize, Illegal
     public List<IllegalXizeDTO> list1() {
         return illegalXizeMapper.list1();
     }
+
+    @Override
+    public String selectSHZB() {
+        return illegalXizeMapper.selectSHZB();
+    }
 }
