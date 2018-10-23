@@ -96,6 +96,11 @@
             <version>${uip.base.service.client.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.uhope.rl</groupId>
+            <artifactId>rl-app-basicdata-service-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
             <version>3.17</version>
