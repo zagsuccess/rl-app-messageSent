@@ -17,6 +17,7 @@
     </parent>
     <properties>
         <common.core.version>0.0.1-SNAPSHOT</common.core.version>
+        <uip.base.service.client.version>0.0.1-SNAPSHOT</uip.base.service.client.version>
     </properties>
 
     <dependencies>
@@ -81,6 +82,12 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <!-- 基础服务客户端 -->
+        <dependency>
+            <groupId>com.uhope.uip</groupId>
+            <artifactId>uip-base-service-client</artifactId>
+            <version>${uip.base.service.client.version}</version>
         </dependency>
 
     </dependencies>

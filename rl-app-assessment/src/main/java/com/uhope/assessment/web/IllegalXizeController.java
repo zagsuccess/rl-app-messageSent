@@ -8,10 +8,15 @@ import com.uhope.assessment.service.IllegalXizeService;
 import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
+import com.uhope.uip.dto.UserDTO;
+import com.uhope.uip.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+import static com.uhope.assessment.utils.CommonUtil.getFeigionServiceResultData;
 
 /**
  * @Author :shujihui
@@ -24,6 +29,8 @@ import java.util.List;
 public class IllegalXizeController {
     @Autowired
     private IllegalXizeService illegalXizeService;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/add")
     public Result<IllegalXize> add(@RequestParam String gradeIllegal) {
@@ -130,5 +137,39 @@ public class IllegalXizeController {
         }
 
         return childList;
+    }
+
+    @GetMapping("/userinfo")
+    public Result<Integer> userinfo(HttpServletRequest request){
+        //获取当前用户信息
+        UserDTO userDTO = getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
+        if(userDTO == null ){
+            return ResponseMsgUtil.failure("获取用户失败");
+        }
+        //默认是00   （00表示都不是  01表示市环保局  02表示市河长办 ）
+        int grade=00;
+        if(userDTO.getId().equals(illegalXizeService.selectSHZB())){
+            grade=01;
+        }
+
+        return ResponseMsgUtil.success(grade);
+    }
+
+    @GetMapping("/userinfo1")
+    public Result<String> userinfo(String id){
+        //获取当前用户信息
+       /* UserDTO userDTO = getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
+        if(userDTO == null ){
+            return ResponseMsgUtil.failure("获取用户失败");
+        }*/
+        //默认是00   （00表示都不是  01表示市环保局  02表示市河长办 ）
+        String grade="00";
+
+        if(id.equals(illegalXizeService.selectSHZB())){
+            grade="01";
+        }
+
+
+        return ResponseMsgUtil.success(grade);
     }
 }
