@@ -112,4 +112,25 @@ public class SewageDisposeController {
 
         return ResponseMsgUtil.success(grade);
     }
+
+    @GetMapping("/userinfo1")
+    public Result<String> userinfo(String id){
+        //获取当前用户信息
+       /* UserDTO userDTO = getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
+        if(userDTO == null ){
+            return ResponseMsgUtil.failure("获取用户失败");
+        }*/
+        //默认是00   （00表示都不是  01表示市环保局  02表示市河长办 ）
+        String grade="00";
+
+        if(id.equals(sewageDisposeService.selectSHZB())){
+            grade="02";
+        }
+
+        if(id.equals(sewageDisposeService.selectSHBJ())){
+            grade="01";
+        }
+
+        return ResponseMsgUtil.success(grade);
+    }
 }
