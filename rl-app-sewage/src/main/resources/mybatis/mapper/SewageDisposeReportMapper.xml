@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.uhope.template.mapper.SewageDisposeReportMapper">
+<mapper namespace="com.uhope.sewage.mapper.SewageDisposeReportMapper">
     <!--删除指定报告下的得分条目-->
     <delete id="deletelist">
         delete from sewage_dispose_report where parentId =#{parentid}
     </delete>
-    <select id="selectList" resultType="com.uhope.template.domain.SewageDisposeReport">
+    <select id="selectList" resultType="com.uhope.sewage.domain.SewageDisposeReport">
         select * from sewage_dispose_report where parentId=#{parentid}
     </select>
 
@@ -15,7 +15,7 @@
         where id%1000000=0 and area_name like CONCAT('%','区')
     </select>
 
-    <select id="haveSewage" resultType="com.uhope.template.domain.SewageDisposeReport">
+    <select id="haveSewage" resultType="com.uhope.sewage.domain.SewageDisposeReport">
         select name from sewage_dispose_report where parentId=#{parentid}
     </select>
 

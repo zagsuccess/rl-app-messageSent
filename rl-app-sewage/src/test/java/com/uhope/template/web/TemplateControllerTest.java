@@ -1,5 +1,6 @@
 package com.uhope.template.web;
 
+import com.uhope.sewage.web.TemplateController;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
@@ -16,7 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 /**
- * {@link com.uhope.template.web.TemplateController} Tester.
+ * {@link TemplateController} Tester.
  *
  * @author xiepuyao
  * @version 1.0
