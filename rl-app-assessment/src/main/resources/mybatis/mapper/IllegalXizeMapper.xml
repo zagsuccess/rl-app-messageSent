@@ -3,7 +3,7 @@
 <mapper namespace="com.uhope.assessment.mapper.IllegalXizeMapper">
     <!-- IllegalXize的resultMap,column是给数据库列起的别名,它对应property类的属性-->
     <resultMap id="riMap" type="com.uhope.assessment.dto.IllegalXizeDTO">
-        <id column="ID" property="id" />
+        <id column="ID" jdbcType="VARCHAR" property="id" />
         <result column="GRADEILLEGAL" property="gradeillegal" />
         <result column="GRADETYPE" property="gradetype" />
         <result column="GRADEDETAILED" property="gradedetailed" />
@@ -13,10 +13,10 @@
         <result column="LEVEL" property="level" />
         <result column="PARENTID" property="parentid" />
     </resultMap>
-    <select id="list" parameterType="java.util.Map" resultType="com.uhope.assessment.dto.IllegalXizeDTO">
+    <select id="list" parameterType="java.util.Map" resultMap="riMap">
         select * from illegal_xize where PARENTID=#{parentId}
     </select>
-    <select id="list1" resultType="com.uhope.assessment.dto.IllegalXizeDTO">
+    <select id="list1" resultMap="riMap">
         select * from illegal_xize where PARENTID is null
     </select>
 
