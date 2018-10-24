@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.uhope.template.mapper.WaterQualityGradeMapper">
-    <resultMap id="MenuMap" type="com.uhope.template.dto.MdSectionDTO">
+<mapper namespace="com.uhope.quality.mapper.WaterQualityGradeMapper">
+    <resultMap id="MenuMap" type="com.uhope.quality.dto.MdSectionDTO">
         <result column="NAME" property="name"/>
-        <association property="mdSection" javaType="com.uhope.template.dto.MdSectionDTO" >
+        <association property="mdSection" javaType="com.uhope.quality.dto.MdSectionDTO" >
             <result column="RIVERNAME" property="riverName"/>
         </association>
     </resultMap>
@@ -25,7 +25,7 @@
         delete from water_quality_grade where parentId =#{parentid}
     </delete>
 
-    <select id="selectList" resultType="com.uhope.template.domain.WaterQualityGrade">
+    <select id="selectList" resultType="com.uhope.quality.domain.WaterQualityGrade">
         select * from water_quality_grade <where>
         <if test="parentid != null ">
             and parentId = #{parentid}
@@ -53,11 +53,11 @@
         select RIVERNAME from md_section where id = #{code}
     </select>
 
-    <select id="get1" resultType="com.uhope.template.domain.WaterQualityGrade">
+    <select id="get1" resultType="com.uhope.quality.domain.WaterQualityGrade">
         select * from water_quality_grade where id=#{id}
     </select>
 
-    <select id="haveSection" resultType="com.uhope.template.domain.WaterQualityGrade">
+    <select id="haveSection" resultType="com.uhope.quality.domain.WaterQualityGrade">
         select name from  water_quality_grade where parentId=#{parentid}
     </select>
     <select id="selectRiver" resultType="java.lang.String">

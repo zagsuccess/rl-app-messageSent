@@ -1,6 +1,6 @@
 package com.uhope.undercover.web;
 
-import com.uhope.template.web.TemplateController;
+import com.uhope.quality.web.TemplateController;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
