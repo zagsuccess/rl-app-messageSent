@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.uhope.template.mapper.SurfaceWaterGradeMapper">
-    <resultMap id="BaseResultMap" type="com.uhope.template.domain.SurfaceWaterGrade">
+<mapper namespace="com.uhope.water.mapper.SurfaceWaterGradeMapper">
+    <resultMap id="BaseResultMap" type="com.uhope.water.domain.SurfaceWaterGrade">
         <id column="id" jdbcType="VARCHAR" property="id" />
         <result column="popedom" jdbcType="VARCHAR" property="popedom" />
         <result column="grade" jdbcType="VARCHAR" property="grade" />
@@ -11,7 +11,7 @@
     <delete id="deletelist">
         delete from surface_water_grade where parentId =#{parentid}
     </delete>
-    <select id="selectList" resultType="com.uhope.template.domain.SurfaceWaterGrade">
+    <select id="selectList" resultType="com.uhope.water.domain.SurfaceWaterGrade">
         select * from surface_water_grade where parentId=#{parentid}
     </select>
 

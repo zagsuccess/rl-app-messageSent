@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.uhope.template.mapper.SurfaceWaterMapper">
-    <resultMap id="BaseResultMap" type="com.uhope.template.domain.SurfaceWater">
+<mapper namespace="com.uhope.water.mapper.SurfaceWaterMapper">
+    <resultMap id="BaseResultMap" type="com.uhope.water.domain.SurfaceWater">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
         <result column="issue" jdbcType="VARCHAR" property="issue"/>
@@ -11,7 +11,7 @@
         <result column="status" jdbcType="INTEGER" property="status"/>
     </resultMap>
 
-    <select id="selectList" resultType="com.uhope.template.domain.SurfaceWater">
+    <select id="selectList" resultType="com.uhope.water.domain.SurfaceWater">
         select * from surface_water
         <where>
             <if test="issue != null ">
