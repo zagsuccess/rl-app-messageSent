@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.spotcheck.mapper.ScSpotcheckMapper">
+  <resultMap id="BaseResultMap" type="com.uhope.spotcheck.domain.ScSpotcheck">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="region_code" jdbcType="VARCHAR" property="regionCode" />
+    <result column="region_name" jdbcType="VARCHAR" property="regionName" />
+    <result column="check_date" jdbcType="TIMESTAMP" property="checkDate" />
+    <result column="check_river" jdbcType="VARCHAR" property="checkRiver" />
+    <result column="task_type" jdbcType="INTEGER" property="taskType" />
+    <result column="send_person_id" jdbcType="VARCHAR" property="sendPersonId" />
+    <result column="send_person" jdbcType="VARCHAR" property="sendPerson" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+</mapper>
