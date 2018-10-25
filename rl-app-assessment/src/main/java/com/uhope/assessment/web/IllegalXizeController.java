@@ -146,7 +146,7 @@ public class IllegalXizeController {
         //默认是00   （00表示都不是  01表示市环保局  02表示市河长办 ）
         int grade=00;
         if(userDTO.getId().equals(illegalXizeService.selectSHZB())){
-            grade=01;
+            grade=02;
         }
 
         return ResponseMsgUtil.success(grade);
@@ -163,7 +163,7 @@ public class IllegalXizeController {
         String grade="00";
 
         if(id.equals(illegalXizeService.selectSHZB())){
-            grade="01";
+            grade="02";
         }
 
 

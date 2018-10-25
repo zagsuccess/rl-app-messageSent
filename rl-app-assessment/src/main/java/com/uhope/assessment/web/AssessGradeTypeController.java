@@ -127,10 +127,10 @@ public class AssessGradeTypeController {
         if(userDTO == null ){
             return ResponseMsgUtil.failure("获取用户失败");
         }
-        //默认是00   （00表示都不是  01表示市河长办 ）
+        //默认是00   （00表示都不是  02表示市河长办 ）
         int grade=00;
         if(userDTO.getId().equals(illegalXizeService.selectSHZB())){
-            grade=01;
+            grade=02;
         }
 
         return ResponseMsgUtil.success(grade);
@@ -139,11 +139,11 @@ public class AssessGradeTypeController {
     @GetMapping("/userinfo1")
     public Result<String> userinfo1(String id){
 
-        //默认是00   （00表示都不是  01 市河长办 ）
+        //默认是00   （00表示都不是  02 市河长办 ）
         String grade="00";
 
         if(id.equals(illegalXizeService.selectSHZB())){
-            grade="01";
+            grade="02";
         }
 
 
