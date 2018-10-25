@@ -23,8 +23,8 @@
     <!-- 查询市河长办的账号-->
     <select id="selectSHZB" resultType="java.lang.String">
         select sm_user.ID from sm_user INNER JOIN
-        (select sur.USER_ID from sm_role sr INNER JOIN sm_user_role sur on sr.id=sur.ROLE_ID where sr.name='河长办'
-        )s on sm_user.id =s.USER_ID where sm_user.region_id='120100000000';
+        (select sur.USER_ID from sm_role sr INNER JOIN sm_user_role sur on sr.id=sur.ROLE_ID where sr.name='市河长办'
+        )s on sm_user.id =s.USER_ID
     </select>
 
     <!--查询排监处的账号-->
