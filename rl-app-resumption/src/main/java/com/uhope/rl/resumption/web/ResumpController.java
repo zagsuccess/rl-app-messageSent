@@ -241,7 +241,7 @@ public class ResumpController {
      * @return 前10个问题较多河道信息
      */
     @GetMapping("/listWithMoreProblemReach")
-    public Result<List<ProblemNumStatistic>> listWithMoreProblemReach(){
+    public Result<List<RiverProblemStatistic>> listWithMoreProblemReach(){
         return ResponseMsgUtil.success(resumptionService.findWithMoreProblemReach());
     }
 
@@ -420,17 +420,5 @@ public class ResumpController {
             }
         }
         return targetList;
-    }
-
-    @GetMapping("/test")
-    public Result<Object> test(){
-
-        //获取所有的区
-        List<ProblemStatisticDTO> list = resumptionService.findAllRegionProblemStatistic( "120114000000");
-        for (int i=0; i<list.size(); i++){
-            String regionId = list.get(i).getRegionId();
-            list.get(i).setList(resumptionService.findRegionTypeNumStatistic(regionId, 3, null, null));
-        }
-        return ResponseMsgUtil.success(list);
     }
 }
