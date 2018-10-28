@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.water.mapper.ExeAssPatrolMapper">
+  <resultMap id="BaseResultMap" type="com.uhope.water.domain.ExeAssPatrol">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="river_name" jdbcType="VARCHAR" property="riverName" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="patrol_date" jdbcType="TIMESTAMP" property="patrolDate" />
+    <result column="river_question" jdbcType="VARCHAR" property="riverQuestion" />
+    <result column="points_type" jdbcType="VARCHAR" property="pointsType" />
+    <result column="buckle_scores" jdbcType="INTEGER" property="buckleScores" />
+    <result column="pator_person" jdbcType="VARCHAR" property="patorPerson" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="photo_url" jdbcType="VARCHAR" property="photoUrl" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, river_name, region, patrol_date, river_question, points_type, buckle_scores, 
+    pator_person, `location`, photo_url
+  </sql>
+  <select id="selectByExample" parameterType="com.uhope.water.domain.ExeAssPatrolExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from exe_ass_patrol
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from exe_ass_patrol
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from exe_ass_patrol
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.uhope.water.domain.ExeAssPatrolExample">
+    delete from exe_ass_patrol
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.uhope.water.domain.ExeAssPatrol" useGeneratedKeys="true">
+    insert into exe_ass_patrol (river_name, region, patrol_date, 
+      river_question, points_type, buckle_scores, 
+      pator_person, `location`, photo_url
+      )
+    values (#{riverName,jdbcType=VARCHAR}, #{region,jdbcType=VARCHAR}, #{patrolDate,jdbcType=TIMESTAMP}, 
+      #{riverQuestion,jdbcType=VARCHAR}, #{pointsType,jdbcType=VARCHAR}, #{buckleScores,jdbcType=INTEGER}, 
+      #{patorPerson,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, #{photoUrl,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.uhope.water.domain.ExeAssPatrol" useGeneratedKeys="true">
+    insert into exe_ass_patrol
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="riverName != null">
+        river_name,
+      </if>
+      <if test="region != null">
+        region,
+      </if>
+      <if test="patrolDate != null">
+        patrol_date,
+      </if>
+      <if test="riverQuestion != null">
+        river_question,
+      </if>
+      <if test="pointsType != null">
+        points_type,
+      </if>
+      <if test="buckleScores != null">
+        buckle_scores,
+      </if>
+      <if test="patorPerson != null">
+        pator_person,
+      </if>
+      <if test="location != null">
+        `location`,
+      </if>
+      <if test="photoUrl != null">
+        photo_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="riverName != null">
+        #{riverName,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null">
+        #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="patrolDate != null">
+        #{patrolDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="riverQuestion != null">
+        #{riverQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="pointsType != null">
+        #{pointsType,jdbcType=VARCHAR},
+      </if>
+      <if test="buckleScores != null">
+        #{buckleScores,jdbcType=INTEGER},
+      </if>
+      <if test="patorPerson != null">
+        #{patorPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="photoUrl != null">
+        #{photoUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.uhope.water.domain.ExeAssPatrolExample" resultType="java.lang.Long">
+    select count(*) from exe_ass_patrol
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update exe_ass_patrol
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.riverName != null">
+        river_name = #{record.riverName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.region != null">
+        region = #{record.region,jdbcType=VARCHAR},
+      </if>
+      <if test="record.patrolDate != null">
+        patrol_date = #{record.patrolDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.riverQuestion != null">
+        river_question = #{record.riverQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pointsType != null">
+        points_type = #{record.pointsType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.buckleScores != null">
+        buckle_scores = #{record.buckleScores,jdbcType=INTEGER},
+      </if>
+      <if test="record.patorPerson != null">
+        pator_person = #{record.patorPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.location != null">
+        `location` = #{record.location,jdbcType=VARCHAR},
+      </if>
+      <if test="record.photoUrl != null">
+        photo_url = #{record.photoUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update exe_ass_patrol
+    set id = #{record.id,jdbcType=VARCHAR},
+      river_name = #{record.riverName,jdbcType=VARCHAR},
+      region = #{record.region,jdbcType=VARCHAR},
+      patrol_date = #{record.patrolDate,jdbcType=TIMESTAMP},
+      river_question = #{record.riverQuestion,jdbcType=VARCHAR},
+      points_type = #{record.pointsType,jdbcType=VARCHAR},
+      buckle_scores = #{record.buckleScores,jdbcType=INTEGER},
+      pator_person = #{record.patorPerson,jdbcType=VARCHAR},
+      `location` = #{record.location,jdbcType=VARCHAR},
+      photo_url = #{record.photoUrl,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.uhope.water.domain.ExeAssPatrol">
+    update exe_ass_patrol
+    <set>
+      <if test="riverName != null">
+        river_name = #{riverName,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null">
+        region = #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="patrolDate != null">
+        patrol_date = #{patrolDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="riverQuestion != null">
+        river_question = #{riverQuestion,jdbcType=VARCHAR},
+      </if>
+      <if test="pointsType != null">
+        points_type = #{pointsType,jdbcType=VARCHAR},
+      </if>
+      <if test="buckleScores != null">
+        buckle_scores = #{buckleScores,jdbcType=INTEGER},
+      </if>
+      <if test="patorPerson != null">
+        pator_person = #{patorPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        `location` = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="photoUrl != null">
+        photo_url = #{photoUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.uhope.water.domain.ExeAssPatrol">
+    update exe_ass_patrol
+    set river_name = #{riverName,jdbcType=VARCHAR},
+      region = #{region,jdbcType=VARCHAR},
+      patrol_date = #{patrolDate,jdbcType=TIMESTAMP},
+      river_question = #{riverQuestion,jdbcType=VARCHAR},
+      points_type = #{pointsType,jdbcType=VARCHAR},
+      buckle_scores = #{buckleScores,jdbcType=INTEGER},
+      pator_person = #{patorPerson,jdbcType=VARCHAR},
+      `location` = #{location,jdbcType=VARCHAR},
+      photo_url = #{photoUrl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
