@@ -1,5 +1,7 @@
 package com.uhope.water.dto;
 
+import com.uhope.water.domain.ExeAssPatrol;
+
 /**
  * 描述:
  * 巡查管理详情DTO
@@ -7,6 +9,6 @@ package com.uhope.water.dto;
  * @author a4994
  * @create 2018-10-27 15:48
  */
-public class ExeAssPatrolDTO {
+public class ExeAssPatrolDTO extends ExeAssPatrol {
 
 }
