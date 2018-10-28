@@ -24,7 +24,7 @@
         GROUP BY t_rn.regionId
     )t_ro ON t_ro.regionId=mar.area_code WHERE mar.grade=3
         <if test="regionId != null">
-            AND t_ro.regionId=#{regionId}
+            AND mar.area_code=#{regionId}
         </if>
     ORDER BY regionId
     </select>
@@ -191,21 +191,10 @@
       SELECT id as regionId, area_name as regionName from md_administrative_region WHERE parent_code = #{parentId}
     </select>
 
-    <select id="findWithMoreProblemReach" resultType="com.uhope.rl.resumption.dto.statistics.ProblemNumStatistic">
-    SELECT t_b.id AS regionId ,t_b.reach_name AS reachName,COUNT(0) AS problemNum, t_b.grade AS grade, t_b.chairman_name AS reachManName FROM
-    (
-    SELECT ee.EVENTREACHID FROM eh_event ee, md_reach mr
-    WHERE ee.eventreachid=mr.id AND ee.createtime >= date_sub(curdate(),interval WEEKDAY(curdate()) day)
-    )t_a
-    LEFT JOIN
-    (
-            SELECT mr.id,mr.reach_name, mr.grade, mrcm.chairman_name
-            FROM md_reach mr,md_reachchairman mrcm
-            WHERE mr.id=mrcm.REACHID
-    )t_b
-    ON t_a.EVENTREACHID=t_b.id
-    GROUP BY t_b.id
-    ORDER BY problemNum DESC
-    LIMIT 10;
+    <select id="findWithMoreProblemReach" resultType="com.uhope.rl.resumption.dto.statistics.RiverProblemStatistic">
+    SELECT mar.area_name AS regionName, ee.EVENTREACHNAME AS riverName, mrcm.chairman_name AS chairmanName, ee.TYPENAME AS problemType
+    FROM eh_event ee, md_reach mr, md_reachchairman mrcm, md_administrative_region mar
+    WHERE ee.EVENTREACHID=mr.id AND ee.createtime >= date_sub(curdate(),interval MONTH(curdate()) day) AND mrcm.REACHID=mr.id AND mr.region_code=mar.area_code
+    ORDER BY ee.CREATETIME DESC
     </select>
 </mapper>

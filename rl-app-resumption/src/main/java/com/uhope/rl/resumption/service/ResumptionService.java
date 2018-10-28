@@ -52,5 +52,5 @@ public interface ResumptionService {
      * 找到本周问题较多河道，取前10条
      * @return 返回对象列表
      */
-    List<ProblemNumStatistic> findWithMoreProblemReach();
+    List<RiverProblemStatistic> findWithMoreProblemReach();
 }

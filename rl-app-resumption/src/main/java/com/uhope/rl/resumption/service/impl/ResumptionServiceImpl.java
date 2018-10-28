@@ -76,7 +76,7 @@ public class ResumptionServiceImpl implements ResumptionService {
     }
 
     @Override
-    public List<ProblemNumStatistic> findWithMoreProblemReach() {
+    public List<RiverProblemStatistic> findWithMoreProblemReach() {
         return resumptionMapper.findWithMoreProblemReach();
     }
 }

@@ -13,10 +13,10 @@
               value="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}" />
 
     <!-- APP 名称没配置, 每个App都需要配置 -->
-    <property name="APP_NAME" value="uiptemplate"></property>
+    <property name="APP_NAME" value="uipresumption"></property>
 
     <!-- APP安装Home目录配置, 每个App都需要配置 -->
-    <property name="APP_HOME" value="/home/uiptemplate"></property>
+    <property name="APP_HOME" value="/home/uipresumption"></property>
 
     <property name="LOG_HOME_PATH" value="${APP_HOME}/logs"></property>
 
@@ -184,7 +184,7 @@
         <appender-ref ref="RUN_FILE" />
     </root>
     <!--配置sql语句打印，name对应mapper包路径,如果有多个，则配置多个<logger>标签-->
-    <logger name="com.uhope.undercover.mapper">
+    <logger name="com.uhope.resumption.mapper">
         <level value="DEBUG"/>
         <appender-ref ref="DEBUG_FILE"/>
     </logger>
