@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.bulletin.mapper.ExeAssPatrolMapper">
+  <resultMap id="BaseResultMap" type="com.uhope.bulletin.domain.ExeAssPatrol">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="river_name" jdbcType="VARCHAR" property="riverName" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="patrol_date" jdbcType="TIMESTAMP" property="patrolDate" />
+    <result column="river_question" jdbcType="VARCHAR" property="riverQuestion" />
+    <result column="points_type" jdbcType="VARCHAR" property="pointsType" />
+    <result column="buckle_scores" jdbcType="INTEGER" property="buckleScores" />
+    <result column="pator_person" jdbcType="VARCHAR" property="patorPerson" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="photo_url" jdbcType="VARCHAR" property="photoUrl" />
+  </resultMap>
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from exe_ass_patrol
+    <where>
+      <if test="riverName != null ">
+        and riverName = #{riverName}
+      </if>
+      <if test="region != null">
+        AND region=#{region}
+      </if>
+      <if test="riverQuestion != null">
+        AND riverQuestion=#{riverQuestion}
+      </if>
+      <if test="patorPerson != null">
+        AND patorPerson=#{patorPerson}
+      </if>
+      <if test="patorPerson != null">
+        AND patorPerson=#{patorPerson}
+      </if>
+      <if test="patrolDateStart != null">
+        AND patrolDate between #{patrolDateStart} AND #{patrolDateEnd}
+      </if>
+    </where>
+  </select>
+</mapper>
