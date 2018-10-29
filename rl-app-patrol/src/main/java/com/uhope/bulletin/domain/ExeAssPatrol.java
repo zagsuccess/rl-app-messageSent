@@ -21,7 +21,7 @@ public class ExeAssPatrol implements Serializable {
 
     private String region;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date patrolDate;
 
     private String riverQuestion;

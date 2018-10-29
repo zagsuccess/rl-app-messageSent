@@ -9,16 +9,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 public interface ExeAssPatrolService extends Service<ExeAssPatrol, ExeAssPatrolDTO, String> {
+
     public PageInfo<ExeAssPatrol> list(
-            @RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
-            @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
-            @RequestParam String riverName,
-            @RequestParam String region,
-            @RequestParam String riverQuestion,
-            @RequestParam String patorPerson,
-            @RequestParam Date patrolDateStart,
-            @RequestParam Date patrolDateEnd) throws ParseException;
+            Integer pageNumber,
+            Integer pageSize,
+            String riverName,
+            String region,
+            String riverQuestion,
+            String patorPerson,
+            String patrolDateStart,
+            String patrolDateEnd) throws ParseException;
+    public List<String> selectGradeWay();
+
+    public List<String> selectGradeDedetailed();
 
 }

@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
+import com.uhope.bulletin.utils.DateUtil;
+import com.uhope.bulletin.utils.TimeUtil;
 import com.uhope.uip.fm.client.FileManagerClient;
 import com.uhope.uip.fm.model.FileItem;
 import com.uhope.uip.service.TokenService;
@@ -14,8 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 描述:
@@ -34,16 +39,26 @@ public class ExeAssPatrolController {
     @Autowired
     private FileManagerClient fileManagerClient;
 
+    @GetMapping("/selectGradeWay")
+    public List<String> selectGradeWay(){
+        return exeAssPatrolService.selectGradeWay();
+    }
+
+    @GetMapping("/selectGradeDedetailed")
+    public List<String> selectGradeDedetailed(){
+        return exeAssPatrolService.selectGradeDedetailed();
+    }
+
     @GetMapping("/selectList")
     public Result<PageInfo<ExeAssPatrol>> selectList(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
-                                               @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
-                                                String riverName,
-                                                String region,
-                                                String riverQuestion,
-                                                String patorPerson,
-                                                Date patrolDateStart,
-                                                Date patrolDateEnd) throws ParseException {
-        return ResponseMsgUtil.success(exeAssPatrolService.list(pageNumber, pageSize, riverName, region, riverQuestion, patorPerson, patrolDateStart, patrolDateEnd));
+                                                     @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
+                                                     String riverName,
+                                                     String region,
+                                                     String riverQuestion,
+                                                     String patorPerson,
+                                                     String patrolDateStart,
+                                                     String patrolDateEnd) throws ParseException {
+        return ResponseMsgUtil.success(exeAssPatrolService.list(pageNumber, pageSize, riverName, region, riverQuestion, patorPerson,patrolDateStart,patrolDateEnd));
     }
 
     @PostMapping("/add")
@@ -78,7 +93,7 @@ public class ExeAssPatrolController {
     }
 
     @GetMapping("/detail")
-    public Result<ExeAssPatrol> detail (@RequestParam String id) {
+    public Result<ExeAssPatrol> detail(@RequestParam String id) {
         return ResponseMsgUtil.success(exeAssPatrolService.get(id));
     }
 

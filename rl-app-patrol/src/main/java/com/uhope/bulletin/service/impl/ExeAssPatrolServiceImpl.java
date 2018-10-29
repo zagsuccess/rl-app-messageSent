@@ -10,6 +10,7 @@ import com.uhope.bulletin.service.ExeAssPatrolService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -25,11 +26,24 @@ public class ExeAssPatrolServiceImpl extends AbstractService<ExeAssPatrol, ExeAs
     @Resource
     private ExeAssPatrolMapper exeAssPatrolMapper;
 
+
+
+
     @Override
-    public PageInfo<ExeAssPatrol> list(Integer pageNumber, Integer pageSize, String riverName, String region, String riverQuestion, String patorPerson, Date patrolDateStart, Date patrolDateEnd) {
+    public PageInfo<ExeAssPatrol> list(Integer pageNumber, Integer pageSize, String riverName, String region, String riverQuestion, String patorPerson, String patrolDateStart, String patrolDateEnd) throws ParseException {
         PageHelper.startPage(pageNumber, pageSize);
         List<ExeAssPatrol> list = exeAssPatrolMapper.selectList(riverName, region, riverQuestion, patorPerson, patrolDateStart, patrolDateEnd);
         PageInfo<ExeAssPatrol> pageInfo = new PageInfo(list);
         return pageInfo;
+    }
+
+    @Override
+    public List<String> selectGradeWay() {
+        return exeAssPatrolMapper.selectGradeWay();
+    }
+
+    @Override
+    public List<String> selectGradeDedetailed() {
+        return exeAssPatrolMapper.selectGradeDedetailed();
     }
 }

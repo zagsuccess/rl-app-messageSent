@@ -8,7 +8,14 @@ import java.util.Date;
 import java.util.List;
 
 public interface ExeAssPatrolMapper extends Mapper<ExeAssPatrol> {
+
     public List<ExeAssPatrol> selectList(@Param("riverName") String riverName, @Param("region") String region,
                                          @Param("riverQuestion") String riverQuestion, @Param("patorPerson") String patorPerson,
-                                         @Param("patrolDateStart") Date patrolDateStart, @Param("patrolDateEnd") Date patrolDateEnd);
+                                         @Param("patrolDateStart") String patrolDateStart, @Param("patrolDateEnd") String patrolDateEnd);
+
+    public List<String> selectGradeWay();
+
+
+
+    public List<String> selectGradeDedetailed();
 }

@@ -15,25 +15,30 @@
   </resultMap>
   <select id="selectList" resultMap="BaseResultMap">
     select * from exe_ass_patrol
-    <where>
-      <if test="riverName != null ">
-        and riverName = #{riverName}
+      <where>
+      <if test="riverName != null and riverName !='' ">
+        and river_name like CONCAT('%',#{riverName},'%')
       </if>
-      <if test="region != null">
-        AND region=#{region}
+      <if test="region != null and region !='' ">
+        AND region  like CONCAT('%',#{region},'%')
       </if>
-      <if test="riverQuestion != null">
-        AND riverQuestion=#{riverQuestion}
+      <if test="riverQuestion != null and riverQuestion !='' ">
+        AND river_question like CONCAT('%',#{riverQuestion},'%')
       </if>
-      <if test="patorPerson != null">
-        AND patorPerson=#{patorPerson}
+      <if test="patorPerson != null and patorPerson !='' ">
+        AND pator_person like CONCAT('%',#{patorPerson},'%')
       </if>
-      <if test="patorPerson != null">
-        AND patorPerson=#{patorPerson}
+      <if test="patrolDateStart != null and patrolDateStart !='' ">
+        and patrol_date between #{patrolDateStart} and #{patrolDateEnd}
       </if>
-      <if test="patrolDateStart != null">
-        AND patrolDate between #{patrolDateStart} AND #{patrolDateEnd}
-      </if>
-    </where>
+      </where>
+  </select>
+
+  <select id="selectGradeWay" resultType="string">
+    SELECT GRADEWAY from illegal_xize
+  </select>
+
+  <select id="selectGradeDedetailed" resultType="string">
+    select GRADEDETAILED from illegal_xize
   </select>
 </mapper>
