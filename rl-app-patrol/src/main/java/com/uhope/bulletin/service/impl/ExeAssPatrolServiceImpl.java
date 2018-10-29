@@ -46,4 +46,9 @@ public class ExeAssPatrolServiceImpl extends AbstractService<ExeAssPatrol, ExeAs
     public List<String> selectGradeDedetailed() {
         return exeAssPatrolMapper.selectGradeDedetailed();
     }
+
+    @Override
+    public List<String> selectDeductMarks(String gradeWay) {
+        return exeAssPatrolMapper.selectDeductMarks(gradeWay);
+    }
 }

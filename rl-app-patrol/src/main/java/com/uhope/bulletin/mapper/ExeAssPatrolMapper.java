@@ -15,6 +15,7 @@ public interface ExeAssPatrolMapper extends Mapper<ExeAssPatrol> {
 
     public List<String> selectGradeWay();
 
+    public List<String> selectDeductMarks(@Param("gradeWay") String gradeWay);
 
 
     public List<String> selectGradeDedetailed();

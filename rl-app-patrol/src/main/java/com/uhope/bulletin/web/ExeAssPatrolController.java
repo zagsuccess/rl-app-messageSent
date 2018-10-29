@@ -4,8 +4,6 @@ import com.github.pagehelper.PageInfo;
 import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
-import com.uhope.bulletin.utils.DateUtil;
-import com.uhope.bulletin.utils.TimeUtil;
 import com.uhope.uip.fm.client.FileManagerClient;
 import com.uhope.uip.fm.model.FileItem;
 import com.uhope.uip.service.TokenService;
@@ -16,9 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -48,6 +44,9 @@ public class ExeAssPatrolController {
     public List<String> selectGradeDedetailed(){
         return exeAssPatrolService.selectGradeDedetailed();
     }
+
+    @GetMapping("/selectDeductMarks")
+    public List<String> selectDeductMarks(String gradeWay){return exeAssPatrolService.selectDeductMarks(gradeWay);}
 
     @GetMapping("/selectList")
     public Result<PageInfo<ExeAssPatrol>> selectList(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,

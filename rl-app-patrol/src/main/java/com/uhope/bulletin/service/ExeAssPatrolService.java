@@ -26,4 +26,6 @@ public interface ExeAssPatrolService extends Service<ExeAssPatrol, ExeAssPatrolD
 
     public List<String> selectGradeDedetailed();
 
+    public List<String> selectDeductMarks(String gradeWay);
+
 }

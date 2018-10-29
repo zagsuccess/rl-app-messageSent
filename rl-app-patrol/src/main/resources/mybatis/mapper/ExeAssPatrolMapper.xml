@@ -35,7 +35,17 @@
   </select>
 
   <select id="selectGradeWay" resultType="string">
-    SELECT GRADEWAY from illegal_xize
+    SELECT GRADEWAY from illegal_xize GROUP BY GRADEWAY
+  </select>
+
+  <select id="selectDeductMarks" resultType="string">
+    SELECT DEDUCT_MARKS FROM illegal_xize
+    <where>
+      <if test="gradeWay !=null">
+        and GRADEWAY = #{gradeWay}
+      </if>
+      order by DEDUCT_MARKS
+    </where>
   </select>
 
   <select id="selectGradeDedetailed" resultType="string">
