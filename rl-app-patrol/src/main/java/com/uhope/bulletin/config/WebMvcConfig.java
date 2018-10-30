@@ -1,4 +1,4 @@
-package com.uhope.water.config;
+package com.uhope.bulletin.config;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
@@ -6,8 +6,8 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.uhope.base.constants.Constant;
 import com.uhope.uip.fm.client.FileManagerClient;
 import com.uhope.uip.fm.client.impl.DefaultFileManagerClient;
-import com.uhope.water.filter.AddTokenFilter;
-import com.uhope.water.filter.ServiceFilter;
+import com.uhope.bulletin.filter.AddTokenFilter;
+import com.uhope.bulletin.filter.ServiceFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
