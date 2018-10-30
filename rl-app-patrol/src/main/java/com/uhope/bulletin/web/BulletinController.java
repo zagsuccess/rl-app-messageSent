@@ -101,15 +101,7 @@ public class    BulletinController {
         return ResponseMsgUtil.success(bulletinService.findBy("id", id));
     }
 
-    /*@PostMapping("/upload")
-    public Result<FileItem> upload(
-            @RequestParam MultipartFile file,
-            @RequestParam String fileName) throws IOException {
-        byte[] data = file.getBytes();
-        Result<FileItem> files = fileManagerClient.upload(data, fileName);
-        files.getData().setUrl(URLDecoder.decode(files.getData().getUrl()));
-        return files;
-    }*/
+
 
     /**
      * 文件上传

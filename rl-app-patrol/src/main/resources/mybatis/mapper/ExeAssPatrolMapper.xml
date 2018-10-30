@@ -44,11 +44,11 @@
       <if test="gradeWay !=null">
         and GRADEWAY = #{gradeWay}
       </if>
-      order by DEDUCT_MARKS
+      group by DEDUCT_MARKS
     </where>
   </select>
 
   <select id="selectGradeDedetailed" resultType="string">
-    select GRADEDETAILED from illegal_xize
+    select GRADEDETAILED from illegal_xize group by GRADEDETAILED
   </select>
 </mapper>
