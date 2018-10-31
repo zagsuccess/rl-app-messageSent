@@ -6,6 +6,8 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.uhope.base.constants.Constant;
 import com.uhope.spotcheck.filter.ServiceFilter;
 import com.uhope.spotcheck.filter.AddTokenFilter;
+import com.uhope.uip.fm.client.FileManagerClient;
+import com.uhope.uip.fm.client.impl.DefaultFileManagerClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -91,6 +93,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registration.setAsyncSupported(true);
         registration.setOrder(2);
         return registration;
+    }
+
+    @Bean
+    public FileManagerClient fileManagerClient() {
+        return new DefaultFileManagerClient(false);
     }
 
 }

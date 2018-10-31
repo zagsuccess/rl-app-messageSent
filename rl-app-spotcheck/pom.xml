@@ -89,6 +89,11 @@
             <artifactId>uip-base-service-client</artifactId>
             <version>${uip.base.service.client.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.uhope</groupId>
+            <artifactId>uip-fm-client</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
