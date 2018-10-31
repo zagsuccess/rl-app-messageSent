@@ -36,8 +36,8 @@ public class ExeAssPatrolController {
     private FileManagerClient fileManagerClient;
 
     @GetMapping("/selectGradeWay")
-    public Result<List<String>> selectGradeWay(){
-        return  ResponseMsgUtil.success(exeAssPatrolService.selectGradeWay());
+    public Result<List<String>> selectGradeWay(String gradeDetailed){
+        return  ResponseMsgUtil.success(exeAssPatrolService.selectGradeWay(gradeDetailed));
     }
 
     @GetMapping("/selectGradeDedetailed")
@@ -46,7 +46,7 @@ public class ExeAssPatrolController {
     }
 
     @GetMapping("/selectDeductMarks")
-    public Result<List<String>> selectDeductMarks(String gradeWay){return ResponseMsgUtil.success(exeAssPatrolService.selectDeductMarks(gradeWay));}
+    public Result<List<String>> selectDeductMarks(String gradeDetailed){return ResponseMsgUtil.success(exeAssPatrolService.selectDeductMarks(gradeDetailed));}
 
     @GetMapping("/selectList")
     public Result<PageInfo<ExeAssPatrol>> selectList(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,

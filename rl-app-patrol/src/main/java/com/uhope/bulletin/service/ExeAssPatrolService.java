@@ -22,10 +22,10 @@ public interface ExeAssPatrolService extends Service<ExeAssPatrol, ExeAssPatrolD
             String patorPerson,
             String patrolDateStart,
             String patrolDateEnd) throws ParseException;
-    public List<String> selectGradeWay();
+    public List<String> selectGradeWay(String gradeDetailed);
 
     public List<String> selectGradeDedetailed();
 
-    public List<String> selectDeductMarks(String gradeWay);
+    public List<String> selectDeductMarks(String gradeDetailed);
 
 }

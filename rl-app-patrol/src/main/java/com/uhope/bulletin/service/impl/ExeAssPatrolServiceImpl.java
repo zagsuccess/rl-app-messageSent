@@ -38,8 +38,8 @@ public class ExeAssPatrolServiceImpl extends AbstractService<ExeAssPatrol, ExeAs
     }
 
     @Override
-    public List<String> selectGradeWay() {
-        return exeAssPatrolMapper.selectGradeWay();
+    public List<String> selectGradeWay(String gradeDetailed) {
+        return exeAssPatrolMapper.selectGradeWay(gradeDetailed);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ExeAssPatrolServiceImpl extends AbstractService<ExeAssPatrol, ExeAs
     }
 
     @Override
-    public List<String> selectDeductMarks(String gradeWay) {
-        return exeAssPatrolMapper.selectDeductMarks(gradeWay);
+    public List<String> selectDeductMarks(String gradeDetailed) {
+        return exeAssPatrolMapper.selectDeductMarks(gradeDetailed);
     }
 }

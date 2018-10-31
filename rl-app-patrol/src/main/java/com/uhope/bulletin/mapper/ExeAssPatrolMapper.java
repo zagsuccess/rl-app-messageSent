@@ -13,9 +13,9 @@ public interface ExeAssPatrolMapper extends Mapper<ExeAssPatrol> {
                                          @Param("riverQuestion") String riverQuestion, @Param("patorPerson") String patorPerson,
                                          @Param("patrolDateStart") String patrolDateStart, @Param("patrolDateEnd") String patrolDateEnd);
 
-    public List<String> selectGradeWay();
+    public List<String> selectGradeWay(@Param("gradeDetailed") String gradeDetailed);
 
-    public List<String> selectDeductMarks(@Param("gradeWay") String gradeWay);
+    public List<String> selectDeductMarks(@Param("gradeDetailed") String gradeDetailed);
 
 
     public List<String> selectGradeDedetailed();
