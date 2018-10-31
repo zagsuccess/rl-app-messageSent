@@ -1,5 +1,6 @@
 package com.uhope.rl.resumption.web;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.uhope.base.constants.Constant;
@@ -176,6 +177,7 @@ public class ResumpController {
             ,@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber
             ,@RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize
     ){
+        PageHelper.startPage(pageNumber, pageSize);
         //没有按时间进行查询，设置默认时间
         if (statTime == null && endTime == null){
             Date startTimeDate = TimeUtil.getStartTime(type);
