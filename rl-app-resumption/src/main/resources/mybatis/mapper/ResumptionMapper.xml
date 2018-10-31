@@ -23,9 +23,6 @@
         )t_rn
         GROUP BY t_rn.regionId
     )t_ro ON t_ro.regionId=mar.area_code WHERE mar.grade=3
-        <if test="regionId != null">
-            AND mar.area_code=#{regionId}
-        </if>
     ORDER BY regionId
     </select>
 
@@ -57,9 +54,6 @@
         GROUP BY mlc.REACHID
         )t_rn GROUP BY t_rn.regionId
         )t_ro ON t_ro.regionId=mar.area_code WHERE mar.grade=3
-            <if test="regionId != null">
-                AND t_ro.regionId=#{regionId}
-            </if>
         ORDER BY regionId
     </select>
 
@@ -184,6 +178,7 @@
         )t_e ON t_d.areaCode=t_e.areaCode1 AND t_d.type=t_e.type1
     )t_c
     ON t_c.areaCode=t_b.areaCode AND t_c.typeId=t_b.typeId
+
     WHERE t_b.areaCode = #{regionId}
     </select>
 

@@ -23,10 +23,9 @@ public class ResumptionServiceImpl implements ResumptionService {
     private ResumptionMapper resumptionMapper;
 
     @Override
-    public List<ReachPatrolNumStatisticDTO> findReachNeedPatrolNumStatistic(Integer type,String regionId,Integer intervalMonths, Integer currentGrade, Integer pageNumber,Integer pageSize) {
+    public List<ReachPatrolNumStatisticDTO> findReachNeedPatrolNumStatistic(Integer type,Integer intervalMonths, Integer currentGrade, Integer pageNumber,Integer pageSize) {
         Map<String,Object> params = new HashMap<>(2);
         params.put("type", type);
-        params.put("regionId", regionId);
         params.put("intervalMonths", intervalMonths);
         params.put("start", (pageNumber-1)*pageSize);
         params.put("pageSize", pageSize);
@@ -35,10 +34,9 @@ public class ResumptionServiceImpl implements ResumptionService {
     }
 
     @Override
-    public List<ReachPatrolNumStatisticDTO> findReachHadPatrolNumStatistic(Integer type,String regionId,String startTime, String endTime, Integer currentGrade,Integer pageNumber,Integer pageSize) {
+    public List<ReachPatrolNumStatisticDTO> findReachHadPatrolNumStatistic(Integer type,String startTime, String endTime, Integer currentGrade,Integer pageNumber,Integer pageSize) {
         Map<String,Object> params = new HashMap<>(2);
         params.put("startTime", startTime);
-        params.put("regionId", regionId);
         params.put("endTime",endTime);
         params.put("start", (pageNumber-1)*pageSize);
         params.put("pageSize", pageSize);

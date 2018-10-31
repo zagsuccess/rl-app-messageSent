@@ -1,6 +1,7 @@
 package com.uhope.rl.resumption.web;
 
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
@@ -44,7 +45,6 @@ public class ResumpController {
      * 根据区域 、时间统计巡查次数 河长巡河统计分析-巡查达标率
      * @param request
      * @param type
-     * @param regionId
      * @param statTime
      * @param endTime
      * @param pageNumber
@@ -55,7 +55,6 @@ public class ResumpController {
     public Result<PageInfo<ReachPatrolNumStatisticDTO>> listReachPatrolNumStatistic(
             HttpServletRequest request
             ,@  RequestParam(name = "type",defaultValue = "2") Integer type
-            ,@RequestParam(name = "regionId", required = false) String regionId
             ,@RequestParam(name = "startTime", required = false) String statTime
             ,@RequestParam(name = "endTime", required = false) String endTime
             ,@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber
@@ -88,37 +87,62 @@ public class ResumpController {
         //regionid 对应的结构为：22233  省，市，区，镇，村
         //默认是村级
         int grade = 5;
-        if(userDTO.getRegionId()%(1000)==0){
+        if(userDTO.getRegionId()%(1000)==0) {
             //镇级
-            grade=4;
+            grade = 4;
+        }
+        if (userDTO.getRegionId()%(1000 * 1000)==0) {
+            //区级
+            grade = 3;
+        }
+        if (userDTO.getRegionId()%(1000 * 1000 * 100)==0) {
+            //市级
+            grade = 2;
+        }
+
+        if(grade == 5) {
+            //村级
+            return ResponseMsgUtil.success();
+        }
+        if(grade == 4) {
+            //镇级
             //查找村级河长应巡次数,相当于给list赋初值
-            list = resumptionService.findReachNeedPatrolNumStatistic(type,regionId,intervalMonths,5, pageNumber, pageSize);
+            list = resumptionService.findReachNeedPatrolNumStatistic(type,intervalMonths,5, pageNumber, pageSize);
             //查找村级河长已巡次数
-            tempList = resumptionService.findReachHadPatrolNumStatistic(type,regionId,statTime, endTime,5, pageNumber, pageSize);
+            tempList = resumptionService.findReachHadPatrolNumStatistic(type,statTime, endTime,5, pageNumber, pageSize);
             list = assignListField(tempList, list, 8);
         }
-        if(userDTO.getRegionId()%(1000*1000)==0){
+        if(grade == 3) {
             //区级
-            grade=3;
+            //查找村级河长应巡次数,相当于给list赋初值
+            list = resumptionService.findReachNeedPatrolNumStatistic(type,intervalMonths,5, pageNumber, pageSize);
+            //查找村级河长已巡次数
+            tempList = resumptionService.findReachHadPatrolNumStatistic(type,statTime, endTime,5, pageNumber, pageSize);
+            list = assignListField(tempList, list, 8);
             //查找镇级河长应巡次数
-            tempList = resumptionService.findReachNeedPatrolNumStatistic(type,regionId,intervalMonths,4, pageNumber, pageSize);
+            tempList = resumptionService.findReachNeedPatrolNumStatistic(type,intervalMonths,4, pageNumber, pageSize);
             //将镇级河长应巡次数赋值给list
             list = assignListField(tempList, list, 4);
-            tempList = resumptionService.findReachHadPatrolNumStatistic(type,regionId,statTime, endTime,4, pageNumber, pageSize);
+            tempList = resumptionService.findReachHadPatrolNumStatistic(type,statTime, endTime,4, pageNumber, pageSize);
             list = assignListField(tempList, list, 7);
         }
-        if(userDTO.getRegionId()%(1000*1000*100)==0){
-            //市级
-            grade=2;
+        if(grade == 2){
+            //查找村级河长应巡次数,相当于给list赋初值
+            list = resumptionService.findReachNeedPatrolNumStatistic(type,intervalMonths,5, pageNumber, pageSize);
+            //查找村级河长已巡次数
+            tempList = resumptionService.findReachHadPatrolNumStatistic(type,statTime, endTime,5, pageNumber, pageSize);
+            list = assignListField(tempList, list, 8);
+            //查找镇级河长应巡次数
+            tempList = resumptionService.findReachNeedPatrolNumStatistic(type,intervalMonths,4, pageNumber, pageSize);
+            //将镇级河长应巡次数赋值给list
+            list = assignListField(tempList, list, 4);
+            tempList = resumptionService.findReachHadPatrolNumStatistic(type,statTime, endTime,4, pageNumber, pageSize);
+            list = assignListField(tempList, list, 7);
             //查找区级河长应巡次数
-            tempList = resumptionService.findReachNeedPatrolNumStatistic(type,regionId,intervalMonths,3, pageNumber, pageSize);
+            tempList = resumptionService.findReachNeedPatrolNumStatistic(type,intervalMonths,3, pageNumber, pageSize);
             list = assignListField(tempList, list, 3);
-            tempList = resumptionService.findReachHadPatrolNumStatistic(type,regionId,statTime, endTime,3, pageNumber, pageSize);
+            tempList = resumptionService.findReachHadPatrolNumStatistic(type,statTime, endTime,3, pageNumber, pageSize);
             list = assignListField(tempList, list, 6);
-        }
-        if(userDTO.getRegionId()%(1000*1000*100*100)==0){
-            //省级
-            grade=1;
         }
 
         list = calc(list, grade);
@@ -202,15 +226,17 @@ public class ResumpController {
             return ResponseMsgUtil.failure("获取用户失败");
         }
 
-        List<ProblemStatisticDTO> list = resumptionService.findAllRegionProblemStatistic(userDTO.getRegionId().toString());
+        List<ProblemStatisticDTO> list = Lists.newArrayList();
+        if (userDTO.getRegionId() == 120000000000L){
+            list = resumptionService.findAllRegionProblemStatistic("120100000000");
+        }else{
+            list = resumptionService.findAllRegionProblemStatistic(userDTO.getRegionId().toString());
+        }
         //获取用户的regionId并解析其河长级别
         //regionid 对应的结构为：22233  省，市，区，镇，村
         //默认是村级
         int grade = 0;
-        if(userDTO.getRegionId()%(1000*1000*100*100)==0){
-            //省级
-            grade=1;
-        }else if(userDTO.getRegionId()%(1000*1000*100)==0){
+        if(userDTO.getRegionId()%(1000*1000*100)==0){
             //市级
             grade=2;
             for (int i=0; i<list.size(); i++){
