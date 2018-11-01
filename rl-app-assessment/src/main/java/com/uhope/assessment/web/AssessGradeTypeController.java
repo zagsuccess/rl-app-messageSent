@@ -78,26 +78,9 @@ public class AssessGradeTypeController {
         return ResponseMsgUtil.success(assessGradeType);
     }
 
-    /**
-     * 带分页的查询,根据条件获取菜单列表,可分页，默认查询第一页,一次" + DEFAULT_PAGE_SIZE + "条记录
-     *
-     * @param pageNumber 默认第{@link com.uhope.base.constants.Constant#DEFAULT_PAGE_NUMBER}页，如果小于1，则查出所有的记录
-     * @param pageSize   分页大小，如果小于1，则查出所有的记录,默认{@link com.uhope.base.constants.Constant#DEFAULT_PAGE_SIZE}条
-     * @return
-     */
-    @GetMapping("/list1")
-    public Result<List<AssessGradeType>> list1(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
-                                              @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize){
-        PageHelper.startPage(pageNumber, pageSize);
-        List<AssessGradeType> list = assessGradeTypeService.find();
-        PageInfo<AssessGradeType> pageInfo = new PageInfo(list);
-        return ResponseMsgUtil.success(list);
-    }
-
-
     @GetMapping("/list")
     public Result<List<AssessGradeTypeDTO>> list(){
-        List<AssessGradeTypeDTO> list = assessGradeTypeService.listDTO("");
+        List<AssessGradeTypeDTO> list = assessGradeTypeService.listDTO(null);
 
         for (AssessGradeTypeDTO assessGradeTypeDTO : list) {
             assessGradeTypeDTO.setChildren(getChild(assessGradeTypeDTO.getId()));
@@ -145,7 +128,6 @@ public class AssessGradeTypeController {
         if(id.equals(illegalXizeService.selectSHZB())){
             grade="02";
         }
-
 
         return ResponseMsgUtil.success(grade);
     }
