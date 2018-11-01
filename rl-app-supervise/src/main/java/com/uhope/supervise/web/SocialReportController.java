@@ -7,13 +7,17 @@ import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
 import com.uhope.supervise.domain.ShSocialReport;
 import com.uhope.supervise.service.ShSocialReportService;
+import com.uhope.uip.fm.client.FileManagerClient;
+import com.uhope.uip.fm.model.FileItem;
 import com.uhope.uip.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tk.mybatis.mapper.entity.Condition;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +33,8 @@ public class SocialReportController {
     private ShSocialReportService socialReportService;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private FileManagerClient fileManagerClient;
 
     @PostMapping("/addReport")
     public Result<ShSocialReport> addReport(ShSocialReport socialReport, HttpServletRequest request){
@@ -87,5 +93,19 @@ public class SocialReportController {
     public Result<ShSocialReport> updateReport(ShSocialReport socialReport){
         socialReportService.update(socialReport);
         return ResponseMsgUtil.success("修改成功", socialReport);
+    }
+
+    /**
+     * 文件上传
+     *
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/upload")
+    public Result<FileItem> upload(@RequestParam MultipartFile file) throws IOException {
+        String filename = file.getOriginalFilename();
+        Result<FileItem> fileItemResult = fileManagerClient.upload(file.getBytes(), filename);
+        return fileItemResult;
     }
 }

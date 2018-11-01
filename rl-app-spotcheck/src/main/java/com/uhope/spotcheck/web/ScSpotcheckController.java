@@ -279,9 +279,9 @@ public class ScSpotcheckController {
      * @throws IOException
      */
     @PostMapping("/upload")
-    public Result<Result<FileItem>> upload(@RequestParam MultipartFile file) throws IOException {
+    public Result<FileItem> upload(@RequestParam MultipartFile file) throws IOException {
         String filename = file.getOriginalFilename();
         Result<FileItem> fileItemResult = fileManagerClient.upload(file.getBytes(), filename);
-        return ResponseMsgUtil.success(fileItemResult);
+        return fileItemResult;
     }
 }
