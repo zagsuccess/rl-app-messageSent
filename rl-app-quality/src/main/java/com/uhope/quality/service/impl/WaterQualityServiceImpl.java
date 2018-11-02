@@ -33,17 +33,17 @@ public class WaterQualityServiceImpl extends AbstractService<WaterQuality, Water
     }
 
     @Override
-    public String selectSHZB() {
-        return waterQualityMapper.selectSHZB();
-    }
-
-    @Override
-    public String selectSHBJ() {
-        return waterQualityMapper.selectSHBJ();
-    }
-
-    @Override
     public WaterQuality get1(String id) {
         return waterQualityMapper.get1(id);
+    }
+
+    @Override
+    public String selectRole(String id) {
+        return waterQualityMapper.selectRole(id);
+    }
+
+    @Override
+    public WaterQuality selectHave(String issue) {
+        return waterQualityMapper.selectHave(issue);
     }
 }

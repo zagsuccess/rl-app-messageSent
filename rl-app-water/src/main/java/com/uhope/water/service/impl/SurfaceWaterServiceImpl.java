@@ -33,12 +33,12 @@ public class SurfaceWaterServiceImpl extends AbstractService<SurfaceWater, Surfa
     }
 
     @Override
-    public String selectSHZB() {
-        return surfaceWaterMapper.selectSHZB();
+    public String selectRole(String id) {
+        return surfaceWaterMapper.selectRole(id);
     }
 
     @Override
-    public String selectSHBJ() {
-        return surfaceWaterMapper.selectSHBJ();
+    public SurfaceWater selectHave(String issue) {
+        return surfaceWaterMapper.selectHave(issue);
     }
 }

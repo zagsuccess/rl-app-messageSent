@@ -50,6 +50,17 @@ public class SewageDisposeController {
         return ResponseMsgUtil.success(sewageDispose);
     }
 
+    //查询是否这个月份是否创建过报告
+    @GetMapping("/selectHave")
+    public Result<String> selectHave(@RequestParam String issue) {
+        SewageDispose waterQuality = sewageDisposeService.selectHave(issue);
+        String msg="没有";
+        if (waterQuality!=null){
+            msg="有";
+        }
+        return ResponseMsgUtil.success(msg);
+    }
+
     @GetMapping("/list")
     public Result<PageInfo<SewageDispose>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                                @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
@@ -102,11 +113,11 @@ public class SewageDisposeController {
         }
         //默认是00   （00表示都不是  01表示市环保局  02表示市河长办 ）
         int grade=00;
-        if(userDTO.getId().equals(sewageDisposeService.selectSHZB())){
+        if("市河长办".equals(sewageDisposeService.selectRole(userDTO.getId()))){
             grade=02;
         }
 
-        if(userDTO.getId().equals(sewageDisposeService.selectSHBJ())){
+        if("排监处".equals(sewageDisposeService.selectRole(userDTO.getId()))){
             grade=01;
         }
 
@@ -123,11 +134,11 @@ public class SewageDisposeController {
         //默认是00   （00表示都不是  01表示市环保局  02表示市河长办 ）
         String grade="00";
 
-        if(id.equals(sewageDisposeService.selectSHZB())){
+        if("市河长办".equals(sewageDisposeService.selectRole(id))){
             grade="02";
         }
 
-        if(id.equals(sewageDisposeService.selectSHBJ())){
+        if("排监处".equals(sewageDisposeService.selectRole(id))){
             grade="01";
         }
 

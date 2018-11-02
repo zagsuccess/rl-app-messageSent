@@ -13,10 +13,7 @@ import com.uhope.quality.dto.MdSectionDTO;
 import com.uhope.quality.service.WaterQualityGradeService;
 import com.uhope.quality.utils.ExcelUtil;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -146,31 +143,33 @@ public class WaterQualityGradeController {
         //获取所有行
         int hang = sheetAt.getPhysicalNumberOfRows();
         for (int i = 2; i < hang; i++) {
-            Cell cell = sheetAt.getRow(i).getCell(0);
-            cell.setCellType(CellType.STRING);
-            String oldCode=cell.getStringCellValue();
-           //=sheetAt.getRow(i).getCell(1).getStringCellValue();;
-            String name = sheetAt.getRow(i).getCell(1).getStringCellValue();
-            String riverName=sheetAt.getRow(i).getCell(2).getStringCellValue();
+            Row row = sheetAt.getRow(i);
+            Cell cell = row.getCell(0);
+            if (cell != null) {
+                cell.setCellType(CellType.STRING);
+            }
+            String oldCode=cell== null ? null :cell.getStringCellValue();
+            String name = row.getCell(1).getStringCellValue();
+            String riverName= row.getCell(2).getStringCellValue();
             Date samplingTime=null;
-            if(sheetAt.getRow(i).getCell(3).getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                short format = sheetAt.getRow(i).getCell(3).getCellStyle().getDataFormat();
+            if(row.getCell(3).getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                short format = row.getCell(3).getCellStyle().getDataFormat();
                 //判断日期个格式是否是 2017/01/01 这样
                 /*
                  * 14 yyyy-MM-dd / 2017/01/01
                  * 31 yyyy年m月d日
                  * */
                 if (format == 14 || format == 31) {
-                    samplingTime = HSSFDateUtil.getJavaDate(sheetAt.getRow(i).getCell(3).getNumericCellValue());
+                    samplingTime = HSSFDateUtil.getJavaDate(row.getCell(3).getNumericCellValue());
 
                 }
             }
             //Date samplingTime=sheetAt.getRow(i).getCell(3).getDateCellValue();
-            Double water_temperature=sheetAt.getRow(i).getCell(4).getNumericCellValue();
-            Double total_phosphorus=sheetAt.getRow(i).getCell(5).getNumericCellValue();
-            Double ammonia_nitrogen=sheetAt.getRow(i).getCell(6).getNumericCellValue();
-            Double permanganate_index=sheetAt.getRow(i).getCell(7).getNumericCellValue();
-            Double DO=sheetAt.getRow(i).getCell(8).getNumericCellValue();
+            Double water_temperature= row.getCell(4)== null ? null :row.getCell(4).getNumericCellValue();
+            Double total_phosphorus= row.getCell(5)== null ? null :row.getCell(5).getNumericCellValue();
+            Double ammonia_nitrogen= row.getCell(6)== null ? null :row.getCell(6).getNumericCellValue();
+            Double permanganate_index= row.getCell(7)== null ? null :row.getCell(7).getNumericCellValue();
+            Double DO= row.getCell(8)== null ? null :row.getCell(8).getNumericCellValue();
             waterQualityGrade.setParentId(parentid);
             waterQualityGrade.setId(UUID.randomUUID().toString().replace("-",""));
             waterQualityGrade.setCode(waterQualityGrade.getId());
