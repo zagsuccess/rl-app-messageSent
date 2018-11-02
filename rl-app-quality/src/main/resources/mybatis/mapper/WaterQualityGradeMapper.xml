@@ -27,13 +27,13 @@
 
     <select id="selectList" resultType="com.uhope.quality.domain.WaterQualityGrade">
         select * from water_quality_grade <where>
-        <if test="parentid != null ">
+        <if test="parentid != null and parentid!=''">
             and parentId = #{parentid}
         </if>
-        <if test="riverName != null">
+        <if test="riverName != null and riverName!=''">
             AND riverName=#{riverName}
         </if>
-        <if test="name !=null">
+        <if test="name !=null and name!=''">
             and name =#{name}
         </if>
     </where>

@@ -10,9 +10,10 @@ public interface WaterQualityMapper extends Mapper<WaterQuality> {
     public List<WaterQuality> selectList(@Param("issue") String issue, @Param("status") Integer status,
                                          @Param("createUser") String createUser, @Param("num") Integer num);
 
-    public String selectSHZB();
-
-    public String selectSHBJ();
 
     WaterQuality get1(String id);
+
+    public String selectRole(@Param("id") String id);
+
+    WaterQuality selectHave(String issue);
 }
