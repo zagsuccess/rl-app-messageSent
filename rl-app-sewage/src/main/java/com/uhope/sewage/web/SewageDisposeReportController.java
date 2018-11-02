@@ -8,10 +8,7 @@ import com.uhope.sewage.domain.SewageDisposeReport;
 import com.uhope.sewage.service.SewageDisposeReportService;
 import com.uhope.sewage.utils.ExcelUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -119,19 +116,22 @@ public class SewageDisposeReportController {
         //获取所有行
         int hang = sheetAt.getPhysicalNumberOfRows();
         for (int i = 2; i < hang; i++) {
-            Cell cell = sheetAt.getRow(i).getCell(0);
-            cell.setCellType(CellType.STRING);
-            String oldCode=cell.getStringCellValue();
-            String name = sheetAt.getRow(i).getCell(1).getStringCellValue();
-            String region=sheetAt.getRow(i).getCell(2).getStringCellValue();
-            String assess=sheetAt.getRow(i).getCell(3).getStringCellValue();
-            String sta=sheetAt.getRow(i).getCell(4).getStringCellValue();
+            Row row = sheetAt.getRow(i);
+            Cell cell = row.getCell(0);
+            if (cell != null) {
+                cell.setCellType(CellType.STRING);
+            }
+            String oldCode=cell== null ? null :cell.getStringCellValue();
+            String name = row.getCell(1)== null ? null :row.getCell(1).getStringCellValue();
+            String region=row.getCell(2)== null ? null :row.getCell(2).getStringCellValue();
+            String assess=row.getCell(3)== null ? null :row.getCell(3).getStringCellValue();
+            String sta=row.getCell(4)== null ? null :row.getCell(4).getStringCellValue();
             if ("是".equals(sta)){
                 sewageDisposeReport.setStatus(0);
             }else{
                 sewageDisposeReport.setStatus(1);
             }
-            String reason=sheetAt.getRow(i).getCell(5).getStringCellValue();
+            String reason=row.getCell(5)== null ? null :row.getCell(5).getStringCellValue();
             sewageDisposeReport.setId(UUID.randomUUID().toString().replace("-",""));
             sewageDisposeReport.setCode(sewageDisposeReport.getId());
             sewageDisposeReport.setName(name);

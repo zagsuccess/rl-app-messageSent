@@ -10,7 +10,8 @@ public interface SewageDisposeMapper extends Mapper<SewageDispose> {
     public List<SewageDispose> selectList(@Param("issue") String issue, @Param("status")Integer status,
                                           @Param("createUser") String createUser, @Param("num")Integer num);
 
-    public String selectSHZB();
 
-    public String selectSHBJ();
+    String selectRole(@Param("id")String id);
+
+    SewageDispose selectHave(String issue);
 }
