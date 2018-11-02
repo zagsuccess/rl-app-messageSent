@@ -13,7 +13,13 @@
   <select id="listDTO" parameterType="java.util.Map" resultType="com.uhope.assessment.dto.AssessGradeTypeDTO">
     select *
     from assess_grade_type
-    where parentid=#{parentId}
+    where
+    <if test=" parentId == null">
+      parentid is null
+    </if>
+    <if test="parentId != null">
+      parentid = #{parentId}
+    </if>
     order by `sort`
   </select>
 </mapper>

@@ -1,6 +1,8 @@
 package com.uhope.rl.resumption.web;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
@@ -38,13 +40,10 @@ public class ResumpController {
     @Autowired
     private TokenService tokenService;
 
-
-
     /**
      * 根据区域 、时间统计巡查次数 河长巡河统计分析-巡查达标率
      * @param request
      * @param type
-     * @param regionId
      * @param statTime
      * @param endTime
      * @param pageNumber
@@ -54,8 +53,7 @@ public class ResumpController {
     @GetMapping("/listReachPatrolNumStatistic")
     public Result<PageInfo<ReachPatrolNumStatisticDTO>> listReachPatrolNumStatistic(
             HttpServletRequest request
-            ,@  RequestParam(name = "type",defaultValue = "2") Integer type
-            ,@RequestParam(name = "regionId", required = false) String regionId
+            ,@RequestParam(name = "type",defaultValue = "2") Integer type
             ,@RequestParam(name = "startTime", required = false) String statTime
             ,@RequestParam(name = "endTime", required = false) String endTime
             ,@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber
@@ -87,38 +85,62 @@ public class ResumpController {
         //获取用户的regionId并解析其河长级别
         //regionid 对应的结构为：22233  省，市，区，镇，村
         //默认是村级
-        int grade = 5;
-        if(userDTO.getRegionId()%(1000)==0){
+        Integer grade = 5;
+        if(userDTO.getRegionId()%(1000)==0) {
             //镇级
-            grade=4;
+            grade = 4;
+        }
+        if (userDTO.getRegionId()%(1000 * 1000)==0) {
+            //区级
+            grade = 3;
+        }
+        if (userDTO.getRegionId()%(1000 * 1000 * 100)==0) {
+            //市级
+            grade = 2;
+        }
+        if(grade == 5) {
+            //村级
+            return ResponseMsgUtil.success();
+        }
+        if(grade == 4) {
+            //镇级
             //查找村级河长应巡次数,相当于给list赋初值
-            list = resumptionService.findReachNeedPatrolNumStatistic(type,regionId,intervalMonths,5, pageNumber, pageSize);
+            list = resumptionService.findReachNeedPatrolNumStatistic(type,intervalMonths,5, pageNumber, pageSize, grade, userDTO.getRegionId());
             //查找村级河长已巡次数
-            tempList = resumptionService.findReachHadPatrolNumStatistic(type,regionId,statTime, endTime,5, pageNumber, pageSize);
+            tempList = resumptionService.findReachHadPatrolNumStatistic(type,statTime, endTime,5, pageNumber, pageSize, grade, userDTO.getRegionId());
             list = assignListField(tempList, list, 8);
         }
-        if(userDTO.getRegionId()%(1000*1000)==0){
+        if(grade == 3) {
             //区级
-            grade=3;
+            //查找村级河长应巡次数,相当于给list赋初值
+            list = resumptionService.findReachNeedPatrolNumStatistic(type,intervalMonths,5, pageNumber, pageSize, grade, userDTO.getRegionId());
+            //查找村级河长已巡次数
+            tempList = resumptionService.findReachHadPatrolNumStatistic(type,statTime, endTime,5, pageNumber, pageSize, grade, userDTO.getRegionId());
+            list = assignListField(tempList, list, 8);
             //查找镇级河长应巡次数
-            tempList = resumptionService.findReachNeedPatrolNumStatistic(type,regionId,intervalMonths,4, pageNumber, pageSize);
+            tempList = resumptionService.findReachNeedPatrolNumStatistic(type,intervalMonths,4, pageNumber, pageSize, grade, userDTO.getRegionId());
             //将镇级河长应巡次数赋值给list
             list = assignListField(tempList, list, 4);
-            tempList = resumptionService.findReachHadPatrolNumStatistic(type,regionId,statTime, endTime,4, pageNumber, pageSize);
+            tempList = resumptionService.findReachHadPatrolNumStatistic(type,statTime, endTime,4, pageNumber, pageSize, grade, userDTO.getRegionId());
             list = assignListField(tempList, list, 7);
         }
-        if(userDTO.getRegionId()%(1000*1000*100)==0){
-            //市级
-            grade=2;
+        if(grade == 2){
+            //查找村级河长应巡次数,相当于给list赋初值
+            list = resumptionService.findReachNeedPatrolNumStatistic(type,intervalMonths,5, pageNumber, pageSize, grade, userDTO.getRegionId());
+            //查找村级河长已巡次数
+            tempList = resumptionService.findReachHadPatrolNumStatistic(type,statTime, endTime,5, pageNumber, pageSize, grade, userDTO.getRegionId());
+            list = assignListField(tempList, list, 8);
+            //查找镇级河长应巡次数
+            tempList = resumptionService.findReachNeedPatrolNumStatistic(type,intervalMonths,4, pageNumber, pageSize, grade, userDTO.getRegionId());
+            //将镇级河长应巡次数赋值给list
+            list = assignListField(tempList, list, 4);
+            tempList = resumptionService.findReachHadPatrolNumStatistic(type,statTime, endTime,4, pageNumber, pageSize, grade, userDTO.getRegionId());
+            list = assignListField(tempList, list, 7);
             //查找区级河长应巡次数
-            tempList = resumptionService.findReachNeedPatrolNumStatistic(type,regionId,intervalMonths,3, pageNumber, pageSize);
+            tempList = resumptionService.findReachNeedPatrolNumStatistic(type,intervalMonths,3, pageNumber, pageSize, grade, userDTO.getRegionId());
             list = assignListField(tempList, list, 3);
-            tempList = resumptionService.findReachHadPatrolNumStatistic(type,regionId,statTime, endTime,3, pageNumber, pageSize);
+            tempList = resumptionService.findReachHadPatrolNumStatistic(type,statTime, endTime,3, pageNumber, pageSize, grade, userDTO.getRegionId());
             list = assignListField(tempList, list, 6);
-        }
-        if(userDTO.getRegionId()%(1000*1000*100*100)==0){
-            //省级
-            grade=1;
         }
 
         list = calc(list, grade);
@@ -152,6 +174,7 @@ public class ResumpController {
             ,@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber
             ,@RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize
     ){
+        PageHelper.startPage(pageNumber, pageSize);
         //没有按时间进行查询，设置默认时间
         if (statTime == null && endTime == null){
             Date startTimeDate = TimeUtil.getStartTime(type);
@@ -165,8 +188,28 @@ public class ResumpController {
             intervalMonths = 1;
         }
 
+        //获取当前用户信息
+        UserDTO userDTO = getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
+        if(userDTO == null ){
+            return ResponseMsgUtil.failure("获取用户失败");
+        }
+
+        Integer userGrade = 5;
+        if(userDTO.getRegionId()%(1000)==0) {
+            //镇级
+            userGrade = 4;
+        }
+        if (userDTO.getRegionId()%(1000 * 1000)==0) {
+            //区级
+            userGrade = 3;
+        }
+        if (userDTO.getRegionId()%(1000 * 1000 * 100)==0) {
+            //市级
+            userGrade = 2;
+        }
+
         //查找统计数值
-        List<ReachmanPatrolNumStatisticDTO> list = resumptionService.findPersonPatrolNum(intervalMonths, regionId, statTime, endTime, grade);
+        List<ReachmanPatrolNumStatisticDTO> list = resumptionService.findPersonPatrolNum(intervalMonths, regionId, statTime, endTime, grade, userGrade);
         //计算达标率
         double d=0.0;
         DecimalFormat df = new DecimalFormat("0.00");
@@ -202,15 +245,17 @@ public class ResumpController {
             return ResponseMsgUtil.failure("获取用户失败");
         }
 
-        List<ProblemStatisticDTO> list = resumptionService.findAllRegionProblemStatistic(userDTO.getRegionId().toString());
+        List<ProblemStatisticDTO> list = Lists.newArrayList();
+        if (userDTO.getRegionId() == 120000000000L){
+            list = resumptionService.findAllRegionProblemStatistic("120100000000");
+        }else{
+            list = resumptionService.findAllRegionProblemStatistic(userDTO.getRegionId().toString());
+        }
         //获取用户的regionId并解析其河长级别
         //regionid 对应的结构为：22233  省，市，区，镇，村
         //默认是村级
         int grade = 0;
-        if(userDTO.getRegionId()%(1000*1000*100*100)==0){
-            //省级
-            grade=1;
-        }else if(userDTO.getRegionId()%(1000*1000*100)==0){
+        if(userDTO.getRegionId()%(1000*1000*100)==0){
             //市级
             grade=2;
             for (int i=0; i<list.size(); i++){
@@ -241,7 +286,7 @@ public class ResumpController {
      * @return 前10个问题较多河道信息
      */
     @GetMapping("/listWithMoreProblemReach")
-    public Result<List<ProblemNumStatistic>> listWithMoreProblemReach(){
+    public Result<List<RiverProblemStatistic>> listWithMoreProblemReach(){
         return ResponseMsgUtil.success(resumptionService.findWithMoreProblemReach());
     }
 
@@ -420,17 +465,5 @@ public class ResumpController {
             }
         }
         return targetList;
-    }
-
-    @GetMapping("/test")
-    public Result<Object> test(){
-
-        //获取所有的区
-        List<ProblemStatisticDTO> list = resumptionService.findAllRegionProblemStatistic( "120114000000");
-        for (int i=0; i<list.size(); i++){
-            String regionId = list.get(i).getRegionId();
-            list.get(i).setList(resumptionService.findRegionTypeNumStatistic(regionId, 3, null, null));
-        }
-        return ResponseMsgUtil.success(list);
     }
 }

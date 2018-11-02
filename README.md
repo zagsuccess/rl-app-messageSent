@@ -47,3 +47,22 @@ rl-app-sewage
 
 - 前端
 kaohepinggu/kaohepinggu-wushui
+
+### 8. 抽查督导-抽查模块
+- 后端
+rl-app-spotcheck(部分完成)
+
+- 前端
+
+### 9. 社会监督-评价+举报模块
+- 后端
+rl-app-supervise
+
+-前端
+
+### 10. 巡查模块
+- 后端
+rl-app-patrol
+
+- 前端
+

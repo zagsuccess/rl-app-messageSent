@@ -4,33 +4,54 @@
     <!-- 天津市 统计巡查情况 -->
 
     <!-- 按区为单位统计各级河长应巡次数 -->
-    <select id="findNeedPatrolNum"  parameterType="java.util.Map" resultType="com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO">
-    SELECT mar.area_code AS regionId, mar.area_name AS regionName, mar.grade as regionGrade,IFNULL(t_ro.needNum,0) as
+    <select id="findNeedPatrolNum" parameterType="java.util.Map"
+            resultType="com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO">
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, mar.grade as regionGrade,IFNULL(t_ro.needNum,0)
+        as
         <if test="regionGrade == 3">countyNeedPatrolNum</if>
         <if test="regionGrade == 4">townNeedPatrolNum</if>
         <if test="regionGrade == 5">villageNeedPatrolNum</if>
-    FROM md_administrative_region mar
-    LEFT JOIN
-    (
+        FROM md_administrative_region mar
+        LEFT JOIN
+        (
         SELECT t_rn.regionId, SUM(t_rn.needReachNum) as needNum
         FROM
         (
-            SELECT CONCAT(LEFT(mr.region_code,6),'000000') AS regionId,mrcm.CHAIRMANLEVEL, mrcm.chairman_role,
-                #{intervalMonths}*COUNT(0)*IFNULL(ach.patrolMarkMonth,IFNULL(ach.patrolMarkTenDay*3,IFNULL(ach.patrolMarkWeek * 4, IFNULL(ach.patrolMarkDay * 30,0)))) AS needReachNum
-            FROM md_reachchairman mrcm, md_reach mr, am_check_standard ach
-            WHERE mrcm.CHAIRMANLEVEL=#{regionGrade} AND mr.ID=mrcm.REACHID AND ach.roleLevel = mrcm.CHAIRMANLEVEL AND ach.roleId = mrcm.chairman_role
-            GROUP BY mrcm.CHAIRMANID
+        SELECT
+        <if test="grade == 3">
+            CONCAT(LEFT(mr.region_code,6),'000000')
+        </if>
+        <if test="grade == 4">
+            CONCAT(LEFT(mr.region_code,9),'000')
+        </if>
+        <if test="grade == 5">
+            mr.region_code
+        </if>
+        AS regionId,mrcm.CHAIRMANLEVEL, mrcm.chairman_role,
+        #{intervalMonths}*COUNT(0)*IFNULL(ach.patrolMarkMonth,IFNULL(ach.patrolMarkTenDay*3,IFNULL(ach.patrolMarkWeek *
+        4, IFNULL(ach.patrolMarkDay * 30,0)))) AS needReachNum
+        FROM md_reachchairman mrcm, md_reach mr, am_check_standard ach
+        WHERE mrcm.CHAIRMANLEVEL=#{regionGrade} AND mr.ID=mrcm.REACHID AND ach.roleLevel = mrcm.CHAIRMANLEVEL AND
+        ach.roleId = mrcm.chairman_role
+        GROUP BY mr.region_code
         )t_rn
         GROUP BY t_rn.regionId
-    )t_ro ON t_ro.regionId=mar.area_code WHERE mar.grade=3
-        <if test="regionId != null">
-            AND t_ro.regionId=#{regionId}
+        )t_ro ON t_ro.regionId=mar.area_code WHERE mar.grade=#{grade}
+        <if test="grade == 3">
+            AND LEFT(mar.id,2)=LEFT(#{regionId}, 2)
         </if>
-    ORDER BY regionId
+        <if test="grade == 4">
+            AND LEFT(mar.id,6)=LEFT(#{regionId}, 6)
+        </if>
+        <if test="grade == 5">
+            AND LEFT(mar.id,9)=LEFT(#{regionId}, 9)
+        </if>
+        ORDER BY regionId
     </select>
 
     <!-- 按区为单位统计各级河长已巡次数 -->
-    <select id="findHadPatrolNum"  parameterType="java.util.Map" resultType="com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO">
+    <select id="findHadPatrolNum" parameterType="java.util.Map"
+            resultType="com.uhope.rl.resumption.dto.statistics.ReachPatrolNumStatisticDTO">
         SELECT mar.area_code AS regionId, mar.area_name AS regionName, mar.grade as regionGrade,IFNULL(t_ro.hadNum,0) as
         <if test="regionGrade == 3">countyHasPatrolNum</if>
         <if test="regionGrade == 4">townHasPatrolNum</if>
@@ -41,7 +62,17 @@
         SELECT t_rn.regionId,t_rn.chairmanlevel, SUM(t_rn.hadNum) as hadNum
         FROM
         (
-        SELECT CONCAT(LEFT(mr.region_code,6),'000000') AS regionId,mrcm.chairmanlevel,COUNT(mlc.REACHID) as hadNum
+        SELECT
+        <if test="grade == 3">
+            CONCAT(LEFT(mr.region_code,6),'000000')
+        </if>
+        <if test="grade == 4">
+            CONCAT(LEFT(mr.region_code,9),'000')
+        </if>
+        <if test="grade == 5">
+            mr.region_code
+        </if>
+        AS regionId,mrcm.chairmanlevel,COUNT(mlc.REACHID) as hadNum
         FROM md_locusrecord mlc, md_reachchairman mrcm, md_reach mr
         WHERE mlc.REACHID=mrcm.reachid AND mrcm.chairmanlevel=#{regionGrade} AND mr.id=mlc.reachid
         <if test="startTime != null">
@@ -56,156 +87,170 @@
         </if>
         GROUP BY mlc.REACHID
         )t_rn GROUP BY t_rn.regionId
-        )t_ro ON t_ro.regionId=mar.area_code WHERE mar.grade=3
-            <if test="regionId != null">
-                AND t_ro.regionId=#{regionId}
-            </if>
+        )t_ro ON t_ro.regionId=mar.area_code WHERE mar.grade=#{grade}
+        <if test="grade == 3">
+            AND LEFT(mar.id,2)=LEFT(#{regionId}, 2)
+        </if>
+        <if test="grade == 4">
+            AND LEFT(mar.id,6)=LEFT(#{regionId}, 6)
+        </if>
+        <if test="grade == 5">
+            AND LEFT(mar.id,9)=LEFT(#{regionId}, 9)
+        </if>
         ORDER BY regionId
     </select>
 
     <!-- 查找各级河长各自的巡河情况 -->
-    <select id="findPersonPatrolNum" parameterType="java.util.Map"  resultType="com.uhope.rl.resumption.dto.statistics.ReachmanPatrolNumStatisticDTO">
-    SELECT t_all.chairman_name AS reachmanName, t_all.CHAIRMANLEVEL as reachmanLevel, t_all.needReachNum AS needReachNum, t_all.hadReachNum AS hadReachNum
-    FROM
-    (
-        SELECT CONCAT(LEFT(t_rn.region_code,6),'000000') AS regionStr,t_rn.chairman_name, t_rn.CHAIRMANLEVEL,  t_rn.needReachNum, IFNULL(t_ur.hadReachNum,0) AS hadReachNum
+    <select id="findPersonPatrolNum" parameterType="java.util.Map"
+            resultType="com.uhope.rl.resumption.dto.statistics.ReachmanPatrolNumStatisticDTO">
+        SELECT t_all.chairman_name AS reachmanName, t_all.CHAIRMANLEVEL as reachmanLevel, t_all.needReachNum AS
+        needReachNum, t_all.hadReachNum AS hadReachNum
         FROM
         (
-            SELECT mr.region_code AS region_code,mrcm.chairman_name, mrcm.CHAIRMANLEVEL,mrcm.CHAIRMANID,
-              #{intervalMonths}*COUNT(0)*IFNULL(ach.patrolMarkMonth,IFNULL(ach.patrolMarkTenDay*3,IFNULL(ach.patrolMarkWeek * 4, IFNULL(ach.patrolMarkDay * 30,0)))) AS needReachNum
-            FROM md_reachchairman mrcm, am_check_standard ach, md_reach mr
-            WHERE mrcm.reachid=mr.id AND ach.roleLevel = mrcm.CHAIRMANLEVEL AND ach.roleId = mrcm.chairman_role AND mrcm.chairmanlevel=#{regionGrade}
-            GROUP BY mrcm.CHAIRMANID
+        SELECT
+        <if test="userGrade == 3">
+            CONCAT(LEFT(t_rn.region_code,6),'000000')
+        </if>
+        <if test="userGrade == 4">
+            CONCAT(LEFT(t_rn.region_code,9),'000')
+        </if>
+        <if test="userGrade == 5">
+            t_rn.region_code
+        </if>
+        AS regionStr,t_rn.chairman_name, t_rn.CHAIRMANLEVEL,
+        t_rn.needReachNum, IFNULL(t_ur.hadReachNum,0) AS hadReachNum
+        FROM
+        (
+        SELECT mr.region_code AS region_code,mrcm.chairman_name, mrcm.CHAIRMANLEVEL,mrcm.CHAIRMANID,
+        #{intervalMonths}*COUNT(0)*IFNULL(ach.patrolMarkMonth,IFNULL(ach.patrolMarkTenDay*3,IFNULL(ach.patrolMarkWeek *
+        4, IFNULL(ach.patrolMarkDay * 30,0)))) AS needReachNum
+        FROM md_reachchairman mrcm, am_check_standard ach, md_reach mr
+        WHERE mrcm.reachid=mr.id AND ach.roleLevel = mrcm.CHAIRMANLEVEL AND ach.roleId = mrcm.chairman_role AND
+        mrcm.chairmanlevel=#{regionGrade}
+        GROUP BY mrcm.CHAIRMANID
         )t_rn
         LEFT JOIN
         (
-            SELECT t_r.chairmanid,t_r.chairman_name,region_code,SUM(t_r.hadNum) AS hadReachNum
-            FROM
-            (
-                SELECT mrcm.chairmanid,mrcm.chairman_name,mr.region_code,mrcm.chairmanlevel,COUNT(mlc.REACHID) as hadNum
-                FROM md_locusrecord mlc, md_reach mr, md_reachchairman mrcm
-                WHERE mlc.REACHID=mrcm.reachid AND mrcm.chairmanlevel=#{regionGrade} AND mr.id=mlc.reachid
-                    <if test="startTime != null">
-                    <![CDATA[
+        SELECT t_r.chairmanid,t_r.chairman_name,region_code,SUM(t_r.hadNum) AS hadReachNum
+        FROM
+        (
+        SELECT mrcm.chairmanid,mrcm.chairman_name,mr.region_code,mrcm.chairmanlevel,COUNT(mlc.REACHID) as hadNum
+        FROM md_locusrecord mlc, md_reach mr, md_reachchairman mrcm
+        WHERE mlc.REACHID=mrcm.reachid AND mrcm.chairmanlevel=#{regionGrade} AND mr.id=mlc.reachid
+        <if test="startTime != null">
+            <![CDATA[
                          AND   mlc.`CREATETIME` >= CONCAT(#{startTime},' 00:00:00')
                     ]]>
-                    </if>
-                    <if test="endTime != null">
-                    <![CDATA[
+        </if>
+        <if test="endTime != null">
+            <![CDATA[
                          AND   mlc.`CREATETIME` <= CONCAT(#{endTime},' 23:59:59')
                     ]]>
-                    </if>
-                GROUP BY mlc.REACHID
-            )t_r GROUP BY t_r.chairmanid
+        </if>
+        GROUP BY mlc.REACHID
+        )t_r GROUP BY t_r.chairmanid
         )t_ur ON t_rn.CHAIRMANID=t_ur.chairmanid
-    )t_all
-    WHERE regionStr=#{regionId}
+        )t_all
+        WHERE regionStr=#{regionId}
     </select>
 
-    <select id="findRegionNumStatistic" parameterType="java.util.Map" resultType="com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO">
-    SELECT t_b.areaCode as regionId, t_b.typeName as typeName, IFNULL(t_c.zaiban,0) as unfinishedNum, IFNULL(t_c.yiban,0) as finishedNum
-    from
-    (
+    <select id="findRegionNumStatistic" parameterType="java.util.Map"
+            resultType="com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO">
+        SELECT t_b.areaCode as regionId, t_b.typeName as typeName, IFNULL(t_c.zaiban,0) as unfinishedNum,
+        IFNULL(t_c.yiban,0) as finishedNum
+        from
+        (
         select mar.area_name as areaName, et.typename as typeName, et.id as typeId, mar.id as areaCode
         from eh_type et
         LEFT JOIN md_administrative_region mar on 1=1
         where et.type_level=1 and mar.grade=#{grade}
-    )t_b LEFT JOIN
-    (
+        )t_b LEFT JOIN
+        (
         SELECT t_d.zaiban,t_e.yiban,t_d.areaCode,t_d.typeId
         FROM
         (
-            SELECT t_a.type,t_a.typeId,t_a.areaCode,count(0) as zaiban  from
-            (
-                    select t_r.status,t_l.typeId,t_r.type,t_l.areaCode
-                    from
-                    (
-                        select et.id as typeId, mar.id as areaCode
-                        from eh_type et
-                        LEFT JOIN md_administrative_region mar on 1=1
-                        where et.type_level=1 and mar.grade=#{grade}
-                    )t_l
-                    LEFT JOIN
-                    (
-                        select ee.type, ee.eventresource, ee.status, ee.createtime,
-                        <if test="grade==3">CONCAT(LEFT(su.region_id,6),'000000')</if>
-                        <if test="grade==4">CONCAT(LEFT(su.region_id,9),'000')</if>
-                        <if test="grade==5">su.region_id</if>
-                         AS region_id
-                        from eh_event ee, sm_user su
-                        where ee.REPORTPERSONID=su.id
-                        <if test="startTime != null">
-                            <![CDATA[
+        SELECT t_a.type,t_a.typeId,t_a.areaCode,count(0) as zaiban from
+        (
+        select t_r.status,t_l.typeId,t_r.type,t_l.areaCode
+        from
+        (
+        select et.id as typeId, mar.id as areaCode
+        from eh_type et
+        LEFT JOIN md_administrative_region mar on 1=1
+        where et.type_level=1 and mar.grade=#{grade}
+        )t_l
+        LEFT JOIN
+        (
+        select ee.type, ee.eventresource, ee.status, ee.createtime,
+        <if test="grade==3">CONCAT(LEFT(su.region_id,6),'000000')</if>
+        <if test="grade==4">CONCAT(LEFT(su.region_id,9),'000')</if>
+        <if test="grade==5">su.region_id</if>
+        AS region_id
+        from eh_event ee, sm_user su
+        where ee.REPORTPERSONID=su.id
+        <if test="startTime != null">
+            <![CDATA[
                              AND   ee.`CREATETIME` >= CONCAT(#{startTime},' 00:00:00')
                             ]]>
-                        </if>
-                        <if test="endTime != null">
-                            <![CDATA[
+        </if>
+        <if test="endTime != null">
+            <![CDATA[
                              AND   ee.`CREATETIME` <= CONCAT(#{endTime},' 23:59:59')
                             ]]>
-                        </if>
-                    )t_r ON t_r.region_id=t_l.areaCode AND t_r.type=t_l.typeId
-            )t_a WHERE t_a.status != 'Z'
-            GROUP BY typeId
+        </if>
+        )t_r ON t_r.region_id=t_l.areaCode AND t_r.type=t_l.typeId
+        )t_a WHERE t_a.status != 'Z'
+        GROUP BY typeId
         )t_d LEFT JOIN
         (
-            SELECT t_a.type1,t_a.typeId1,t_a.areaCode1,count(0) as yiban  from
-            (
-                select t_r.status1,t_l.typeId1,t_r.type1,t_l.areaCode1
-                from
-                (
-                    select et.id as typeId1, mar.id as areaCode1
-                    from eh_type et
-                    LEFT JOIN md_administrative_region mar on 1=1
-                    where et.type_level=1 and mar.grade=#{grade}
-                )t_l
-                LEFT JOIN
-                (
-                    select ee.type as type1, ee.eventresource as resource1, ee.status as status1, ee.createtime as createtime1,
-                    <if test="grade==3">CONCAT(LEFT(su.region_id,6),'000000')</if>
-                    <if test="grade==4">CONCAT(LEFT(su.region_id,9),'000')</if>
-                    <if test="grade==5">su.region_id</if>
-                    AS region_id1
-                    from eh_event ee, sm_user su
-                    where ee.REPORTPERSONID=su.id
-                    <if test="startTime != null">
-                        <![CDATA[
+        SELECT t_a.type1,t_a.typeId1,t_a.areaCode1,count(0) as yiban from
+        (
+        select t_r.status1,t_l.typeId1,t_r.type1,t_l.areaCode1
+        from
+        (
+        select et.id as typeId1, mar.id as areaCode1
+        from eh_type et
+        LEFT JOIN md_administrative_region mar on 1=1
+        where et.type_level=1 and mar.grade=#{grade}
+        )t_l
+        LEFT JOIN
+        (
+        select ee.type as type1, ee.eventresource as resource1, ee.status as status1, ee.createtime as createtime1,
+        <if test="grade==3">CONCAT(LEFT(su.region_id,6),'000000')</if>
+        <if test="grade==4">CONCAT(LEFT(su.region_id,9),'000')</if>
+        <if test="grade==5">su.region_id</if>
+        AS region_id1
+        from eh_event ee, sm_user su
+        where ee.REPORTPERSONID=su.id
+        <if test="startTime != null">
+            <![CDATA[
                                  AND   ee.`CREATETIME` >= CONCAT(#{startTime},' 00:00:00')
                                 ]]>
-                    </if>
-                    <if test="endTime != null">
-                        <![CDATA[
+        </if>
+        <if test="endTime != null">
+            <![CDATA[
                                  AND   ee.`CREATETIME` <= CONCAT(#{endTime},' 23:59:59')
                                 ]]>
-                    </if>
-                )t_r ON t_r.region_id1=t_l.areaCode1 AND t_r.type1=t_l.typeId1
-            )t_a WHERE t_a.status1 = 'Z'
-            GROUP BY typeId1
+        </if>
+        )t_r ON t_r.region_id1=t_l.areaCode1 AND t_r.type1=t_l.typeId1
+        )t_a WHERE t_a.status1 = 'Z'
+        GROUP BY typeId1
         )t_e ON t_d.areaCode=t_e.areaCode1 AND t_d.type=t_e.type1
-    )t_c
-    ON t_c.areaCode=t_b.areaCode AND t_c.typeId=t_b.typeId
-    WHERE t_b.areaCode = #{regionId}
+        )t_c
+        ON t_c.areaCode=t_b.areaCode AND t_c.typeId=t_b.typeId
+
+        WHERE t_b.areaCode = #{regionId}
     </select>
 
-    <select id="findAllRegionNumStatistic" parameterType="java.util.Map" resultType="com.uhope.rl.resumption.dto.statistics.ProblemStatisticDTO">
+    <select id="findAllRegionNumStatistic" parameterType="java.util.Map"
+            resultType="com.uhope.rl.resumption.dto.statistics.ProblemStatisticDTO">
       SELECT id as regionId, area_name as regionName from md_administrative_region WHERE parent_code = #{parentId}
     </select>
 
-    <select id="findWithMoreProblemReach" resultType="com.uhope.rl.resumption.dto.statistics.ProblemNumStatistic">
-    SELECT t_b.id AS regionId ,t_b.reach_name AS reachName,COUNT(0) AS problemNum, t_b.grade AS grade, t_b.chairman_name AS reachManName FROM
-    (
-    SELECT ee.EVENTREACHID FROM eh_event ee, md_reach mr
-    WHERE ee.eventreachid=mr.id AND ee.createtime >= date_sub(curdate(),interval WEEKDAY(curdate()) day)
-    )t_a
-    LEFT JOIN
-    (
-            SELECT mr.id,mr.reach_name, mr.grade, mrcm.chairman_name
-            FROM md_reach mr,md_reachchairman mrcm
-            WHERE mr.id=mrcm.REACHID
-    )t_b
-    ON t_a.EVENTREACHID=t_b.id
-    GROUP BY t_b.id
-    ORDER BY problemNum DESC
-    LIMIT 10;
+    <select id="findWithMoreProblemReach" resultType="com.uhope.rl.resumption.dto.statistics.RiverProblemStatistic">
+    SELECT mar.area_name AS regionName, ee.EVENTREACHNAME AS riverName, mrcm.chairman_name AS chairmanName, ee.TYPENAME AS problemType
+    FROM eh_event ee, md_reach mr, md_reachchairman mrcm, md_administrative_region mar
+    WHERE ee.EVENTREACHID=mr.id AND ee.createtime >= date_sub(curdate(),interval MONTH(curdate()) day) AND mrcm.REACHID=mr.id AND mr.region_code=mar.area_code
+    ORDER BY ee.CREATETIME DESC
     </select>
 </mapper>

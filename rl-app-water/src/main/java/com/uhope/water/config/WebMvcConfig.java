@@ -4,6 +4,8 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.uhope.base.constants.Constant;
+import com.uhope.uip.fm.client.FileManagerClient;
+import com.uhope.uip.fm.client.impl.DefaultFileManagerClient;
 import com.uhope.water.filter.AddTokenFilter;
 import com.uhope.water.filter.ServiceFilter;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +33,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Value("${spring.profiles.active}")
     private String env;
 
+
     /**
      * 解决路径资源映射问题
      *
@@ -42,6 +45,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
     }
+
+
 
     /**
      * 使用fastJson代替Jackjson解析JSON数据
@@ -92,5 +97,13 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registration.setOrder(2);
         return registration;
     }
+
+    /**
+     * 文件上传下载查看
+     */
+    @Bean
+    public FileManagerClient fileManagerClient() { return new DefaultFileManagerClient(false); }
+
+
 
 }

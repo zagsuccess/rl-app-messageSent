@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.supervise.mapper.ShSocialReportMapper">
+    <resultMap id="BaseResultMap" type="com.uhope.supervise.domain.ShSocialReport">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="report_date" jdbcType="TIMESTAMP" property="reportDate"/>
+        <result column="region_name" jdbcType="VARCHAR" property="regionName"/>
+        <result column="river_name" jdbcType="VARCHAR" property="riverName"/>
+        <result column="reportor" jdbcType="VARCHAR" property="reportor"/>
+        <result column="contact_type" jdbcType="VARCHAR" property="contactType"/>
+        <result column="report_problem" jdbcType="VARCHAR" property="reportProblem"/>
+        <result column="problem_attant" jdbcType="VARCHAR" property="problemAttant"/>
+        <result column="processing_status" jdbcType="VARCHAR" property="processingStatus"/>
+        <result column="report_evaluate" jdbcType="VARCHAR" property="reportEvaluate"/>
+        <result column="report_source" jdbcType="VARCHAR" property="reportSource"/>
+        <result column="problem_position" jdbcType="LONGVARCHAR" property="problemPosition"/>
+        <result column="proposed_treatment" jdbcType="LONGVARCHAR" property="proposedTreatment"/>
+        <result column="processing_results" jdbcType="LONGVARCHAR" property="processingResults"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+    </resultMap>
+</mapper>
