@@ -10,7 +10,7 @@ public interface SurfaceWaterMapper extends Mapper<SurfaceWater> {
     public List<SurfaceWater> selectList(@Param("issue") String issue, @Param("status")Integer status,
                                          @Param("createUser") String createUser,@Param("num")Integer num);
 
-    public String selectSHZB();
+    String selectRole(@Param("id") String id);
 
-    public String selectSHBJ();
+    SurfaceWater selectHave(String issue);
 }
