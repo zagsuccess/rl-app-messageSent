@@ -136,6 +136,20 @@ public class ScSpotcheckController {
     }
 
     /**
+     * 修改-确认并派发任务
+     *
+     * @param id
+     * @return
+     */
+    @PostMapping("/doDistributeApp")
+    public Result<ScSpotcheck> doDistributeApp(String id) {
+        ScSpotcheck spotcheck = scSpotcheckService.get(id);
+        spotcheck.setStatus(1);
+        scSpotcheckService.update(spotcheck);
+        return ResponseMsgUtil.success(spotcheck);
+    }
+
+    /**
      * 查找-抽查记录列表
      *
      * @param status
