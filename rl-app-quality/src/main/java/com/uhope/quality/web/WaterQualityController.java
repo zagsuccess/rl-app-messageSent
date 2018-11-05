@@ -123,7 +123,7 @@ public class WaterQualityController {
         }
 
         if("水文水资源中心".equals(waterQualityService.selectRole(userDTO.getId()))){
-            grade="01";
+            grade="04";
         }
 
         return ResponseMsgUtil.success(grade);
@@ -140,7 +140,7 @@ public class WaterQualityController {
         }
 
         if("水文水资源中心".equals(waterQualityService.selectRole(id))){
-            grade="01";
+            grade="04";
         }
 
         return ResponseMsgUtil.success(grade);
