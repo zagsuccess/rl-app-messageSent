@@ -118,7 +118,7 @@ public class SewageDisposeController {
         }
 
         if("排监处".equals(sewageDisposeService.selectRole(userDTO.getId()))){
-            grade=01;
+            grade=03;
         }
 
         return ResponseMsgUtil.success(grade);
@@ -139,7 +139,7 @@ public class SewageDisposeController {
         }
 
         if("排监处".equals(sewageDisposeService.selectRole(id))){
-            grade="01";
+            grade="03";
         }
 
         return ResponseMsgUtil.success(grade);
