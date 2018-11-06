@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.ancha.mapper.AnzhaReportMapper">
+    <!-- AnzhaReport的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="arMap" type="com.uhope.ancha.domain.AnzhaReport">
+        <id column="ID" property="id" />
+        <result column="ISSUER" property="issuer" />
+        <result column="DATE" property="date" />
+        <result column="PEOBLEM_TYPE" property="peoblemType" />
+        <result column="IMAGE" property="image" />
+        <result column="PROCESS_LIMITED" property="processLimited" />
+        <result column="PEOBLEM_DESCRIPTION" property="peoblemDescription" />
+        <result column="STATUS" property="status" />
+        <result column="ANZHAID" property="anzhaid" />
+        <result column="INCIDENTID" property="incidentid" />
+    </resultMap>
+    <select id="selectList" resultMap="arMap">
+        select * from AnZha_report where ANZHAID =#{anzhaid} order by date
+    </select>
+
+</mapper>
