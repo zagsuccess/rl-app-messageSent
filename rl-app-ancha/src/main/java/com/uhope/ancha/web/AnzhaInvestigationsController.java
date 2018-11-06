@@ -7,14 +7,17 @@ import com.google.common.collect.Lists;
 import com.uhope.ancha.domain.AnzhaInvestigations;
 import com.uhope.ancha.dto.RegionDTO;
 import com.uhope.ancha.service.AnzhaInvestigationsService;
+import com.uhope.ancha.utils.CommonUtil;
 import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
 import com.uhope.uip.dto.UserDTO;
+import com.uhope.uip.service.TokenService;
 import com.uhope.uip.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,8 @@ public class AnzhaInvestigationsController {
     private AnzhaInvestigationsService anzhaInvestigationsService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/add")
     public Result<AnzhaInvestigations> add(@RequestParam String title,
@@ -85,10 +90,10 @@ public class AnzhaInvestigationsController {
 
     //查询市河长办中所有的人员账号
     @GetMapping("/selectPersonnel")
-    public Result<Result<com.uhope.base.dto.PageInfo<UserDTO>>> selectPersonnel(){
+    public Result<com.uhope.base.dto.PageInfo<UserDTO>> selectPersonnel(){
         String roleId=anzhaInvestigationsService.selectRoleId("市河长办");
        Result<com.uhope.base.dto.PageInfo<UserDTO>> list = userService.queryUserList(null,null,null,roleId,0,0);
-        return ResponseMsgUtil.success(list);
+        return list;
     }
 
     @GetMapping("/detail")
@@ -173,17 +178,21 @@ public class AnzhaInvestigationsController {
     }
 
     @GetMapping("/userinfo")
-    public Result<String> userinfo(String id){
-
-        //默认是00   （00表示都不是  01表示水文水资源中心  02表示市河长办 ）
+    public Result<String> userinfo(HttpServletRequest request){
+        //获取当前用户信息
+        UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
+        if(userDTO == null ){
+            return ResponseMsgUtil.failure("获取用户失败");
+        }
+        //默认是00   （00表示都不是  01表示市环保局  02表示市河长办 ）
         String grade="00";
 
-        if("市河长办".equals(anzhaInvestigationsService.selectRole(id))){
+        if("市河长办".equals(anzhaInvestigationsService.selectRole(userDTO.getId()))){
             grade="02";
         }
 
-        if("河长办".equals(anzhaInvestigationsService.selectRole(id))){
-            grade="01";
+        if("河长办".equals(anzhaInvestigationsService.selectRole(userDTO.getId()))){
+            grade="05";
         }
 
         return ResponseMsgUtil.success(grade);

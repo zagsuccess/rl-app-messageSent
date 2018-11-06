@@ -140,7 +140,7 @@ public class WaterQualityController {
         }
 
         if("水文水资源中心".equals(waterQualityService.selectRole(id))){
-            grade="04";
+            grade="01";
         }
 
         return ResponseMsgUtil.success(grade);

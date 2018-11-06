@@ -139,7 +139,7 @@ public class SewageDisposeController {
         }
 
         if("排监处".equals(sewageDisposeService.selectRole(id))){
-            grade="03";
+            grade="01";
         }
 
         return ResponseMsgUtil.success(grade);
