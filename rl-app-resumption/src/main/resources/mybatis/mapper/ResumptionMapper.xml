@@ -110,13 +110,13 @@
         FROM
         (
         SELECT
-        <if test="regionGrade == 3">
+        <if test="userGrade == 3">
             CONCAT(LEFT(su.region_id,6),'000000')
         </if>
-        <if test="regionGrade == 4">
+        <if test="userGrade == 4">
             CONCAT(LEFT(su.region_id,9),'000')
         </if>
-        <if test="regionGrade == 5">
+        <if test="userGrade == 5">
             su.region_id
         </if>
         AS regionStr,mrcm.chairman_name, mrcm.CHAIRMANLEVEL,mrcm.CHAIRMANID,
