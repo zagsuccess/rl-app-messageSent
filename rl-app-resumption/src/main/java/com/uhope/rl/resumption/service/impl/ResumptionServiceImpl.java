@@ -65,7 +65,7 @@ public class ResumptionServiceImpl implements ResumptionService {
     public List<ProblemTypeStatisticDTO> findRegionTypeNumStatistic(String regionId, int grade, String startTime, String endTime) {
         Map<String, Object> params = new HashMap<>(2);
         params.put("regionId", regionId);
-        params.put("grade", grade+1);
+        params.put("grade", grade);
         params.put("startTime", startTime);
         params.put("endTime", endTime);
         return resumptionMapper.findRegionNumStatistic(params);
