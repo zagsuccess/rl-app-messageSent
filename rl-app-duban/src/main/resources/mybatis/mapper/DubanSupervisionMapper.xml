@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.duban.mapper.DubanSupervisionMapper">
+    <!-- DubanSupervision的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_DubanSupervision_Map" type="com.uhope.duban.domain.DubanSupervision">
+        <id column="ID" property="id" />
+        <result column="TITLE" property="title" />
+        <result column="PROJECT" property="project" />
+        <result column="ISSUEDTIME" property="issuedtime" />
+        <result column="DEADLINEDATE" property="deadlinedate" />
+        <result column="REASON" property="reason" />
+        <result column="OBJECTID" property="objectid" />
+        <result column="OBJECTNAME" property="objectname" />
+        <result column="ASSESSORY" property="assessory" />
+        <result column="ASSESSORYDESCRIBE" property="assessorydescribe" />
+    </resultMap>
+    <!--查询市河长办的角色id-->
+    <select id="selectRoleId" resultType="java.lang.String">
+      select id from sm_role where name =#{rolename}
+    </select>
+
+    <!--查询期限时间前一天的用户id-->
+    <select id="selectDeadlineUser" resultType="java.lang.String">
+      select objectid from duban_supervision where DATE_FORMAT(DATE_SUB(DEADLINEDATE,INTERVAL 1 DAY),'%Y-%m-%d')=CURDATE();
+    </select>
+
+    <!--查询期限时间后一天的用户id和督办id-->
+    <select id="selectDeadlineUserh" resultType="com.uhope.duban.dto.DeadlineDTO">
+        select id,objectid from duban_supervision where status='1' and DATE_FORMAT(DATE_ADD(DEADLINEDATE,INTERVAL 1 DAY),'%Y-%m-%d')=CURDATE();
+    </select>
+
+    <select id="list" resultType="com.uhope.duban.domain.DubanSupervision">
+        select * from duban_supervision
+        <where>
+            <if test="issuedtime != null and issuedtime != ''">
+                and DATE_FORMAT(ISSUEDTIME,'%Y-%m-%d')=#{issuedtime}
+            </if>
+            <if test="objectname !=null and objectname != ''">
+                and OBJECTNAME like CONCAT('%',#{objectname},'%')
+            </if>
+            <if test="status != null and status != ''">
+                AND status=#{status}
+            </if>
+        </where>
+    </select>
+
+</mapper>
