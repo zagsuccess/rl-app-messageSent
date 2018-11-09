@@ -154,90 +154,85 @@
 
     <select id="findRegionNumStatistic" parameterType="java.util.Map"
             resultType="com.uhope.rl.resumption.dto.statistics.ProblemTypeStatisticDTO">
-        SELECT t_b.areaCode as regionId, t_b.typeName as typeName, IFNULL(t_c.zaiban,0) as unfinishedNum,
-        IFNULL(t_c.yiban,0) as finishedNum
-        from
-        (
-        select mar.area_name as areaName, et.typename as typeName, et.id as typeId, mar.id as areaCode
-        from eh_type et
-        LEFT JOIN md_administrative_region mar on 1=1
-        where et.type_level=1 and mar.grade=#{grade}
-        )t_b LEFT JOIN
-        (
-        SELECT t_d.zaiban,t_e.yiban,t_d.areaCode,t_d.typeId
+        SELECT #{regionId} AS regionId, t_c.typename AS typeName, t_c.finishedNum, t_d.unfinishedNum
         FROM
         (
-        SELECT t_a.type,t_a.typeId,t_a.areaCode,count(0) as zaiban from
-        (
-        select t_r.status,t_l.typeId,t_r.type,t_l.areaCode
-        from
-        (
-        select et.id as typeId, mar.id as areaCode
-        from eh_type et
-        LEFT JOIN md_administrative_region mar on 1=1
-        where et.type_level=1 and mar.grade=#{grade}
-        )t_l
-        LEFT JOIN
-        (
-        select ee.type, ee.eventresource, ee.status, ee.createtime,
-        <if test="grade==3">CONCAT(LEFT(su.region_id,6),'000000')</if>
-        <if test="grade==4">CONCAT(LEFT(su.region_id,9),'000')</if>
-        <if test="grade==5">su.region_id</if>
-        AS region_id
-        from eh_event ee, sm_user su
-        where ee.REPORTPERSONID=su.id
-        <if test="startTime != null">
-            <![CDATA[
-                             AND   ee.`CREATETIME` >= CONCAT(#{startTime},' 00:00:00')
-                            ]]>
-        </if>
-        <if test="endTime != null">
-            <![CDATA[
-                             AND   ee.`CREATETIME` <= CONCAT(#{endTime},' 23:59:59')
-                            ]]>
-        </if>
-        )t_r ON t_r.region_id=t_l.areaCode AND t_r.type=t_l.typeId
-        )t_a WHERE t_a.status != 'Z'
-        GROUP BY typeId
-        )t_d LEFT JOIN
-        (
-        SELECT t_a.type1,t_a.typeId1,t_a.areaCode1,count(0) as yiban from
-        (
-        select t_r.status1,t_l.typeId1,t_r.type1,t_l.areaCode1
-        from
-        (
-        select et.id as typeId1, mar.id as areaCode1
-        from eh_type et
-        LEFT JOIN md_administrative_region mar on 1=1
-        where et.type_level=1 and mar.grade=#{grade}
-        )t_l
-        LEFT JOIN
-        (
-        select ee.type as type1, ee.eventresource as resource1, ee.status as status1, ee.createtime as createtime1,
-        <if test="grade==3">CONCAT(LEFT(su.region_id,6),'000000')</if>
-        <if test="grade==4">CONCAT(LEFT(su.region_id,9),'000')</if>
-        <if test="grade==5">su.region_id</if>
-        AS region_id1
-        from eh_event ee, sm_user su
-        where ee.REPORTPERSONID=su.id
-        <if test="startTime != null">
-            <![CDATA[
-                                 AND   ee.`CREATETIME` >= CONCAT(#{startTime},' 00:00:00')
-                                ]]>
-        </if>
-        <if test="endTime != null">
-            <![CDATA[
-                                 AND   ee.`CREATETIME` <= CONCAT(#{endTime},' 23:59:59')
-                                ]]>
-        </if>
-        )t_r ON t_r.region_id1=t_l.areaCode1 AND t_r.type1=t_l.typeId1
-        )t_a WHERE t_a.status1 = 'Z'
-        GROUP BY typeId1
-        )t_e ON t_d.areaCode=t_e.areaCode1 AND t_d.type=t_e.type1
+            SELECT et.typename, IFNULL(t_b.num,0) AS finishedNum
+            FROM eh_type et
+            LEFT JOIN
+            (
+                SELECT t_a.id, count(0) AS num
+                FROM eh_event ee
+                LEFT JOIN
+                (
+                    SELECT et.id,et2.id as id2, et.typename
+                    FROM eh_type et
+                    JOIN eh_type et2 ON et2.parent_id=et.id OR et2.id=et.id
+                    WHERE et.type_level=1
+                )t_a ON ee.type=t_a.id2
+                WHERE ee.status='Z' AND
+                <if test="grade == 2">
+                    CONCAT(LEFT(ee.eventoccurareaid,6), '000000')=#{regionId}
+                </if>
+                <if test="grade == 3">
+                    CONCAT(LEFT(ee.eventoccurareaid,9), '000')=#{regionId}
+                </if>
+                <if test="grade == 4">
+                    ee.eventoccurareaid=#{regionId}
+                </if>
+                <if test="startTime != null">
+                    <![CDATA[
+                         AND   ee.`reporttime` >= CONCAT(#{startTime},' 00:00:00')
+                    ]]>
+                </if>
+                <if test="endTime != null">
+                    <![CDATA[
+                         AND   ee.`reporttime` <= CONCAT(#{endTime},' 23:59:59')
+                    ]]>
+                </if>
+                GROUP BY t_a.id
+            )t_b ON t_b.id=et.id
+            WHERE et.type_level=1
         )t_c
-        ON t_c.areaCode=t_b.areaCode AND t_c.typeId=t_b.typeId
-
-        WHERE t_b.areaCode = #{regionId}
+        LEFT JOIN
+        (
+            SELECT et.typename, IFNULL(t_b.num,0) AS unfinishedNum
+            FROM eh_type et
+            LEFT JOIN
+            (
+                SELECT t_a.id, count(0) AS num
+                FROM eh_event ee
+                LEFT JOIN
+                (
+                    SELECT et.id,et2.id as id2, et.typename
+                    FROM eh_type et
+                    JOIN eh_type et2 ON et2.parent_id=et.id OR et2.id=et.id
+                    WHERE et.type_level=1
+                )t_a ON ee.type=t_a.id2
+                WHERE ee.status!='Z' AND
+                <if test="grade == 2">
+                    CONCAT(LEFT(ee.eventoccurareaid,6), '000000')=#{regionId}
+                </if>
+                <if test="grade == 3">
+                    CONCAT(LEFT(ee.eventoccurareaid,9), '000')=#{regionId}
+                </if>
+                <if test="grade == 4">
+                    ee.eventoccurareaid=#{regionId}
+                </if>
+                <if test="startTime != null">
+                    <![CDATA[
+                                 AND   ee.`reporttime` >= CONCAT(#{startTime},' 00:00:00')
+                            ]]>
+                </if>
+                <if test="endTime != null">
+                    <![CDATA[
+                                 AND   ee.`reporttime` <= CONCAT(#{endTime},' 23:59:59')
+                            ]]>
+                </if>
+                GROUP BY t_a.id
+            )t_b ON t_b.id=et.id
+            WHERE et.type_level=1
+        )t_d ON t_c.typename=t_d.typename
     </select>
 
     <select id="findAllRegionNumStatistic" parameterType="java.util.Map"
