@@ -1,6 +1,6 @@
 package com.uhope.duban.web;
 
-import com.uhope.duban.domain.DubanSupervision;
+import com.uhope.duban.domain.ScDubanSupervision;
 import com.uhope.duban.dto.DeadlineDTO;
 import com.uhope.duban.service.DubanSupervisionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class TimerController {
         List<DeadlineDTO> list1=dubanSupervisionService.selectDeadlineUserh();
         System.out.println("期限后"+list1);
         //修改延期方案的状态为未按期 3
-        DubanSupervision dubanSupervision=new DubanSupervision();
+        ScDubanSupervision dubanSupervision=new ScDubanSupervision();
         dubanSupervision.setStatus("3");
         for (DeadlineDTO deadlineDTO:list1) {
              dubanSupervision.setId(deadlineDTO.getId());

@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
-public class DubanFeedback implements Serializable {
+public class ScDubanFeedback implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT REPLACE(UUID(),\"-\",\"\")")
     private String id;
@@ -38,11 +38,11 @@ public class DubanFeedback implements Serializable {
      */
     private String status;
 
-    public DubanFeedback() {
+    public ScDubanFeedback() {
         super();
     }
 
-    public DubanFeedback(Date feedbacktime, String whether, String description, String assessory, String supervisionid, String status) {
+    public ScDubanFeedback(Date feedbacktime, String whether, String description, String assessory, String supervisionid, String status) {
         this.feedbacktime = feedbacktime;
         this.whether = whether;
         this.description = description;
@@ -109,7 +109,7 @@ public class DubanFeedback implements Serializable {
 
     @Override
     public String toString() {
-        return "DubanFeedback{" +
+        return "ScDubanFeedback{" +
                 "id='" + id + '\'' +
                 ", feedbacktime=" + feedbacktime +
                 ", whether='" + whether + '\'' +

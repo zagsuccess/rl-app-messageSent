@@ -3,7 +3,7 @@ package com.uhope.duban.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.uhope.core.AbstractService;
-import com.uhope.duban.domain.DubanSupervision;
+import com.uhope.duban.domain.ScDubanSupervision;
 import com.uhope.duban.dto.DeadlineDTO;
 import com.uhope.duban.dto.DubanSupervisionDTO;
 import com.uhope.duban.mapper.DubanSupervisionMapper;
@@ -23,7 +23,7 @@ import java.util.List;
  * @author ChenBin on 2018/09/04
  */
 @Service
-public class DubanSupervisionServiceImpl extends AbstractService<DubanSupervision, DubanSupervisionDTO, String> implements DubanSupervisionService {
+public class DubanSupervisionServiceImpl extends AbstractService<ScDubanSupervision, DubanSupervisionDTO, String> implements DubanSupervisionService {
     @Resource
     private DubanSupervisionMapper dubanSupervisionMapper;
 
@@ -43,10 +43,10 @@ public class DubanSupervisionServiceImpl extends AbstractService<DubanSupervisio
     }
 
     @Override
-    public PageInfo<DubanSupervision> list(Integer pageNumber, Integer pageSize, String issuedtime, String objectname, String status) {
+    public PageInfo<ScDubanSupervision> list(Integer pageNumber, Integer pageSize, String issuedtime, String objectname, String status) {
         PageHelper.startPage(pageNumber, pageSize);
-        List<DubanSupervision> list = dubanSupervisionMapper.list(issuedtime,objectname,status);
-        PageInfo<DubanSupervision> pageInfo = new PageInfo(list);
+        List<ScDubanSupervision> list = dubanSupervisionMapper.list(issuedtime,objectname,status);
+        PageInfo<ScDubanSupervision> pageInfo = new PageInfo(list);
         return pageInfo;
     }
 }

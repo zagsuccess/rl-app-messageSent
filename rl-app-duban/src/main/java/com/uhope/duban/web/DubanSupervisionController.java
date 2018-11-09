@@ -6,8 +6,8 @@ import com.uhope.base.dto.PageInfo;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
 import com.uhope.converter.client.Converter;
-import com.uhope.duban.domain.DubanFeedback;
-import com.uhope.duban.domain.DubanSupervision;
+import com.uhope.duban.domain.ScDubanFeedback;
+import com.uhope.duban.domain.ScDubanSupervision;
 import com.uhope.duban.service.DubanFeedbackService;
 import com.uhope.duban.service.DubanSupervisionService;
 import com.uhope.duban.utils.CommonUtil;
@@ -53,7 +53,7 @@ public class DubanSupervisionController {
     private TokenService tokenService;
 
     @PostMapping("/add")
-    public Result<DubanSupervision> add(DubanSupervision dubanSupervision) {
+    public Result<ScDubanSupervision> add(ScDubanSupervision dubanSupervision) {
         dubanSupervision.setTitle(dubanSupervision.getTitle());
         dubanSupervision.setProject(dubanSupervision.getProject());
         dubanSupervision.setIssuedtime(dubanSupervision.getIssuedtime());
@@ -61,7 +61,9 @@ public class DubanSupervisionController {
         dubanSupervision.setReason(dubanSupervision.getReason());
         dubanSupervision.setObjectid(dubanSupervision.getObjectid());
         Result<UserDTO> id = userService.getById(dubanSupervision.getObjectid());
-        dubanSupervision.setObjectname(id.getData().getName());
+        if(id.getData()!=null){
+            dubanSupervision.setObjectname(id.getData().getName());
+        }
         dubanSupervision.setAssessory(dubanSupervision.getAssessory());
         dubanSupervision.setAssessorydescribe(dubanSupervision.getAssessorydescribe());
         dubanSupervision.setStatus("0");
@@ -71,8 +73,8 @@ public class DubanSupervisionController {
 
 
     @GetMapping("/detail")
-    public Result<DubanSupervision> detail(@RequestParam String id) {
-        DubanSupervision dubanSupervision = dubanSupervisionService.get(id);
+    public Result<ScDubanSupervision> detail(@RequestParam String id) {
+        ScDubanSupervision dubanSupervision = dubanSupervisionService.get(id);
         return ResponseMsgUtil.success(dubanSupervision);
     }
 
@@ -92,7 +94,7 @@ public class DubanSupervisionController {
     }
 
     @GetMapping("/list")
-    public Result<com.github.pagehelper.PageInfo<DubanSupervision>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
+    public Result<com.github.pagehelper.PageInfo<ScDubanSupervision>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                                                          @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
                                                                          String issuedtime,String objectname,String status) {
 
@@ -101,7 +103,7 @@ public class DubanSupervisionController {
 
     //添加回复信息
     @PostMapping("/addFeedbackhf")
-    public Result<DubanFeedback> addFeedbackhf(DubanFeedback dubanFeedback) throws ParseException {
+    public Result<ScDubanFeedback> addFeedbackhf(ScDubanFeedback dubanFeedback) throws ParseException {
         dubanFeedback.setSupervisionid(dubanFeedback.getSupervisionid());
         dubanFeedback.setFeedbacktime(dubanFeedback.getFeedbacktime());
         dubanFeedback.setWhether(dubanFeedback.getWhether());
@@ -109,7 +111,7 @@ public class DubanSupervisionController {
         dubanFeedback.setAssessory(dubanFeedback.getAssessory());
         dubanFeedback.setStatus("0");
         dubanFeedbackService.insert(dubanFeedback);
-        DubanSupervision dubanSupervision = new DubanSupervision();
+        ScDubanSupervision dubanSupervision = new ScDubanSupervision();
         dubanSupervision.setId(dubanFeedback.getSupervisionid());
         dubanSupervision.setStatus("1");
         dubanSupervisionService.update(dubanSupervision);
@@ -118,7 +120,7 @@ public class DubanSupervisionController {
 
     //添加处理信息
     @PostMapping("/addFeedbackcl")
-    public Result<DubanFeedback> addFeedbackcl(DubanFeedback dubanFeedback) throws ParseException {
+    public Result<ScDubanFeedback> addFeedbackcl(ScDubanFeedback dubanFeedback) throws ParseException {
         dubanFeedback.setSupervisionid(dubanFeedback.getSupervisionid());
         dubanFeedback.setFeedbacktime(dubanFeedback.getFeedbacktime());
         dubanFeedback.setWhether(dubanFeedback.getWhether());
@@ -126,7 +128,7 @@ public class DubanSupervisionController {
         dubanFeedback.setAssessory(dubanFeedback.getAssessory());
         dubanFeedback.setStatus("1");
         dubanFeedbackService.insert(dubanFeedback);
-        DubanSupervision dubanSupervision = new DubanSupervision();
+        ScDubanSupervision dubanSupervision = new ScDubanSupervision();
         dubanSupervision.setId(dubanFeedback.getSupervisionid());
         if("是".equals(dubanFeedback.getWhether())){
             dubanSupervision.setStatus("2");
@@ -139,7 +141,7 @@ public class DubanSupervisionController {
 
     //添加核查信息
     @PostMapping("/addFeedbackhc")
-    public Result<DubanFeedback> addFeedbackhc(DubanFeedback dubanFeedback) throws ParseException {
+    public Result<ScDubanFeedback> addFeedbackhc(ScDubanFeedback dubanFeedback) throws ParseException {
         dubanFeedback.setSupervisionid(dubanFeedback.getSupervisionid());
         dubanFeedback.setFeedbacktime(dubanFeedback.getFeedbacktime());
         dubanFeedback.setWhether(dubanFeedback.getWhether());
@@ -147,7 +149,7 @@ public class DubanSupervisionController {
         dubanFeedback.setAssessory(dubanFeedback.getAssessory());
         dubanFeedback.setStatus("2");
         dubanFeedbackService.insert(dubanFeedback);
-        DubanSupervision dubanSupervision = new DubanSupervision();
+        ScDubanSupervision dubanSupervision = new ScDubanSupervision();
         dubanSupervision.setId(dubanFeedback.getSupervisionid());
         if("是".equals(dubanFeedback.getWhether())){
             dubanSupervision.setStatus("4");
@@ -161,16 +163,16 @@ public class DubanSupervisionController {
 
 
     @GetMapping("/detailFeedbackhf")
-    public Result<DubanFeedback> detailFeedbackhf(@RequestParam String supervisionid) {
-        DubanFeedback dubanFeedback = new DubanFeedback();
+    public Result<ScDubanFeedback> detailFeedbackhf(@RequestParam String supervisionid) {
+        ScDubanFeedback dubanFeedback = new ScDubanFeedback();
         dubanFeedback.setSupervisionid(supervisionid);
         dubanFeedback.setStatus("0");
         return ResponseMsgUtil.success(dubanFeedbackService.selectFeedback(dubanFeedback));
     }
 
     @GetMapping("/detailFeedbackcl")
-    public Result<DubanFeedback> detailFeedbackcl(@RequestParam String supervisionid) {
-        DubanFeedback dubanFeedback = new DubanFeedback();
+    public Result<ScDubanFeedback> detailFeedbackcl(@RequestParam String supervisionid) {
+        ScDubanFeedback dubanFeedback = new ScDubanFeedback();
         dubanFeedback.setSupervisionid(supervisionid);
         dubanFeedback.setStatus("1");
         return ResponseMsgUtil.success(dubanFeedbackService.selectFeedback(dubanFeedback));
@@ -178,8 +180,8 @@ public class DubanSupervisionController {
 
 
     @GetMapping("/detailFeedbackhc")
-    public Result<DubanFeedback> detailFeedbackhc(@RequestParam String supervisionid) {
-        DubanFeedback dubanFeedback = new DubanFeedback();
+    public Result<ScDubanFeedback> detailFeedbackhc(@RequestParam String supervisionid) {
+        ScDubanFeedback dubanFeedback = new ScDubanFeedback();
         dubanFeedback.setSupervisionid(supervisionid);
         dubanFeedback.setStatus("2");
         return ResponseMsgUtil.success(dubanFeedbackService.selectFeedback(dubanFeedback));
@@ -188,10 +190,10 @@ public class DubanSupervisionController {
     //查询是否有核查
     @GetMapping("/selectFeedbackhc")
     public Result<String> selectFeedbackhc(@RequestParam String supervisionid) {
-        DubanFeedback dubanFeedback = new DubanFeedback();
+        ScDubanFeedback dubanFeedback = new ScDubanFeedback();
         dubanFeedback.setSupervisionid(supervisionid);
         dubanFeedback.setStatus("2");
-        DubanFeedback dubanFeedback1 = dubanFeedbackService.selectFeedback(dubanFeedback);
+        ScDubanFeedback dubanFeedback1 = dubanFeedbackService.selectFeedback(dubanFeedback);
         String msg="没有";
         if(dubanFeedback1!=null){
             msg="有";

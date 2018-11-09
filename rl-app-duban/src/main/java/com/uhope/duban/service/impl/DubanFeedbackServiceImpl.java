@@ -1,7 +1,7 @@
 package com.uhope.duban.service.impl;
 
 import com.uhope.core.AbstractService;
-import com.uhope.duban.domain.DubanFeedback;
+import com.uhope.duban.domain.ScDubanFeedback;
 import com.uhope.duban.dto.DubanFeedbackDTO;
 import com.uhope.duban.mapper.DubanFeedbackMapper;
 import com.uhope.duban.service.DubanFeedbackService;
@@ -19,12 +19,12 @@ import javax.annotation.Resource;
  * @author ChenBin on 2018/09/04
  */
 @Service
-public class DubanFeedbackServiceImpl extends AbstractService<DubanFeedback, DubanFeedbackDTO, String> implements DubanFeedbackService {
+public class DubanFeedbackServiceImpl extends AbstractService<ScDubanFeedback, DubanFeedbackDTO, String> implements DubanFeedbackService {
     @Resource
     private DubanFeedbackMapper dubanFeedbackMapper;
 
     @Override
-    public DubanFeedback selectFeedback(DubanFeedback dubanFeedback) {
+    public ScDubanFeedback selectFeedback(ScDubanFeedback dubanFeedback) {
         return dubanFeedbackMapper.selectFeedback(dubanFeedback);
     }
 

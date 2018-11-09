@@ -1,7 +1,7 @@
 package com.uhope.duban.service;
 
 import com.uhope.core.Service;
-import com.uhope.duban.domain.DubanFeedback;
+import com.uhope.duban.domain.ScDubanFeedback;
 import com.uhope.duban.dto.DubanFeedbackDTO;
 import com.uhope.template.domain.Template;
 import com.uhope.template.dto.TemplateDTO;
@@ -11,9 +11,9 @@ import com.uhope.template.dto.TemplateDTO;
  *
  * @author ChenBin on 2018/09/04
  */
-public interface DubanFeedbackService extends Service<DubanFeedback, DubanFeedbackDTO, String> {
+public interface DubanFeedbackService extends Service<ScDubanFeedback, DubanFeedbackDTO, String> {
 
-    DubanFeedback selectFeedback(DubanFeedback dubanFeedback);
+    ScDubanFeedback selectFeedback(ScDubanFeedback dubanFeedback);
 
     String selectRole(String id);
 }

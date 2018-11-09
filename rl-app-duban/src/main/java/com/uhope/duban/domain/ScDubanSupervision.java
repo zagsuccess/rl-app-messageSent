@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
-public class DubanSupervision implements Serializable {
+public class ScDubanSupervision implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT REPLACE(UUID(),\"-\",\"\")")
     private String id;
@@ -57,11 +57,11 @@ public class DubanSupervision implements Serializable {
      * 状态
      */
     private String status;
-    public DubanSupervision() {
+    public ScDubanSupervision() {
         super();
     }
 
-    public DubanSupervision(String title, String project, Date issuedtime, Date deadlinedate, String reason, String objectid, String objectname, String assessory, String assessorydescribe, String status) {
+    public ScDubanSupervision(String title, String project, Date issuedtime, Date deadlinedate, String reason, String objectid, String objectname, String assessory, String assessorydescribe, String status) {
         this.title = title;
         this.project = project;
         this.issuedtime = issuedtime;
@@ -164,7 +164,7 @@ public class DubanSupervision implements Serializable {
 
     @Override
     public String toString() {
-        return "DubanSupervision{" +
+        return "ScDubanSupervision{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
                 ", project='" + project + '\'' +

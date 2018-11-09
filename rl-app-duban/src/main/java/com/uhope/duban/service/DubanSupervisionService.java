@@ -2,7 +2,7 @@ package com.uhope.duban.service;
 
 import com.github.pagehelper.PageInfo;
 import com.uhope.core.Service;
-import com.uhope.duban.domain.DubanSupervision;
+import com.uhope.duban.domain.ScDubanSupervision;
 import com.uhope.duban.dto.DeadlineDTO;
 import com.uhope.duban.dto.DubanSupervisionDTO;
 import com.uhope.template.domain.Template;
@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author ChenBin on 2018/09/04
  */
-public interface DubanSupervisionService extends Service<DubanSupervision, DubanSupervisionDTO, String> {
+public interface DubanSupervisionService extends Service<ScDubanSupervision, DubanSupervisionDTO, String> {
 
     String selectRoleId(String rolename);
 
@@ -23,5 +23,5 @@ public interface DubanSupervisionService extends Service<DubanSupervision, Duban
 
     List<DeadlineDTO> selectDeadlineUserh();
 
-    PageInfo<DubanSupervision> list(Integer pageNumber, Integer pageSize, String issuedtime, String objectname, String status);
+    PageInfo<ScDubanSupervision> list(Integer pageNumber, Integer pageSize, String issuedtime, String objectname, String status);
 }
