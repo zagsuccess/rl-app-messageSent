@@ -43,9 +43,9 @@ public class DubanSupervisionServiceImpl extends AbstractService<ScDubanSupervis
     }
 
     @Override
-    public PageInfo<ScDubanSupervision> list(Integer pageNumber, Integer pageSize, String issuedtime, String objectname, String status) {
+    public PageInfo<ScDubanSupervision> list(Integer pageNumber, Integer pageSize, String issuedtime, String objectname, String status,String objectid) {
         PageHelper.startPage(pageNumber, pageSize);
-        List<ScDubanSupervision> list = dubanSupervisionMapper.list(issuedtime,objectname,status);
+        List<ScDubanSupervision> list = dubanSupervisionMapper.list(issuedtime,objectname,status,objectid);
         PageInfo<ScDubanSupervision> pageInfo = new PageInfo(list);
         return pageInfo;
     }

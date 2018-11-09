@@ -86,19 +86,27 @@ public class DubanSupervisionController {
         Result<PageInfo<UserDTO>> pageInfoResult = userService.queryUserList(null, null, null, roleId, 0, 0);
         List<UserDTO> userDTOList=new ArrayList<>();
         for (UserDTO userDTO:pageInfoResult.getData().getRecords()){
-             if (userDTO.getRegionId()%(1000 * 1000)==0){
+             if (userDTO.getRegionId()%(1000 * 1000)==0 && userDTO.getRegionId()%(10000 * 10000)!=0){
                  userDTOList.add(userDTO);
              }
         }
         return ResponseMsgUtil.success(userDTOList);
     }
 
-    @GetMapping("/list")
+    /*@GetMapping("/list")
     public Result<com.github.pagehelper.PageInfo<ScDubanSupervision>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                                                          @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
                                                                          String issuedtime,String objectname,String status) {
 
         return ResponseMsgUtil.success(dubanSupervisionService.list(pageNumber,pageSize,issuedtime,objectname,status));
+    }*/
+
+    @GetMapping("/list")
+    public Result<com.github.pagehelper.PageInfo<ScDubanSupervision>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
+                                                                           @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
+                                                                           String issuedtime,String objectname,String status,String objectid) {
+
+        return ResponseMsgUtil.success(dubanSupervisionService.list(pageNumber,pageSize,issuedtime,objectname,status,objectid));
     }
 
     //添加回复信息

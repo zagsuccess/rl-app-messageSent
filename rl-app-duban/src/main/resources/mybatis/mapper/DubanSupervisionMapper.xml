@@ -41,6 +41,9 @@
             <if test="status != null and status != ''">
                 AND status=#{status}
             </if>
+            <if test="objectid !=null and objectid != ''">
+                and OBJECTID =#{objectid}
+            </if>
         </where>
     </select>
 

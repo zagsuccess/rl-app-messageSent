@@ -15,5 +15,8 @@ public interface DubanSupervisionMapper extends Mapper<ScDubanSupervision> {
 
     List<DeadlineDTO> selectDeadlineUserh();
 
-    List<ScDubanSupervision> list(@Param("issuedtime") String issuedtime,@Param("objectname") String objectname,@Param("status") String status);
+    List<ScDubanSupervision> list(@Param("issuedtime") String issuedtime,
+                                  @Param("objectname") String objectname,
+                                  @Param("status") String status,
+                                  @Param("objectid") String objectid);
 }
