@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.inspection.mapper.TrafficListMapper">
+  <resultMap id="BaseResultMap" type="com.uhope.inspection.domain.ScTrafficList">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="accessory" jdbcType="VARCHAR" property="accessory" />
+    <result column="inspection_id" jdbcType="VARCHAR" property="inspectionId" />
+    <result column="traffic_date" jdbcType="VARCHAR" property="trafficDate" />
+    <result column="traffic_content" jdbcType="VARCHAR" property="trafficContent" />
+    <result column="oneregion" jdbcType="INTEGER" property="oneregion" />
+  </resultMap>
+  <select id="selectById" resultMap="BaseResultMap">
+    SELECT * FROM sc_traffic_list where inspection_id = #{inspectionId}
+  </select>
+</mapper>

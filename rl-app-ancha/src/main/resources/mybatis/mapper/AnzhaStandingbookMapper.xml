@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.ancha.mapper.AnzhaStandingBookMapper">
+    <!-- AnzhaStandingbook的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_AnzhaStandingbook_Map" type="com.uhope.ancha.domain.AnzhaStandingBook">
+        <id column="ID" property="id" />
+        <result column="TURNAROUNDDATE" property="turnarounddate" />
+        <result column="CONTENT" property="content" />
+        <result column="OBJECT" property="object" />
+        <result column="NAME" property="name" />
+        <result column="DUTY" property="duty" />
+        <result column="ACCOUNTABILITYTYPE" property="accountabilitytype" />
+        <result column="ACCESSORY" property="accessory" />
+        <result column="REMARK" property="remark" />
+        <result column="BULLETINID" property="bulletinid" />
+    </resultMap>
+    <select id="selectList" resultType="com.uhope.ancha.domain.AnzhaStandingBook">
+        select * from anzha_standing_book where BULLETINID =#{bulletinid} order by TURNAROUNDDATE
+    </select>
+
+
+</mapper>
