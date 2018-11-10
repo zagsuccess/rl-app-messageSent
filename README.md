@@ -53,4 +53,16 @@ kaohepinggu/kaohepinggu-wushui
 rl-app-spotcheck(部分完成)
 
 - 前端
-未完成
+
+### 9. 社会监督-评价+举报模块
+- 后端
+rl-app-supervise
+
+-前端
+
+### 10. 巡查模块
+- 后端
+rl-app-patrol
+
+- 前端
+

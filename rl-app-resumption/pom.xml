@@ -110,11 +110,6 @@
             <artifactId>rl-app-component-service-client</artifactId>
             <version>${rl.app.component.service.client.version}</version>
         </dependency>
-        <!-- 督办单下发管理服务 -->
-        <dependency>
-            <groupId>com.uhope.rl</groupId>
-            <artifactId>rl-supervise-service-client</artifactId>
-        </dependency>
         <!-- uip通用平台河湖库服务客户端 -->
         <dependency>
             <groupId>com.uhope.rl</groupId>

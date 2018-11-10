@@ -2,6 +2,7 @@ package com.uhope.spotcheck.service;
 
 import com.uhope.core.Service;
 import com.uhope.spotcheck.domain.ScSpotcheckProblem;
+import com.uhope.spotcheck.dto.RegionDTO;
 import com.uhope.spotcheck.dto.ScSpotcheckProblemDTO;
 
 import java.util.List;
@@ -14,14 +15,14 @@ import java.util.List;
 public interface ScSpotcheckProblemService extends Service<ScSpotcheckProblem, ScSpotcheckProblemDTO, String> {
 
     /**
-     * 查找所有的市级河长
+     * 根据角色名查找对应的角色ID
      * @return
      */
-    List<String> listSendPerson();
+    String findRoleIdByName(String roleName);
 
     /**
      * 查找所有的区
      * @return
      */
-    List<String> listRegion();
+    List<RegionDTO> listRegion();
 }

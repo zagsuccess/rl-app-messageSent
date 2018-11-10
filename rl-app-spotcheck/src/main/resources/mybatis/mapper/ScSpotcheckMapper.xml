@@ -6,7 +6,7 @@
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="region_code" jdbcType="VARCHAR" property="regionCode" />
     <result column="region_name" jdbcType="VARCHAR" property="regionName" />
-    <result column="check_date" jdbcType="TIMESTAMP" property="checkDate" />
+    <result column="check_date" jdbcType="DATE" property="checkDate" />
     <result column="check_river" jdbcType="VARCHAR" property="checkRiver" />
     <result column="task_type" jdbcType="INTEGER" property="taskType" />
     <result column="send_person_id" jdbcType="VARCHAR" property="sendPersonId" />
@@ -15,4 +15,14 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
+  <select id="findRiverByRegion" parameterType="java.util.Map" resultType="java.lang.String">
+    SELECT mr.reach_name AS regionName
+    FROM md_reach mr, md_administrative_region mar
+    WHERE mr.grade=3 AND mr.region_code=mar.id AND mar.area_name=#{regionName}
+  </select>
+  <select id="listProblemType" resultType="com.uhope.spotcheck.dto.ProblemTypeDTO">
+    SELECT ix.ID AS problemTypeId, ix.GRADEDETAILED AS problemTypeName, ix.GRADEWAY AS problemDecutionType, ix.DEDUCT_MARKS AS problemScore
+    FROM illegal_xize ix
+    WHERE ix.`LEVEL`=3
+  </select>
 </mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.duban.mapper.DubanFeedbackMapper">
+    <!-- DubanFeedback的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_DubanFeedback_Map" type="com.uhope.duban.domain.ScDubanFeedback">
+        <id column="ID" property="id" />
+        <result column="FEEDBACKTIME" property="feedbacktime" />
+        <result column="WHETHER" property="whether" />
+        <result column="DESCRIPTION" property="description" />
+        <result column="ASSESSORY" property="assessory" />
+        <result column="SUPERVISIONID" property="supervisionid" />
+        <result column="STATUS" property="status" />
+    </resultMap>
+    <select id="selectFeedback" resultType="com.uhope.duban.domain.ScDubanFeedback">
+        select * from sc_duban_feedback where SUPERVISIONID=#{supervisionid} and status=#{status} order by FEEDBACKTIME desc limit 1
+    </select>
+    <select id="selectRole" resultType="java.lang.String">
+        select name from sm_role sr INNER JOIN (select sur.role_id from sm_user_role sur where sur.user_id=#{id})s on
+          sr.id=s.role_id
+    </select>
+
+
+</mapper>

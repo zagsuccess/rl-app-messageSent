@@ -1,5 +1,6 @@
 package com.uhope.spotcheck.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.base.Objects;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -20,7 +21,8 @@ public class ScSpotcheck implements Serializable {
 
     private String regionName;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JSONField(format="yyyy-MM-dd")
     private Date checkDate;
 
     private String checkRiver;
@@ -33,10 +35,9 @@ public class ScSpotcheck implements Serializable {
 
     private Integer status;
 
-    private String creator;
+    private transient String creator;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    private transient Date createTime;
 
     public String getId() {
         return id;

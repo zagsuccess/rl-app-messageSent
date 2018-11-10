@@ -33,12 +33,13 @@ public class SewageDisposeServiceImpl extends AbstractService<SewageDispose, Sew
     }
 
     @Override
-    public String selectSHZB() {
-        return sewageDisposeMapper.selectSHZB();
+    public String selectRole(String id) {
+        return sewageDisposeMapper.selectRole(id);
     }
 
     @Override
-    public String selectSHBJ() {
-        return sewageDisposeMapper.selectSHBJ();
+    public SewageDispose selectHave(String issue) {
+        return sewageDisposeMapper.selectHave(issue);
     }
+
 }

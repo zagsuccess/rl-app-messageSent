@@ -49,6 +49,17 @@ public class SurfaceWaterController {
         return ResponseMsgUtil.success(surfaceWater);
     }
 
+    //查询是否这个月份是否创建过报告
+    @GetMapping("/selectHave")
+    public Result<String> selectHave(@RequestParam String issue) {
+        SurfaceWater surfaceWater = surfaceWaterService.selectHave(issue);
+        String msg="没有";
+        if (surfaceWater!=null){
+            msg="有";
+        }
+        return ResponseMsgUtil.success(msg);
+    }
+
     @GetMapping("/list")
     public Result<PageInfo<SurfaceWater>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                                @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
@@ -102,11 +113,11 @@ public class SurfaceWaterController {
         //默认是00   （00表示都不是  01表示市环保局  02表示市河长办 ）
         String grade="00";
 
-        if(userDTO.getId().equals(surfaceWaterService.selectSHZB())){
+        if("市河长办".equals(surfaceWaterService.selectRole(userDTO.getId()))){
             grade="02";
         }
 
-        if(userDTO.getId().equals(surfaceWaterService.selectSHBJ())){
+        if("环保局".equals(surfaceWaterService.selectRole(userDTO.getId()))){
             grade="01";
         }
 
@@ -115,19 +126,14 @@ public class SurfaceWaterController {
 
     @GetMapping("/userinfo1")
     public Result<String> userinfo(String id){
-        //获取当前用户信息
-       /* UserDTO userDTO = getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
-        if(userDTO == null ){
-            return ResponseMsgUtil.failure("获取用户失败");
-        }*/
         //默认是00   （00表示都不是  01表示市环保局  02表示市河长办 ）
         String grade="00";
 
-        if(id.equals(surfaceWaterService.selectSHZB())){
+        if("市河长办".equals(surfaceWaterService.selectRole(id))){
             grade="02";
         }
 
-        if(id.equals(surfaceWaterService.selectSHBJ())){
+        if("环保局".equals(surfaceWaterService.selectRole(id))){
             grade="01";
         }
 

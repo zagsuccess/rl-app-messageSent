@@ -1,6 +1,8 @@
 package com.uhope.spotcheck.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.uhope.spotcheck.domain.ScSpotcheckProblem;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,32 +11,25 @@ import java.util.List;
 /**
  * @author: Yang Jiaheng
  * @date: 18/10/25
- * @description:
+ * @description: 检查结果-最终传输类
  */
 public class CheckResultDTO implements Serializable {
 
-    //扣分结果
-    private Integer deductionResult;
-    //检查时间
+    /**
+     * 检查时间
+     */
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JSONField(format="yyyy-MM-dd")
     private Date checkDate;
-    //上报人
+
+    /**
+     * 上报人
+     */
     private String sendPerson;
-    //问题list
+    /**
+     * 问题list
+     */
     private List<ScSpotcheckProblem> problemList;
-
-    /**
-     * @return deductionResult
-     */
-    public Integer getDeductionResult() {
-        return deductionResult;
-    }
-
-    /**
-     * @param deductionResult
-     */
-    public void setDeductionResult(Integer deductionResult) {
-        this.deductionResult = deductionResult;
-    }
 
     /**
      * @return checkDate
@@ -81,7 +76,6 @@ public class CheckResultDTO implements Serializable {
     @Override
     public String toString() {
         return "CheckResultDTO{" +
-                "deductionResult=" + deductionResult +
                 ", checkDate=" + checkDate +
                 ", sendPerson='" + sendPerson + '\'' +
                 ", problemList=" + problemList +

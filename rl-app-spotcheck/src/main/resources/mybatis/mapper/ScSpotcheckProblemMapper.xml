@@ -4,19 +4,22 @@
   <resultMap id="BaseResultMap" type="com.uhope.spotcheck.domain.ScSpotcheckProblem" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="spotcheck_id" property="spotcheckId" jdbcType="VARCHAR" />
-    <result column="problem_type_id" property="problemTypeId" jdbcType="VARCHAR" />
+    <result column="problem_type_name" property="problemTypeName" jdbcType="VARCHAR" />
+    <result column="problem_deduction" property="problemDeduction" jdbcType="VARCHAR" />
     <result column="attach" property="attach" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="creator_id" property="creatorId" jdbcType="VARCHAR" />
-    <result column="problem_desc" property="problemDesc" jdbcType="LONGVARCHAR" />
+    <result column="problem_desc" property="problemDesc" jdbcType="VARCHAR" />
+    <result column="spotcheck_region" property="spotcheckRegion" jdbcType="VARCHAR" />
+    <result column="spotcheck_river" property="spotcheckRiver" jdbcType="VARCHAR" />
   </resultMap>
-  <select id="listSendPerson" resultType="java.lang.String">
-    select distinct chairman_name
-    from md_reachchairman
-    where chairmanlevel=2
+  <select id="findRoleIdByName" parameterType="java.lang.String" resultType="java.lang.String">
+    SELECT ID
+    FROM sm_role
+    WHERE `NAME`=#{roleName}
   </select>
-  <select id="listRegion" resultType="java.lang.String">
-    select distinct area_name
+  <select id="listRegion" resultType="com.uhope.spotcheck.dto.RegionDTO">
+    select distinct area_name as  regionName, id as regionId
     from md_administrative_region
     where grade=3
   </select>

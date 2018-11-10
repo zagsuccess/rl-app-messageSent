@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.statistic.mapper.StatisticMapper">
+
+    <select id="listRegionName" resultType="com.uhope.statistic.dto.RiverStatisticDTO">
+        SELECT area_name AS regionName
+        FROM md_administrative_region
+        WHERE grade=3
+    </select>
+
+    <select id="listWaterQualityData" resultType="com.uhope.statistic.dto.WaterQualityDTO">
+        SELECT mar.area_name AS regionName, IFNULL(t_a.oxygen,0) AS oxygen, IFNULL(t_a.phosphorus,0) AS phosphorus, IFNULL(t_a.permanganate,0) AS permanganate, IFNULL(t_a.AN,0) AS AN
+        FROM md_administrative_region mar
+        LEFT JOIN
+        (
+            SELECT mar.area_name AS regionName, ROUND(AVG(wqg.`DO`),2) AS oxygen, ROUND(AVG(wqg.total_phosphorus),2) AS phosphorus, ROUND(AVG(wqg.permanganate_index),2) AS permanganate, ROUND(AVG(wqg.ammonia_nitrogen),2) AS AN
+            FROM water_quality_grade wqg, md_section ms, md_administrative_region mar
+            WHERE wqg.`name`=ms.`NAME` AND mar.area_code=ms.COUNTYID AND ms.SECTIONLEVEL=3
+            GROUP BY regionName
+        )t_a ON mar.area_name = t_a.regionName
+        WHERE mar.grade=3
+    </select>
+</mapper>

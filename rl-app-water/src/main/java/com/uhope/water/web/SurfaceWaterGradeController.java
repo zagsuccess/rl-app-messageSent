@@ -6,10 +6,7 @@ import com.uhope.water.domain.SurfaceWaterGrade;
 import com.uhope.water.service.SurfaceWaterGradeService;
 import com.uhope.water.utils.ExcelUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -108,11 +105,13 @@ public class SurfaceWaterGradeController {
         int hang = sheetAt.getPhysicalNumberOfRows();
         for (int i = 2; i < hang; i++) {
             String id=null;
-            String popedom = sheetAt.getRow(i).getCell(1).getStringCellValue();
-            String grade=null;
-            Cell cell = sheetAt.getRow(i).getCell(2);
-            cell.setCellType(CellType.STRING);
-            grade=cell.getStringCellValue();
+            Row row = sheetAt.getRow(i);
+            String popedom = row.getCell(1)== null ? null :row.getCell(1).getStringCellValue();
+            Cell cell = row.getCell(2);
+            if (cell != null) {
+                cell.setCellType(CellType.STRING);
+            }
+            String grade=cell== null ? null :cell.getStringCellValue();
             surfaceWaterGrade.setParentid(parentid);
             surfaceWaterGrade.setPopedom(popedom);
             surfaceWaterGrade.setGrade(grade);
