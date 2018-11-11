@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.uhope.supervise.domain.ShSocialReport">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="report_date" jdbcType="TIMESTAMP" property="reportDate"/>
+        <result column="over_time" jdbcType="TIMESTAMP" property="overTime"/>
         <result column="region_name" jdbcType="VARCHAR" property="regionName"/>
         <result column="river_name" jdbcType="VARCHAR" property="riverName"/>
         <result column="reportor" jdbcType="VARCHAR" property="reportor"/>
