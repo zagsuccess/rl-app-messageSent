@@ -4,10 +4,10 @@
   <resultMap id="BaseResultMap" type="com.uhope.assessment.domain.AssessGradeType">
     <id column="ID" jdbcType="VARCHAR" property="id" />
     <result column="GRADETYPE" jdbcType="VARCHAR" property="gradetype" />
-    <result column="GRADELEVEL" jdbcType="INTEGER" property="gradelevel" />
-    <result column="WEIGHT" jdbcType="INTEGER" property="weight" />
-    <result column="TOTALPOINTS" jdbcType="INTEGER" property="totalpoints" />
-    <result column="SORT" jdbcType="INTEGER" property="sort" />
+    <result column="GRADELEVEL" jdbcType="VARCHAR" property="gradelevel" />
+    <result column="WEIGHT" jdbcType="VARCHAR" property="weight" />
+    <result column="TOTALPOINTS" jdbcType="VARCHAR" property="totalpoints" />
+    <result column="SORT" jdbcType="VARCHAR" property="sort" />
     <result column="PARENTID" jdbcType="VARCHAR" property="parentid" />
   </resultMap>
   <select id="listDTO" parameterType="java.util.Map" resultType="com.uhope.assessment.dto.AssessGradeTypeDTO">
