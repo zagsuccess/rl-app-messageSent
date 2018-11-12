@@ -10,5 +10,5 @@ import java.util.List;
 public interface BulletinMapper extends Mapper<Bulletin> {
     public List<Bulletin> selectByFirst(Integer type);
 
-    public List<Bulletin> selectshujihui(@Param("type") Integer type, @Param("year") String year, @Param("month") String month);
+    public List<Bulletin> selectlist(@Param("type") Integer type, @Param("post_time") String post_time);
 }

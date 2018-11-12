@@ -1,6 +1,7 @@
 package com.uhope.bulletin.domain;
 
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
@@ -9,12 +10,12 @@ import java.util.Objects;
 /**
  * @author: StivenYang
  * @date: 2018/9/8
- * @description: 暗查暗访表-接口实现类
+ * @description: 信息管理表-接口实现类
  */
 public class Bulletin implements Serializable {
     @Id
-    @GeneratedValue(generator = "JDBC")
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT REPLACE(UUID(),\"-\",\"\")")
+    private String id;
     /**
      *标题
      */
@@ -30,7 +31,7 @@ public class Bulletin implements Serializable {
     /**
      *发布时间
      */
-	private String postTime;
+	private String post_time;
     /**
      *月份
      */
@@ -42,7 +43,7 @@ public class Bulletin implements Serializable {
     /**
      *静态页面url
      */
-    private String detailUrl;
+    private String detail_url;
     /**
      *状态
      */
@@ -50,11 +51,11 @@ public class Bulletin implements Serializable {
     /**
      *附件url
      */
-    private String attandUrl;
+    private String attand_url;
     /**
      *创建时间
      */
-    private Date createTime;
+    private Date create_time;
     /**
      *描述
      */
@@ -64,53 +65,25 @@ public class Bulletin implements Serializable {
         super();
     }
 
-    @Override
-    public String toString() {
-        return "Bulletin{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", type='" + type + '\'' +
-                ", issuer='" + issuer + '\'' +
-                ", postTime='" + postTime + '\'' +
-                ", month='" + month + '\'' +
-                ", year='" + year + '\'' +
-                ", detailUrl='" + detailUrl + '\'' +
-                ", status=" + status +
-                ", attandUrl='" + attandUrl + '\'' +
-                ", createTime=" + createTime +
-                ", detail='" + detail + '\'' +
-                '}';
+    public Bulletin(String title, Integer type, String issuer, String post_time, String month, String year, String detail_url, Integer status, String attand_url, Date create_time, String detail) {
+        this.title = title;
+        this.type = type;
+        this.issuer = issuer;
+        this.post_time = post_time;
+        this.month = month;
+        this.year = year;
+        this.detail_url = detail_url;
+        this.status = status;
+        this.attand_url = attand_url;
+        this.create_time = create_time;
+        this.detail = detail;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {return true;}
-        if (o == null || getClass() != o.getClass()) {return false;}
-        Bulletin bulletin = (Bulletin) o;
-        return Objects.equals(id, bulletin.id) &&
-                Objects.equals(title, bulletin.title) &&
-                Objects.equals(type, bulletin.type) &&
-                Objects.equals(issuer, bulletin.issuer) &&
-                Objects.equals(postTime, bulletin.postTime) &&
-                Objects.equals(month, bulletin.month) &&
-                Objects.equals(year, bulletin.year) &&
-                Objects.equals(detailUrl, bulletin.detailUrl) &&
-                Objects.equals(status, bulletin.status) &&
-                Objects.equals(attandUrl, bulletin.attandUrl) &&
-                Objects.equals(createTime, bulletin.createTime) &&
-                Objects.equals(detail, bulletin.detail);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, title, type, issuer, postTime, month, year, detailUrl, status, attandUrl, createTime, detail);
-    }
-
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -138,12 +111,12 @@ public class Bulletin implements Serializable {
         this.issuer = issuer;
     }
 
-    public String getPostTime() {
-        return postTime;
+    public String getPost_time() {
+        return post_time;
     }
 
-    public void setPostTime(String postTime) {
-        this.postTime = postTime;
+    public void setPost_time(String post_time) {
+        this.post_time = post_time;
     }
 
     public String getMonth() {
@@ -162,12 +135,12 @@ public class Bulletin implements Serializable {
         this.year = year;
     }
 
-    public String getDetailUrl() {
-        return detailUrl;
+    public String getDetail_url() {
+        return detail_url;
     }
 
-    public void setDetailUrl(String detailUrl) {
-        this.detailUrl = detailUrl;
+    public void setDetail_url(String detail_url) {
+        this.detail_url = detail_url;
     }
 
     public Integer getStatus() {
@@ -178,20 +151,20 @@ public class Bulletin implements Serializable {
         this.status = status;
     }
 
-    public String getAttandUrl() {
-        return attandUrl;
+    public String getAttand_url() {
+        return attand_url;
     }
 
-    public void setAttandUrl(String attandUrl) {
-        this.attandUrl = attandUrl;
+    public void setAttand_url(String attand_url) {
+        this.attand_url = attand_url;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreate_time() {
+        return create_time;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreate_time(Date create_time) {
+        this.create_time = create_time;
     }
 
     public String getDetail() {
@@ -202,17 +175,21 @@ public class Bulletin implements Serializable {
         this.detail = detail;
     }
 
-    public Bulletin(String title, Integer type, String issuer, String postTime, String month, String year, String detailUrl, Integer status, String attandUrl, Date createTime, String detail) {
-        this.title = title;
-        this.type = type;
-        this.issuer = issuer;
-        this.postTime = postTime;
-        this.month = month;
-        this.year = year;
-        this.detailUrl = detailUrl;
-        this.status = status;
-        this.attandUrl = attandUrl;
-        this.createTime = createTime;
-        this.detail = detail;
+    @Override
+    public String toString() {
+        return "Bulletin{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", type=" + type +
+                ", issuer='" + issuer + '\'' +
+                ", post_time='" + post_time + '\'' +
+                ", month='" + month + '\'' +
+                ", year='" + year + '\'' +
+                ", detail_url='" + detail_url + '\'' +
+                ", status=" + status +
+                ", attand_url='" + attand_url + '\'' +
+                ", create_time=" + create_time +
+                ", detail='" + detail + '\'' +
+                '}';
     }
 }

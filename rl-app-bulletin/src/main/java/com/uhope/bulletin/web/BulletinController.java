@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
+import com.uhope.converter.client.Converter;
 import com.uhope.uip.fm.client.FileManagerClient;
 import com.uhope.uip.fm.model.FileItem;
 import com.uhope.bulletin.domain.Bulletin;
@@ -17,6 +18,7 @@ import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,121 +34,102 @@ public class    BulletinController {
 
     @Autowired
     private BulletinService bulletinService;
-
     @Autowired
     private FileManagerClient fileManagerClient;
+    @Autowired
+    private Converter converter;
 
 
     @GetMapping("/list")
     public Result<PageInfo<Bulletin>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                            @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
                                            Integer type,
-                                           String year,
-                                           String month) throws ParseException {
-        return ResponseMsgUtil.success(bulletinService.list(pageNumber, pageSize, type, year, month));
+                                           String post_time) throws ParseException {
+        return ResponseMsgUtil.success(bulletinService.list(pageNumber, pageSize, type, post_time));
     }
 
 
     @PostMapping("/add")
-    public Result<Bulletin> add(@RequestParam Integer type,
-                                @RequestParam String title,
-                                @RequestParam String detail,
-                                @RequestParam String postTime,
-                                @RequestParam String month,
-                                @RequestParam(defaultValue = "") String year,
-                                @RequestParam String issuer,
-                                @RequestParam(defaultValue = "") String attandUrl) {
-        Bulletin bulletin = new Bulletin();
-        bulletin.setAttandUrl(attandUrl);
-        bulletin.setDetail(detail);
-        bulletin.setPostTime(postTime);
-        bulletin.setTitle(title);
-        bulletin.setYear(year);
-        bulletin.setMonth(month);
-        bulletin.setIssuer(issuer);
-        bulletin.setType(type);
-        bulletin.setCreateTime(new Date());
+    public Result<Bulletin> add(Bulletin bulletin) {
+        bulletin.setAttand_url(bulletin.getAttand_url());
+        bulletin.setDetail(bulletin.getDetail());
+        bulletin.setPost_time(bulletin.getPost_time());
+        bulletin.setTitle(bulletin.getTitle());
+        bulletin.setYear(bulletin.getYear());
+        bulletin.setMonth(bulletin.getMonth());
+        bulletin.setIssuer(bulletin.getIssuer());
+        bulletin.setType(bulletin.getType());
+        bulletin.setCreate_time(new Date());
         bulletinService.insert(bulletin);
         return ResponseMsgUtil.success(bulletin);
     }
 
     @DeleteMapping("/delete")
-    public Result delete(@RequestParam Integer id) {
-        bulletinService.delete(id);
+    public Result delete(@RequestParam String id) {
+        bulletinService.remove(id);
         return ResponseMsgUtil.success();
     }
 
     @PutMapping("/update")
-    public Result<Bulletin> update(@RequestParam Integer id,
-                                   @RequestParam Integer type,
-                                   @RequestParam String title,
-                                   @RequestParam String issuer,
-                                   @RequestParam String postTime,
-                                   @RequestParam(defaultValue = "") String year,
-                                   @RequestParam String month,
-                                   @RequestParam String detail,
-                                   @RequestParam(defaultValue = "") String attandUrl
-    ) {
-        Bulletin bulletin = new Bulletin();
-        bulletin.setTitle(title);
-        bulletin.setType(type);
-        bulletin.setId(id);
-        bulletin.setAttandUrl(attandUrl);
-        bulletin.setIssuer(issuer);
-        bulletin.setPostTime(postTime);
-        bulletin.setYear(year);
-        bulletin.setMonth(month);
-        bulletin.setDetail(detail);
+    public Result<Bulletin> update(Bulletin bulletin) {
+        bulletin.setTitle(bulletin.getTitle());
+        bulletin.setType(bulletin.getType());
+        bulletin.setId(bulletin.getId());
+        bulletin.setAttand_url(bulletin.getAttand_url());
+        bulletin.setIssuer(bulletin.getIssuer());
+        bulletin.setPost_time(bulletin.getPost_time());
+        bulletin.setYear(bulletin.getYear());
+        bulletin.setMonth(bulletin.getMonth());
+        bulletin.setDetail(bulletin.getDetail());
         bulletinService.update(bulletin);
-        return ResponseMsgUtil.success(bulletinService.findBy("id", id));
+        return ResponseMsgUtil.success(bulletin);
     }
-
-    /*@PostMapping("/upload")
-    public Result<FileItem> upload(
-            @RequestParam MultipartFile file,
-            @RequestParam String fileName) throws IOException {
-        byte[] data = file.getBytes();
-        Result<FileItem> files = fileManagerClient.upload(data, fileName);
-        files.getData().setUrl(URLDecoder.decode(files.getData().getUrl()));
-        return files;
-    }*/
 
     /**
      * 文件上传
      *
-     * @param file
+     * @param files
      * @return
      * @throws IOException
      */
     @PostMapping("/upload")
-    public Result upload(@RequestParam(required = true) MultipartFile file) throws IOException {
-        byte[] bytes = file.getBytes();
-        String fileName = file.getOriginalFilename();
-        Result<FileItem> itemResult = fileManagerClient.upload(bytes, fileName);
-        return ResponseMsgUtil.isSuccess(itemResult) ? itemResult : ResponseMsgUtil.failure();
+    public Result<List<String>> upload(@RequestParam(required = true) MultipartFile files[]) throws IOException {
+        List<String>list=new ArrayList<>();
+        for (int i=0;i<files.length;i++){
+            byte[] bytes = files[i].getBytes();
+            String fileName = files[i].getOriginalFilename();
+            String lastName = fileName.substring(fileName.lastIndexOf(".") + 1);
+            FileItem fileItem = fileManagerClient.upload(bytes, fileName).getData();
+            String filePath = fileItem.getVirtualPath();
+            if (lastName.contains("doc") || lastName.contains("xls")){
+                filePath = converter.startConverter(fileItem.getVirtualPath());
+            }
+            list.add(filePath);
+        }
+        return ResponseMsgUtil.success(list);
     }
 
 
     @GetMapping("/detail")
-    public Result<Bulletin> detail(@RequestParam Integer id) {
-        Bulletin undercover = bulletinService.detail(id);
+    public Result<Bulletin> detail(@RequestParam String id) {
+        Bulletin undercover = bulletinService.get(id);
         return ResponseMsgUtil.success(undercover);
     }
 
     @GetMapping("/selectByFirst")
-    public List<Bulletin> selectByFirst(@RequestParam(defaultValue = "") Integer type) {
+    public List<Bulletin> selectByFirst(@RequestParam Integer type) {
 
         return bulletinService.selectByFirst(type);
     }
 
     @GetMapping ("/lookload")
-    public void lookload(@RequestParam String attandUrl,HttpServletResponse res) {
+    public void lookload(@RequestParam String attand_url,HttpServletResponse res) {
         try{
-            String[] str=attandUrl.split("_");
+            String[] str=attand_url.split("_");
             String fileName=str[1];
-        // 最需要注意的是  告诉浏览器只保存文件  不用在页面展示
-        res.setHeader("content-disposition", "inline;filename="+URLEncoder.encode(fileName,"UTF-8"));
-            byte[] bs = fileManagerClient.download(attandUrl).getData();
+            // 最需要注意的是  告诉浏览器只保存文件  不用在页面展示
+            res.setHeader("content-disposition", "inline;filename="+URLEncoder.encode(fileName,"UTF-8"));
+            byte[] bs = fileManagerClient.download(attand_url).getData();
             res.getOutputStream().write(bs);
             res.flushBuffer();
         }catch (UnsupportedEncodingException e) {
@@ -156,7 +139,7 @@ public class    BulletinController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
     }
+
 
 }

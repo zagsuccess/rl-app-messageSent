@@ -25,30 +25,13 @@ public class BulletinServiceImpl extends AbstractService<Bulletin, BulletinDTO, 
     private BulletinMapper bulletinMapper;
 
     @Override
-    public PageInfo<Bulletin> list(Integer pageNumber, Integer pageSize, Integer type, String year, String month) throws ParseException {
+    public PageInfo<Bulletin> list(Integer pageNumber, Integer pageSize, Integer type, String post_time){
         PageHelper.startPage(pageNumber, pageSize);
-        List<Bulletin> list = null;
-        if (year != null) {
-            year = "%" + year + "%";
-        }
-        if (month != null) {
-            month = "%" + month + "%";
-        }
-        list = bulletinMapper.selectshujihui(type, year, month);
+        List<Bulletin>list = bulletinMapper.selectlist(type, post_time);
         PageInfo<Bulletin> pageInfo = new PageInfo(list);
         return pageInfo;
     }
 
-    @Override
-    public void delete(Integer id) {
-        bulletinMapper.deleteByPrimaryKey(id);
-    }
-
-    @Override
-    public Bulletin detail(Integer id) {
-        Bulletin undercover = bulletinMapper.selectByPrimaryKey(id);
-        return undercover;
-    }
 
     @Override
     public List<Bulletin> selectByFirst(Integer type) {

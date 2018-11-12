@@ -29,6 +29,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
+        <!-- 在线预览-->
+        <dependency>
+            <groupId>com.uhope</groupId>
+            <artifactId>converter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!--文件上传下载查看-->
         <dependency>
             <groupId>com.uhope</groupId>
