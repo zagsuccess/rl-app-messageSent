@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.inspection.mapper.SuperviseMapper">
+  <resultMap id="BaseResultMap" type="com.uhope.inspection.domain.ScSupervise">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="group_leader" jdbcType="VARCHAR" property="groupLeader" />
+    <result column="grouping" jdbcType="VARCHAR" property="grouping" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="contact" jdbcType="VARCHAR" property="contact" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="department" jdbcType="VARCHAR" property="department" />
+    <result column="inspectionid" jdbcType="VARCHAR" property="inspectionid" />
+  </resultMap>
+  <select id="selectArea" resultType="string">
+    select county_name from md_administrative_region where grade = 3
+  </select>
+</mapper>
