@@ -26,6 +26,10 @@
         (select sur.USER_ID from sm_role sr INNER JOIN sm_user_role sur on sr.id=sur.ROLE_ID where sr.name='市河长办'
         )s on sm_user.id =s.USER_ID
     </select>
+    <select id="selectRole" resultType="java.lang.String">
+        select name from sm_role sr INNER JOIN (select sur.role_id from sm_user_role sur where sur.user_id=#{id}) s on
+          sr.id=s.role_id
+    </select>
 
 
 </mapper>

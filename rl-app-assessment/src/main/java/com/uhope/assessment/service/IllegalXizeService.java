@@ -18,4 +18,6 @@ public interface IllegalXizeService extends Service<IllegalXize, IllegalXizeDTO,
     List<IllegalXizeDTO> list1();
 
     public String selectSHZB();
+
+    String selectRole(String id);
 }

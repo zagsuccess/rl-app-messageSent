@@ -39,4 +39,9 @@ public class IllegalXizeServiceImpl extends AbstractService<IllegalXize, Illegal
     public String selectSHZB() {
         return illegalXizeMapper.selectSHZB();
     }
+
+    @Override
+    public String selectRole(String id) {
+        return illegalXizeMapper.selectRole(id);
+    }
 }

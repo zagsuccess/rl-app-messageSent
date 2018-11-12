@@ -13,4 +13,6 @@ public interface IllegalXizeMapper extends Mapper<IllegalXize> {
     List<IllegalXizeDTO> list1();
 
     public String selectSHZB();
+
+    String selectRole(String id);
 }

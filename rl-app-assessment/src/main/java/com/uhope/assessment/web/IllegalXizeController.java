@@ -137,16 +137,17 @@ public class IllegalXizeController {
     }
 
     @GetMapping("/userinfo")
-    public Result<Integer> userinfo(HttpServletRequest request){
+    public Result<String> userinfo(HttpServletRequest request){
         //获取当前用户信息
         UserDTO userDTO = getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
         if(userDTO == null ){
             return ResponseMsgUtil.failure("获取用户失败");
         }
-        //默认是00   （00表示都不是  01表示市环保局  02表示市河长办 ）
-        int grade=00;
-        if(userDTO.getId().equals(illegalXizeService.selectSHZB())){
-            grade=02;
+        //默认是00   （00表示都不是   02表示市河长办 ）
+        String grade="00";
+
+        if("市河长办".equals(illegalXizeService.selectRole(userDTO.getId()))){
+            grade="02";
         }
 
         return ResponseMsgUtil.success(grade);
@@ -154,18 +155,13 @@ public class IllegalXizeController {
 
     @GetMapping("/userinfo1")
     public Result<String> userinfo(String id){
-        //获取当前用户信息
-       /* UserDTO userDTO = getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
-        if(userDTO == null ){
-            return ResponseMsgUtil.failure("获取用户失败");
-        }*/
-        //默认是00   （00表示都不是  01表示市环保局  02表示市河长办 ）
+
+        //默认是00   （00表示都不是   02表示市河长办 ）
         String grade="00";
 
-        if(id.equals(illegalXizeService.selectSHZB())){
+        if("市河长办".equals(illegalXizeService.selectRole(id))){
             grade="02";
         }
-
 
         return ResponseMsgUtil.success(grade);
     }
