@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.ancha.mapper.AnzhaSchemeMapper">
+    <!-- AnzhaScheme的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_AnzhaScheme_Map" type="com.uhope.ancha.domain.AnzhaScheme">
+        <id column="ID" property="id" />
+        <result column="TITLE" property="title" />
+        <result column="ISSUE" property="issue" />
+        <result column="CREATEUSER" property="createuser" />
+        <result column="CONTENT" property="content" />
+        <result column="ASSESSORY" property="assessory" />
+        <result column="BULLETINID" property="bulletinid" />
+    </resultMap>
+    <select id="selectHave" resultType="com.uhope.ancha.domain.AnzhaScheme">
+        select * from anzha_scheme where ISSUE=#{issue}
+    </select>
+    <select id="selectList" resultType="com.uhope.ancha.dto.AnzhaSchemeDTO">
+        select * from anzha_scheme
+        <where>
+            <if test="title != null and title !=''">
+                AND TITLE like CONCAT('%',#{title},'%')
+            </if>
+            <if test="issue != null and issue !='' ">
+                and ISSUE = #{issue}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>
