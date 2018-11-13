@@ -23,6 +23,22 @@ public class AnzhaReport implements Serializable {
      */
     private String peoblemType;
     /**
+     * 区域id
+     */
+    private String regionid;
+    /**
+     * 区域名称
+     */
+    private String regionname;
+    /**
+     * 河道id
+     */
+    private String reachid;
+    /**
+     * 河道名称
+     */
+    private String reachname;
+    /**
      * 上传照片
      */
     private String image;
@@ -50,10 +66,14 @@ public class AnzhaReport implements Serializable {
         super();
     }
 
-    public AnzhaReport(String issuer, Date date, String peoblemType, String image, String processLimited, String peoblemDescription, String status, String anzhaid, String incidentid) {
+    public AnzhaReport(String issuer, Date date, String peoblemType, String regionid, String regionname, String reachid, String reachname, String image, String processLimited, String peoblemDescription, String status, String anzhaid, String incidentid) {
         this.issuer = issuer;
         this.date = date;
         this.peoblemType = peoblemType;
+        this.regionid = regionid;
+        this.regionname = regionname;
+        this.reachid = reachid;
+        this.reachname = reachname;
         this.image = image;
         this.processLimited = processLimited;
         this.peoblemDescription = peoblemDescription;
@@ -142,6 +162,38 @@ public class AnzhaReport implements Serializable {
         this.status = status;
     }
 
+    public String getRegionid() {
+        return regionid;
+    }
+
+    public void setRegionid(String regionid) {
+        this.regionid = regionid;
+    }
+
+    public String getRegionname() {
+        return regionname;
+    }
+
+    public void setRegionname(String regionname) {
+        this.regionname = regionname;
+    }
+
+    public String getReachid() {
+        return reachid;
+    }
+
+    public void setReachid(String reachid) {
+        this.reachid = reachid;
+    }
+
+    public String getReachname() {
+        return reachname;
+    }
+
+    public void setReachname(String reachname) {
+        this.reachname = reachname;
+    }
+
     @Override
     public String toString() {
         return "AnzhaReport{" +
@@ -149,6 +201,10 @@ public class AnzhaReport implements Serializable {
                 ", issuer='" + issuer + '\'' +
                 ", date=" + date +
                 ", peoblemType='" + peoblemType + '\'' +
+                ", regionid='" + regionid + '\'' +
+                ", regionname='" + regionname + '\'' +
+                ", reachid='" + reachid + '\'' +
+                ", reachname='" + reachname + '\'' +
                 ", image='" + image + '\'' +
                 ", processLimited='" + processLimited + '\'' +
                 ", peoblemDescription='" + peoblemDescription + '\'' +

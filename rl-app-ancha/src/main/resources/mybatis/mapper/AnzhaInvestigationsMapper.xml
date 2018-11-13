@@ -26,9 +26,11 @@
     <select id="selectList" resultType="com.uhope.ancha.domain.AnzhaInvestigations">
         select * from AnZha_investigations
         <where>
-            SCHEMEID=#{schemeid}
+            <if test="schemeid != null and schemeid != ''">
+                and SCHEMEID=#{schemeid}
+            </if>
             <if test="d != null and d != ''">
-                and AnZha_investigations.DATE=#{d}
+                and AnZha_investigations.DATE like CONCAT('%',#{d},'%')
             </if>
             <if test="region !=null and region != ''">
                 and regionname=#{region}

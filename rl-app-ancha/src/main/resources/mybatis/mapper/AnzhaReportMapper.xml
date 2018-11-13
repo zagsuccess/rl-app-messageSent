@@ -5,6 +5,10 @@
     <resultMap id="arMap" type="com.uhope.ancha.domain.AnzhaReport">
         <id column="ID" property="id" />
         <result column="ISSUER" property="issuer" />
+        <result column="REGIONID" property="regionid" />
+        <result column="REGIONNAME" property="regionname" />
+        <result column="REACHID" property="reachid" />
+        <result column="REACHNAME" property="reachname" />
         <result column="DATE" property="date" />
         <result column="PEOBLEM_TYPE" property="peoblemType" />
         <result column="IMAGE" property="image" />

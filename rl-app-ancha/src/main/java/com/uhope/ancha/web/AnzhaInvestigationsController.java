@@ -134,7 +134,7 @@ public class AnzhaInvestigationsController {
     @GetMapping("/list")
     public Result<PageInfo<AnzhaInvestigations>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                                       @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
-                                                      @RequestParam String schemeid,
+                                                      String schemeid,
                                                       String date, String region, String status) {
 
         return ResponseMsgUtil.success(anzhaInvestigationsService.list(pageNumber,pageSize,schemeid,date,region,status));

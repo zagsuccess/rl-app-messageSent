@@ -38,6 +38,8 @@ public class AnzhaReportController {
     @PostMapping("/add")
     public Result<AnzhaReport> add(@RequestParam String anzhaid,
                                    @RequestParam String issuer,
+                                   String regionid,String regionname,
+                                   String reachid,String reachname,
                                    @RequestParam String date,
                                    @RequestParam String peoblemType,
                                    @RequestParam String status,
@@ -46,6 +48,10 @@ public class AnzhaReportController {
                                    String filePath) throws ParseException {
         AnzhaReport anzhaReport = new AnzhaReport();
         anzhaReport.setIssuer(issuer);
+        anzhaReport.setRegionid(regionid);
+        anzhaReport.setRegionname(regionname);
+        anzhaReport.setReachid(reachid);
+        anzhaReport.setReachname(reachname);
         anzhaReport.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date));
         anzhaReport.setAnzhaid(anzhaid);
         anzhaReport.setProcessLimited(processLimited);
@@ -88,6 +94,20 @@ public class AnzhaReportController {
         return ResponseMsgUtil.success(list);
     }
 
+
+    @PostMapping("/uploadapp")
+    public Result<String> uploadapp(@RequestParam(required = true) MultipartFile file) throws IOException {
+        byte[] bytes = file.getBytes();
+        String fileName = file.getOriginalFilename();
+        String lastName = fileName.substring(fileName.lastIndexOf(".") + 1);
+        FileItem fileItem = fileManagerClient.upload(bytes, fileName).getData();
+        String filePath = fileItem.getVirtualPath();
+        if (lastName.contains("doc")){
+            filePath = converter.startConverter(fileItem.getVirtualPath());
+        }
+        return ResponseMsgUtil.success(filePath);
+    }
+
     //获取远程服务器资源地址
     @GetMapping("/fileUrl")
     public Result fileUrl(){
@@ -106,6 +126,8 @@ public class AnzhaReportController {
     @PutMapping("/update")
     public Result<AnzhaReport> update(@RequestParam String id,
                                       @RequestParam String issuer,
+                                      String regionid,String regionname,
+                                      String reachid,String reachname,
                                       @RequestParam String date,
                                       @RequestParam String processLimited,
                                       @RequestParam String peoblemType,
@@ -115,6 +137,10 @@ public class AnzhaReportController {
         AnzhaReport anzhaReport = new AnzhaReport();
         anzhaReport.setId(id);
         anzhaReport.setIssuer(issuer);
+        anzhaReport.setRegionid(regionid);
+        anzhaReport.setRegionname(regionname);
+        anzhaReport.setReachid(reachid);
+        anzhaReport.setReachname(reachname);
         anzhaReport.setDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date));
         anzhaReport.setPeoblemType(peoblemType);
         anzhaReport.setProcessLimited(processLimited);
