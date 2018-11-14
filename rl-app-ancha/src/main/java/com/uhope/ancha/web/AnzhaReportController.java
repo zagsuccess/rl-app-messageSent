@@ -38,12 +38,12 @@ public class AnzhaReportController {
     @PostMapping("/add")
     public Result<AnzhaReport> add(@RequestParam String anzhaid,
                                    @RequestParam String issuer,
+                                   @RequestParam String status,
+                                   @RequestParam String date,
                                    String regionid,String regionname,
                                    String reachid,String reachname,
-                                   @RequestParam String date,
-                                   @RequestParam String peoblemType,
-                                   @RequestParam String status,
-                                   @RequestParam String processLimited,
+                                    String peoblemType,
+                                    String processLimited,
                                    String peoblemDescription,
                                    String filePath) throws ParseException {
         AnzhaReport anzhaReport = new AnzhaReport();
@@ -126,11 +126,11 @@ public class AnzhaReportController {
     @PutMapping("/update")
     public Result<AnzhaReport> update(@RequestParam String id,
                                       @RequestParam String issuer,
+                                      @RequestParam String date,
                                       String regionid,String regionname,
                                       String reachid,String reachname,
-                                      @RequestParam String date,
-                                      @RequestParam String processLimited,
-                                      @RequestParam String peoblemType,
+                                       String processLimited,
+                                       String peoblemType,
                                       String peoblemDescription,
                                       String filePath) throws ParseException {
 
