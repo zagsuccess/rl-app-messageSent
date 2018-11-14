@@ -8,5 +8,4 @@ import java.io.Serializable;
  * @description:
  */
 public class RegionStatisticDTO implements Serializable {
-
 }
