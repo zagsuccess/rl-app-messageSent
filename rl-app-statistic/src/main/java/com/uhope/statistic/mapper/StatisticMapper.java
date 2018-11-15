@@ -23,4 +23,14 @@ public interface StatisticMapper {
     List<SurfaceWaterDTO> listSurfaceWaterDTO(HashMap<String, Object> hashMap);
 
     List<SuperviseDTO> listSuperviseDTOs(HashMap<String, Object> hashMap);
+
+    List<SuperviseDTO> listSuperviseSentiment(HashMap<String, Object> hashMap);
+
+    List<SuperviseDTO> listSuperviseTelephone(HashMap<String, Object> hashMap);
+
+    List<SuperviseDTO> listWaterSanitation(HashMap<String, Object> hashMap);
+
+    List<SuperviseDTO> listShoreLineManage(HashMap<String, Object> hashMap);
+
+    List<SuperviseDTO> listRiverPatrol(HashMap<String, Object> hashMap);
 }

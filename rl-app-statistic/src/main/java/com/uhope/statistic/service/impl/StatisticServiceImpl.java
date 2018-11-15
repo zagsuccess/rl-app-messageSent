@@ -50,4 +50,39 @@ public class StatisticServiceImpl implements StatisticService {
         hashMap.put("date", date);
         return statisticMapper.listSuperviseDTOs(hashMap);
     }
+
+    @Override
+    public List<SuperviseDTO> listSuperviseSentiment(String date) {
+        HashMap<String, Object> hashMap = Maps.newHashMap();
+        hashMap.put("date", date);
+        return statisticMapper.listSuperviseSentiment(hashMap);
+    }
+
+    @Override
+    public List<SuperviseDTO> listSuperviseTelephone(String date) {
+        HashMap<String, Object> hashMap = Maps.newHashMap();
+        hashMap.put("date", date);
+        return statisticMapper.listSuperviseTelephone(hashMap);
+    }
+
+    @Override
+    public List<SuperviseDTO> listWaterSanitation(String date) {
+        HashMap<String, Object> hashMap = Maps.newHashMap();
+        hashMap.put("date", date);
+        return statisticMapper.listWaterSanitation(hashMap);
+    }
+
+    @Override
+    public List<SuperviseDTO> listShoreLineManage(String date) {
+        HashMap<String, Object> hashMap = Maps.newHashMap();
+        hashMap.put("date", date);
+        return statisticMapper.listShoreLineManage(hashMap);
+    }
+
+    @Override
+    public List<SuperviseDTO> listRiverPatrol(String date) {
+        HashMap<String, Object> hashMap = Maps.newHashMap();
+        hashMap.put("date", date);
+        return statisticMapper.listRiverPatrol(hashMap);
+    }
 }

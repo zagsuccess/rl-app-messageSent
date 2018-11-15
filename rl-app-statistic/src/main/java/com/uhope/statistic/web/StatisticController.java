@@ -77,9 +77,7 @@ public class StatisticController {
             RiverStatisticDTO riverStatisticDTO = WaterCalc.calcResult(waterQualityDTO);
             listRiverStatisticDTO.add(riverStatisticDTO);
         }
-        //3. 获得社会监督评价考核成绩
+        //3. 计算社会监督评价考核成绩
         List<SuperviseDTO> superviseDTOS = statisticService.listSuperviseDTOs(date);
-
-
     }
 }
