@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 /**
  * @author: Yang Jiaheng
  * @date: 18/11/13
- * @description:
+ * @description: 水质变化细则表
  */
 @Service
 public class WaterQualityServiceImpl extends AbstractService<AmWaterQuality, AmWaterQuality, String> implements WaterQualityService {

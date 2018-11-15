@@ -7,11 +7,14 @@ import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
 import com.uhope.statistic.domain.AmWaterAssess;
 import com.uhope.statistic.service.WaterAssessService;
+import com.uhope.uip.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,9 +28,13 @@ public class WaterAssessController {
 
     @Autowired
     private WaterAssessService waterAssessService;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/addWaterAssess")
-    public Result<AmWaterAssess> addWaterAssess(AmWaterAssess waterAssess){
+    public Result<AmWaterAssess> addWaterAssess(HttpServletRequest request, AmWaterAssess waterAssess){
+        waterAssess.setCreateTime(new Date());
+        waterAssess.setCreator(tokenService.getUserIdByRequest(request));
         waterAssessService.insert(waterAssess);
         return ResponseMsgUtil.success(waterAssess);
     }
@@ -56,10 +63,10 @@ public class WaterAssessController {
         Example.Criteria criteria = condition.createCriteria();
 
         if (paramType != null && paramType != "") {
-            criteria.andCondition("param_type like %" + paramType + "%");
+            criteria.andCondition("param_type like '%" + paramType + "%'");
         }
         if (waterQualityType != null && waterQualityType != "") {
-            criteria.andCondition("water_quality_type like %" + waterQualityType + "%");
+            criteria.andCondition("water_quality_type like '%" + waterQualityType + "%'");
         }
         
         condition.orderBy("sortOrder");

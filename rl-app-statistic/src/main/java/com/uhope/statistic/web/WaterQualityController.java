@@ -7,11 +7,14 @@ import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
 import com.uhope.statistic.domain.AmWaterQuality;
 import com.uhope.statistic.service.WaterQualityService;
+import com.uhope.uip.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,9 +28,13 @@ public class WaterQualityController {
 
     @Autowired
     private WaterQualityService waterQualityService;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/addWaterQuality")
-    public Result<AmWaterQuality> addWaterQuality(AmWaterQuality waterQuality){
+    public Result<AmWaterQuality> addWaterQuality(HttpServletRequest request, AmWaterQuality waterQuality){
+        waterQuality.setCreateTime(new Date());
+        waterQuality.setCreator(tokenService.getUserIdByRequest(request));
         waterQualityService.insert(waterQuality);
         return ResponseMsgUtil.success(waterQuality);
     }
@@ -55,7 +62,7 @@ public class WaterQualityController {
         Example.Criteria criteria = condition.createCriteria();
 
         if (paramType != null && paramType != "") {
-            criteria.andCondition("param_type like %" + paramType + "%");
+            criteria.andCondition("param_type like '%" + paramType + "%'");
         }
         condition.orderBy("sortOrder");
         List<AmWaterQuality> list = waterQualityService.findByCondition(condition);

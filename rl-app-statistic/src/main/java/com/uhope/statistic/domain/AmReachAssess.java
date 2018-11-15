@@ -13,6 +13,8 @@ public class AmReachAssess implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT REPLACE(UUID(),\"-\",\"\")")
     private String id;
 
+    private String regionName;
+
     private String riverName;
 
     private String reachName;

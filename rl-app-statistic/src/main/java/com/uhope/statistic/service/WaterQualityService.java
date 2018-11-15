@@ -6,7 +6,7 @@ import com.uhope.statistic.domain.AmWaterQuality;
 /**
  * @author: StivenYang
  * @date: 18/11/13
- * @description:
+ * @description: 水质变化细则表
  */
 public interface WaterQualityService extends Service<AmWaterQuality, AmWaterQuality, String> {
 }
