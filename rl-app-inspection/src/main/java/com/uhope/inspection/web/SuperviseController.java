@@ -51,11 +51,12 @@ public class SuperviseController {
         return ResponseMsgUtil.success(scSupervise);
     }
 
-    @GetMapping("/list")
-    public Result<PageInfo<ScSupervise>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
-                                              @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize) {
+    @GetMapping("/selectList")
+    public Result<PageInfo<ScSupervise>> selectById(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
+                                                        @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
+                                                        String inspectionid) {
         PageHelper.startPage(pageNumber, pageSize);
-        List<ScSupervise> list = superviseService.find();
+        List<ScSupervise> list = superviseService.selectById(inspectionid);
         PageInfo<ScSupervise> pageInfo = new PageInfo(list);
         return ResponseMsgUtil.success(pageInfo);
     }

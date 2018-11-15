@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface SuperviseService extends Service<ScSupervise, ScSuperviseDTO,String> {
     List<String> selectArea();
+
+    List<ScSupervise> selectById(String inspectionid);
 }

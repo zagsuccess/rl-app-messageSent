@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface SuperviseMapper extends Mapper<ScSupervise> {
     List<String> selectArea();
+
+    List<ScSupervise> selectById(String inspectionid);
 }

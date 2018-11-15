@@ -14,4 +14,7 @@
   <select id="selectArea" resultType="string">
     select county_name from md_administrative_region where grade = 3
   </select>
+  <select id="selectById" resultMap="BaseResultMap">
+    select * from sc_comtact_person where inspectionid = #{inspectionid}
+  </select>
 </mapper>

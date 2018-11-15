@@ -26,4 +26,9 @@ public class SuperviseServiceImpl extends AbstractService<ScSupervise, ScSupervi
     public List<String> selectArea() {
         return superviseMapper.selectArea();
     }
+
+    @Override
+    public List<ScSupervise> selectById(String inspectionid) {
+        return superviseMapper.selectById(inspectionid);
+    }
 }
