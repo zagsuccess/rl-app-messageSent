@@ -6,14 +6,17 @@ import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
 import com.uhope.inspection.domain.ScInspection;
+import com.uhope.inspection.dto.ScInspectionDTO;
 import com.uhope.inspection.service.InspectionService;
 import com.uhope.converter.client.Converter;
 import com.uhope.inspection.utils.CommonUtil;
 import com.uhope.uip.dto.UserDTO;
 import com.uhope.uip.fm.client.FileManagerClient;
+import com.uhope.uip.fm.config.FmConfig;
 import com.uhope.uip.fm.model.FileItem;
 import com.uhope.uip.service.TokenService;
 import com.uhope.uip.service.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -98,7 +101,10 @@ public class InspectionController {
 
     @GetMapping("/detail")
     public Result<ScInspection> detail(@RequestParam String id) {
-        return ResponseMsgUtil.success(inspectionService.get(id));
+        ScInspection scInspection=inspectionService.get(id);
+        String url=scInspection.getAccessory();
+        scInspection.setAccessory(FmConfig.getAgentUrl()+url);
+        return ResponseMsgUtil.success(scInspection);
     }
 
     @PutMapping("/update")
