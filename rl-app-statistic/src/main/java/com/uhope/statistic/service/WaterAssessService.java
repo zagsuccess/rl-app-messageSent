@@ -6,7 +6,7 @@ import com.uhope.statistic.domain.AmWaterAssess;
 /**
  * @author: StivenYang
  * @date: 18/11/13
- * @description:
+ * @description: 水质评分细则表
  */
 public interface WaterAssessService extends Service<AmWaterAssess, AmWaterAssess, String> {
 }

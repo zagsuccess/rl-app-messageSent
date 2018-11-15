@@ -7,6 +7,7 @@ import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
 import com.uhope.statistic.domain.AmReachAssess;
 import com.uhope.statistic.service.ReachAssessService;
+import com.uhope.uip.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
@@ -20,7 +21,7 @@ import java.util.List;
  * @description: 河段考核配置
  */
 @RestController
-@RequestMapping("/v1/reachAssess")
+@RequestMapping("v1/reachAssess")
 public class ReachAssessController {
 
     @Autowired
@@ -58,19 +59,19 @@ public class ReachAssessController {
         Condition condition = new Condition(AmReachAssess.class);
         Example.Criteria criteria = condition.createCriteria();
         if (regionName != null && regionName != ""){
-            criteria.andCondition("region_name like %" + regionName + "%");
+            criteria.andCondition("region_name like '%" + regionName + "%'");
         }
         if (isSewage != null && isSewage != ""){
-            criteria.andCondition("is_sewage_factory like %" + isSewage + "%");
+            criteria.andCondition("is_sewage_factory like '%" + isSewage + "%'");
         }
         if (isCompensation != null && isCompensation != ""){
-            criteria.andCondition("is_compensation like %" + isCompensation + "%");
+            criteria.andCondition("is_compensation like '%" + isCompensation + "%'");
         }
         if (isScoringRules != null && isScoringRules != ""){
-            criteria.andCondition("scoring_rules like %" + isScoringRules + "%");
+            criteria.andCondition("scoring_rules like '%" + isScoringRules + "%'");
         }
         if (isWaterQualityAssess != null && isWaterQualityAssess != ""){
-            criteria.andCondition("is_water_quality_assess like %" + isWaterQualityAssess + "%");
+            criteria.andCondition("is_water_quality_assess like '%" + isWaterQualityAssess + "%'");
         }
         
         List<AmReachAssess> list = reachAssessService.findByCondition(condition);

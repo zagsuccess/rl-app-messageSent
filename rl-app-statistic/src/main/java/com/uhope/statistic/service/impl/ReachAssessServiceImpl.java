@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 /**
  * @author: Yang Jiaheng
  * @date: 18/11/13
- * @description:
+ * @description: 河段考核配置
  */
 @Service
 public class ReachAssessServiceImpl extends AbstractService<AmReachAssess, AmReachAssess, String> implements ReachAssessService {

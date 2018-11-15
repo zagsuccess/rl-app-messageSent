@@ -3,6 +3,7 @@
 <mapper namespace="com.uhope.statistic.mapper.AmReachAssessMapper" >
   <resultMap id="BaseResultMap" type="com.uhope.statistic.domain.AmReachAssess" >
     <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="region_name" property="regionName" jdbcType="VARCHAR" />
     <result column="river_name" property="riverName" jdbcType="VARCHAR" />
     <result column="reach_name" property="reachName" jdbcType="VARCHAR" />
     <result column="input_section" property="inputSection" jdbcType="VARCHAR" />
