@@ -4,11 +4,14 @@ import com.github.pagehelper.PageInfo;
 import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
+import com.uhope.bulletin.dto.BulletinDTO;
 import com.uhope.converter.client.Converter;
 import com.uhope.uip.fm.client.FileManagerClient;
+import com.uhope.uip.fm.config.FmConfig;
 import com.uhope.uip.fm.model.FileItem;
 import com.uhope.bulletin.domain.Bulletin;
 import com.uhope.bulletin.service.BulletinService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -111,9 +114,17 @@ public class    BulletinController {
 
 
     @GetMapping("/detail")
-    public Result<Bulletin> detail(@RequestParam String id) {
+    public Result<BulletinDTO> detail(@RequestParam String id) {
         Bulletin undercover = bulletinService.get(id);
-        return ResponseMsgUtil.success(undercover);
+        String name=undercover.getAttand_url();
+        undercover.setAttand_url(FmConfig.getAgentUrl() + name);
+        BulletinDTO bulletinDTO =new BulletinDTO();
+        BeanUtils.copyProperties(undercover,bulletinDTO);
+        String[] str=bulletinDTO.getAttand_url().split("_");
+        String ren = str[1];
+        bulletinDTO.setDownurl(FmConfig.getFmUrl() + FmConfig.getDownloadUri().substring(0,FmConfig.getDownloadUri().length()-1) + name);
+        bulletinDTO.setRen(ren);
+        return ResponseMsgUtil.success(bulletinDTO);
     }
 
     @GetMapping("/selectByFirst")
@@ -122,7 +133,9 @@ public class    BulletinController {
         return bulletinService.selectByFirst(type);
     }
 
-    @GetMapping ("/lookload")
+
+
+    /*@GetMapping ("/lookload")
     public void lookload(@RequestParam String attand_url,HttpServletResponse res) {
         try{
             String[] str=attand_url.split("_");
@@ -139,7 +152,8 @@ public class    BulletinController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }
+    }*/
+
 
 
 }

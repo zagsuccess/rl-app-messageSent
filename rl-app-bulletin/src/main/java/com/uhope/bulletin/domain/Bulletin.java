@@ -12,7 +12,7 @@ import java.util.Objects;
  * @date: 2018/9/8
  * @description: 信息管理表-接口实现类
  */
-public class Bulletin implements Serializable {
+public class Bulletin implements Serializable ,Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT REPLACE(UUID(),\"-\",\"\")")
     private String id;

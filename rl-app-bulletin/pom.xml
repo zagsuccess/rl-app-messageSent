@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.uhope</groupId>
-    <artifactId>rl-app-template</artifactId>
+    <artifactId>rl-app-bulletin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -39,7 +39,7 @@
         <dependency>
             <groupId>com.uhope</groupId>
             <artifactId>uip-fm-client</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
         <!--MySQL JDBC驱动-->
         <dependency>
