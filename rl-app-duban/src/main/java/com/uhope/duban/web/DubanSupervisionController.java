@@ -231,7 +231,7 @@ public class DubanSupervisionController {
             String lastName = fileName.substring(fileName.lastIndexOf(".") + 1);
             FileItem fileItem = fileManagerClient.upload(bytes, fileName).getData();
             String filePath = fileItem.getVirtualPath();
-            if (lastName.contains("doc")){
+            if (lastName.contains("doc")|| lastName.contains("xls")){
                 filePath = converter.startConverter(fileItem.getVirtualPath());
             }
             list.add(filePath);
