@@ -75,6 +75,7 @@ public class DubanSupervisionController {
     @GetMapping("/detail")
     public Result<ScDubanSupervision> detail(@RequestParam String id) {
         ScDubanSupervision dubanSupervision = dubanSupervisionService.get(id);
+        dubanSupervision.setAssessory(FmConfig.getAgentUrl() + dubanSupervision.getAssessory());
         return ResponseMsgUtil.success(dubanSupervision);
     }
 
@@ -182,6 +183,7 @@ public class DubanSupervisionController {
     public Result<ScDubanFeedback> detailFeedbackcl(@RequestParam String supervisionid) {
         ScDubanFeedback dubanFeedback = new ScDubanFeedback();
         dubanFeedback.setSupervisionid(supervisionid);
+        dubanFeedback.setAssessory(FmConfig.getAgentUrl() + dubanFeedback.getAssessory());
         dubanFeedback.setStatus("1");
         return ResponseMsgUtil.success(dubanFeedbackService.selectFeedback(dubanFeedback));
     }
@@ -191,6 +193,7 @@ public class DubanSupervisionController {
     public Result<ScDubanFeedback> detailFeedbackhc(@RequestParam String supervisionid) {
         ScDubanFeedback dubanFeedback = new ScDubanFeedback();
         dubanFeedback.setSupervisionid(supervisionid);
+        dubanFeedback.setAssessory(FmConfig.getAgentUrl() + dubanFeedback.getAssessory());
         dubanFeedback.setStatus("2");
         return ResponseMsgUtil.success(dubanFeedbackService.selectFeedback(dubanFeedback));
     }

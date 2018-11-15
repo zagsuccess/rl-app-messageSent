@@ -8,10 +8,6 @@ import com.uhope.duban.dto.DeadlineDTO;
 import com.uhope.duban.dto.DubanSupervisionDTO;
 import com.uhope.duban.mapper.DubanSupervisionMapper;
 import com.uhope.duban.service.DubanSupervisionService;
-import com.uhope.template.domain.Template;
-import com.uhope.template.dto.TemplateDTO;
-import com.uhope.template.mapper.TemplateMapper;
-import com.uhope.template.service.TemplateService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
