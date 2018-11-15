@@ -67,9 +67,14 @@ public class ProblemHandleController {
         return ResponseMsgUtil.success(scProblemHandle);
     }
 
+
+
     @GetMapping("/selectById")
     public Result<ScProblemHandle> selectById(@RequestParam String inspectionId) {
-        return ResponseMsgUtil.success(problemHandleService.selectById(inspectionId));
+        ScProblemHandle scProblemHandle=problemHandleService.selectById(inspectionId);
+        String url=scProblemHandle.getAccessory();
+        scProblemHandle.setAccessory(FmConfig.getAgentUrl()+url);
+        return ResponseMsgUtil.success(scProblemHandle);
     }
     @PostMapping("/upload")
     public Result<List<String>> upload(@RequestParam(required = true) MultipartFile files[]) throws IOException {
@@ -80,7 +85,7 @@ public class ProblemHandleController {
             String lastName = fileName.substring(fileName.lastIndexOf(".") + 1);
             FileItem fileItem = fileManagerClient.upload(bytes, fileName).getData();
             String filePath = fileItem.getVirtualPath();
-            if (lastName.contains("doc")){
+            if (lastName.contains("doc")|| lastName.contains("xls")){
                 filePath = converter.startConverter(fileItem.getVirtualPath());
             }
             list.add(filePath);
