@@ -6,6 +6,7 @@ import com.uhope.ancha.service.AnzhaBulletinService;
 import com.uhope.ancha.service.AnzhaFeedbackService;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
+import com.uhope.uip.fm.config.FmConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,6 +53,7 @@ public class AnzhaFeedbackController {
     @GetMapping("/detail")
     public Result<AnzhaFeedback> detail(@RequestParam String bulletinid) {
         AnzhaFeedback anzhaFeedback = anzhaFeedbackService.selectOneById(bulletinid);
+        anzhaFeedback.setAssessory(FmConfig.getAgentUrl() + anzhaFeedback.getAssessory());
         return ResponseMsgUtil.success(anzhaFeedback);
     }
 
