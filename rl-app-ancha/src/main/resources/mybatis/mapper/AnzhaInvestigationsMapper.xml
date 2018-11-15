@@ -33,7 +33,7 @@
                 and AnZha_investigations.DATE like CONCAT('%',#{d},'%')
             </if>
             <if test="region !=null and region != ''">
-                and regionname=#{region}
+                and regionname like CONCAT('%',#{region},'%')
             </if>
             <if test="status != null and status != ''">
                 AND status=#{status}
