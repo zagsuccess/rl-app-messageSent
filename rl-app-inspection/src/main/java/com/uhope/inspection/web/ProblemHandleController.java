@@ -8,6 +8,7 @@ import com.uhope.inspection.service.InspectionService;
 import com.uhope.inspection.service.ProblemHandleService;
 import com.uhope.converter.client.Converter;
 import com.uhope.uip.fm.client.FileManagerClient;
+import com.uhope.uip.fm.config.FmConfig;
 import com.uhope.uip.fm.model.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +56,14 @@ public class ProblemHandleController {
         scProblemHandle.setState(state);
         scProblemHandle.setInspectionid(inspectionid);
         problemHandleService.insert(scProblemHandle);
+        return ResponseMsgUtil.success(scProblemHandle);
+    }
+
+    @GetMapping("/detail")
+    public Result<ScProblemHandle> detail(@RequestParam String id) {
+        ScProblemHandle scProblemHandle=problemHandleService.get(id);
+        String url=scProblemHandle.getAccessory();
+        scProblemHandle.setAccessory(FmConfig.getAgentUrl()+url);
         return ResponseMsgUtil.success(scProblemHandle);
     }
 

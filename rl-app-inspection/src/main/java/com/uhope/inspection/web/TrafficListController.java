@@ -8,6 +8,7 @@ import com.uhope.inspection.service.InspectionService;
 import com.uhope.inspection.service.TrafficListService;
 import com.uhope.converter.client.Converter;
 import com.uhope.uip.fm.client.FileManagerClient;
+import com.uhope.uip.fm.config.FmConfig;
 import com.uhope.uip.fm.model.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -68,6 +69,14 @@ public class TrafficListController {
     @GetMapping("/selectById")
     public Result<ScTrafficList> selectById(@RequestParam String inspectionId) {
         return ResponseMsgUtil.success(trafficListService.selectById(inspectionId));
+    }
+
+    @GetMapping("/detail")
+    public Result<ScTrafficList> detail(@RequestParam String id) {
+        ScTrafficList scTrafficList=trafficListService.get(id);
+        String url=scTrafficList.getAccessory();
+        scTrafficList.setAccessory(FmConfig.getAgentUrl()+url);
+        return ResponseMsgUtil.success(scTrafficList);
     }
 
     @PostMapping("/upload")

@@ -6,6 +6,7 @@ import com.uhope.converter.client.Converter;
 import com.uhope.inspection.domain.ScResultFeedback;
 import com.uhope.inspection.service.ResultFeedbackService;
 import com.uhope.uip.fm.client.FileManagerClient;
+import com.uhope.uip.fm.config.FmConfig;
 import com.uhope.uip.fm.model.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +49,15 @@ public class ResultFeedbackController {
         resultFeedbackService.insert(scResultFeedback);
         return ResponseMsgUtil.success(scResultFeedback);
     }
+
+    @GetMapping("/detail")
+    public Result<ScResultFeedback> detail(@RequestParam String id) {
+        ScResultFeedback scResultFeedback=resultFeedbackService.get(id);
+        String url=scResultFeedback.getAccessory();
+        scResultFeedback.setAccessory(FmConfig.getAgentUrl()+url);
+        return ResponseMsgUtil.success(scResultFeedback);
+    }
+
 
     @GetMapping("/selectById")
     public Result<ScResultFeedback> selectById(@RequestParam String inspectionId) {
