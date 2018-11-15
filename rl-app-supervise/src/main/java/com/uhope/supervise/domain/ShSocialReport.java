@@ -36,8 +36,8 @@ public class ShSocialReport implements Serializable {
     /**
      * 问题处理超时时间
      */
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    @JSONField(format="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
+    @JSONField(format="yyyy-MM-dd HH:mm")
     private Date overTime;
 
     /**

@@ -8,6 +8,7 @@ import com.uhope.base.result.Result;
 import com.uhope.supervise.domain.ShSocialReport;
 import com.uhope.supervise.service.ShSocialReportService;
 import com.uhope.uip.fm.client.FileManagerClient;
+import com.uhope.uip.fm.config.FmConfig;
 import com.uhope.uip.fm.model.FileItem;
 import com.uhope.uip.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,9 @@ public class SocialReportController {
     @GetMapping("/detailReport")
     public Result<ShSocialReport> detailReport(String id){
         ShSocialReport socialReport = socialReportService.get(id);
+        socialReport.setProblemAttant(FmConfig.getAgentUrl() + socialReport.getProblemAttant());
+        socialReport.setProcessingResults(FmConfig.getAgentUrl() + socialReport.getProcessingResults());
+        socialReport.setProposedTreatment(FmConfig.getAgentUrl() + socialReport.getProposedTreatment());
         return ResponseMsgUtil.success(socialReport);
     }
 
