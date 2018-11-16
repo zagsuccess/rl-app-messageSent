@@ -4,6 +4,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.uhope.base.constants.Constant;
+import com.uhope.converter.client.Converter;
 import com.uhope.supervise.filter.ServiceFilter;
 import com.uhope.supervise.filter.AddTokenFilter;
 import com.uhope.uip.fm.client.FileManagerClient;
@@ -93,6 +94,15 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registration.setAsyncSupported(true);
         registration.setOrder(2);
         return registration;
+    }
+
+    /**
+     *
+     * 把converter这个变成单例的
+     */
+    @Bean
+    public Converter converter(){
+        return new Converter();
     }
 
     @Bean

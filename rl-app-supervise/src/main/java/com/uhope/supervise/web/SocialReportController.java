@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
+import com.uhope.converter.client.Converter;
 import com.uhope.supervise.domain.ShSocialReport;
 import com.uhope.supervise.service.ShSocialReportService;
 import com.uhope.uip.fm.client.FileManagerClient;
@@ -36,6 +37,8 @@ public class SocialReportController {
     private TokenService tokenService;
     @Autowired
     private FileManagerClient fileManagerClient;
+    @Autowired
+    private Converter converter;
 
     @PostMapping("/addReport")
     public Result<ShSocialReport> addReport(ShSocialReport socialReport, HttpServletRequest request){
@@ -107,9 +110,15 @@ public class SocialReportController {
      * @throws IOException
      */
     @PostMapping("/upload")
-    public Result<FileItem> upload(@RequestParam MultipartFile file) throws IOException {
+    public Result<String> upload(@RequestParam MultipartFile file) throws IOException {
         String filename = file.getOriginalFilename();
         Result<FileItem> fileItemResult = fileManagerClient.upload(file.getBytes(), filename);
-        return fileItemResult;
+        String fileName = file.getOriginalFilename();
+        String lastName = fileName.substring(fileName.lastIndexOf(".") + 1);
+        String filePath = fileItemResult.getData().getVirtualPath();
+        if (lastName.contains("doc") || lastName.contains("xls")){
+            filePath = converter.startConverter(filePath);
+        }
+        return ResponseMsgUtil.success(filePath);
     }
 }

@@ -99,6 +99,12 @@
             <artifactId>lombok</artifactId>
             <version>1.16.10</version>
         </dependency>
+        <!-- 在线预览-->
+        <dependency>
+            <groupId>com.uhope</groupId>
+            <artifactId>converter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 
