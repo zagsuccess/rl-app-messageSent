@@ -7,7 +7,7 @@ import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
 import com.uhope.statistic.domain.AmReachAssess;
 import com.uhope.statistic.service.ReachAssessService;
-import com.uhope.uip.service.TokenService;
+import com.uhope.statistic.service.WaterQualityRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
@@ -26,6 +26,8 @@ public class ReachAssessController {
 
     @Autowired
     private ReachAssessService reachAssessService;
+    @Autowired
+    private WaterQualityRuleService waterQualityRuleService;
 
     @PostMapping("/addReachAssess")
     public Result<AmReachAssess> addReachAssess(AmReachAssess amReachAssess){
@@ -84,5 +86,18 @@ public class ReachAssessController {
     public Result<AmReachAssess> findReachAssessById(String id){
         AmReachAssess reachAssess = reachAssessService.get(id);
         return ResponseMsgUtil.success(reachAssess);
+    }
+
+
+    @GetMapping("/regionList")
+    public Result<List<String>> regionList(){
+        List<String> list = reachAssessService.regionList();
+        return ResponseMsgUtil.success(list);
+    }
+
+    @GetMapping("/waterQualityRuleList")
+    public Result<List<String>> waterQualityRuleList(){
+        List<String> list = reachAssessService.waterQualityRuleList();
+        return ResponseMsgUtil.success(list);
     }
 }

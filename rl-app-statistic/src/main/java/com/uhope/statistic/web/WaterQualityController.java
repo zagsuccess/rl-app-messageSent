@@ -53,13 +53,15 @@ public class WaterQualityController {
 
     @GetMapping("/listWaterQuality")
     public Result<PageInfo> listWaterQuality(
-            @RequestParam(name = "paramType", required = false) String paramType
+            @RequestParam(name = "waterQualityRule", required = true) String waterQualityRule
+            , @RequestParam(name = "paramType", required = false) String paramType
             , @RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber
             , @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize
     ){
         PageHelper.startPage(pageNumber, pageSize);
         Condition condition = new Condition(AmWaterQuality.class);
         Example.Criteria criteria = condition.createCriteria();
+        criteria.andCondition("assess_rule like '%" + waterQualityRule + "%'");
 
         if (paramType != null && paramType != "") {
             criteria.andCondition("param_type like '%" + paramType + "%'");

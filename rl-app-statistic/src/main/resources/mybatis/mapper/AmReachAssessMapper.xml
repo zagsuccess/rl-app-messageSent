@@ -15,4 +15,12 @@
     <result column="scoring_rules" property="scoringRules" jdbcType="VARCHAR" />
     <result column="is_water_quality_assess" property="isWaterQualityAssess" jdbcType="INTEGER" />
   </resultMap>
+  <!--查取所有区名-->
+  <select id="regionList" resultType="java.lang.String">
+    SELECT area_name FROM md_administrative_region WHERE grade=3 ORDER BY area_code
+  </select>
+  <!--查取所有水质规则-->
+  <select id="waterQualityRuleList" resultType="java.lang.String">
+    SELECT rule_name FROM am_water_quality_rule ORDER BY sort_order
+  </select>
 </mapper>
