@@ -68,7 +68,10 @@ public class TrafficListController {
 
     @GetMapping("/selectById")
     public Result<ScTrafficList> selectById(@RequestParam String inspectionId) {
-        return ResponseMsgUtil.success(trafficListService.selectById(inspectionId));
+        ScTrafficList scTrafficList=trafficListService.selectById(inspectionId);
+        String url=scTrafficList.getAccessory();
+        scTrafficList.setAccessory(FmConfig.getAgentUrl()+url);
+        return ResponseMsgUtil.success(scTrafficList);
     }
 
     @GetMapping("/detail")

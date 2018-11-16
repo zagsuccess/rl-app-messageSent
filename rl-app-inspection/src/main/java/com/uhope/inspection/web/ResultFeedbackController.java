@@ -61,7 +61,10 @@ public class ResultFeedbackController {
 
     @GetMapping("/selectById")
     public Result<ScResultFeedback> selectById(@RequestParam String inspectionId) {
-        return ResponseMsgUtil.success(resultFeedbackService.selectById(inspectionId));
+        ScResultFeedback scResultFeedback=resultFeedbackService.selectById(inspectionId);
+        String url=scResultFeedback.getAccessory();
+        scResultFeedback.setAccessory(FmConfig.getAgentUrl()+url);
+        return ResponseMsgUtil.success(scResultFeedback);
     }
     @PostMapping("/upload")
     public Result<List<String>> upload(@RequestParam(required = true) MultipartFile files[]) throws IOException {
