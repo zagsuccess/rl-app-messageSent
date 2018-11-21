@@ -82,7 +82,7 @@ public class SocialReportController {
             criteria.andCondition("processing_status like '%"+processingStatus+"%'");
         }
         if (startTime != null && endTime != null && startTime != "" && endTime != ""){
-            criteria.andBetween("reportDate", startTime, endTime);
+            criteria.andBetween("reportDate", startTime + " 00:00:00", endTime + " 23:59:59");
         }
         condition.orderBy("reportDate");
         List<ShSocialReport> list = socialReportService.findByCondition(condition);
