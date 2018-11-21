@@ -86,7 +86,7 @@ public class InspectionController {
         Condition condition = new Condition(ScInspection.class);
         Example.Criteria criteria = condition.createCriteria();
         if (printDate != null && printDate != "") {
-            criteria.andCondition("print_date = " + printDate);
+            criteria.andCondition("print_date like '%" + printDate+"%'");
         }
         if (renumber != null && renumber != "") {
             criteria.andCondition("renumber = " + renumber);
