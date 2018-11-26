@@ -40,13 +40,19 @@ public class StatisticController {
     private StatisticService statisticService;
 
     /**
-     * 河湖水生态质量排名统计
+     * 河湖水生态环境质量排名统计
      * @param date 查询月份
      */
     @GetMapping("/riverStatistic")
     public Result<List<RiverStatisticDTO>> riverStatistic(
             @RequestParam(required = false, name = "date") String date
     ) {
+        // 1. 河湖水体水质感官情况
+        // 2. 河湖区界断面出入境水体水质变化情况（分别计算跨区河道、水库）
+        // 3. 河湖口门排水情况
+        // 4. 污水处理厂达标排放情况
+        // 获得水质数据
+        //
         List<RiverStatisticDTO> list = Lists.newArrayList();
         //获得水质数据
         List<WaterQualityDTO> waterQualityDTOS = statisticService.listWaterQualityData(date);
