@@ -31,7 +31,10 @@ public class InspectionServiceImpl extends AbstractService<ScInspection, ScInspe
         return inspectionMapper.selectRole(id);
     }
 
-
+    @Override
+    public List<ScInspection> selectBelong(String sentUnit) {
+        return inspectionMapper.selectBelong(sentUnit);
+    }
 
 
 }

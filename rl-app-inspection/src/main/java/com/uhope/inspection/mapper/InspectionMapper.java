@@ -10,4 +10,5 @@ public interface InspectionMapper extends Mapper<ScInspection> {
     public String selectRole(@Param("id")String id);
 
 
+    List<ScInspection> selectBelong(@Param("sentUnit")String sentUnit);
 }

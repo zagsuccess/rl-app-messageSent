@@ -36,5 +36,7 @@ public class ScInspection implements Serializable {
 
     private Integer oneregion;
 
+    private String sentUnit;
+
     private static final long serialVersionUID = 1L;
 }

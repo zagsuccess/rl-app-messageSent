@@ -52,6 +52,16 @@ public class ScSupervise implements Serializable {
      */
     private String inspectionid;
 
+    /**
+     * 督查区联络员
+     */
+    private String supervisePerson;
+
+    /**
+     * 督查区联络员电话
+     */
+    private String personPhone;
+
     private static final long serialVersionUID = 1L;
 
 
