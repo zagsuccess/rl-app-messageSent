@@ -133,7 +133,7 @@ public class InspectionController {
                 criteria.andCondition("state = " + state);
             }
             if (sentUnit !=null){
-                criteria.andCondition("print_unit like '%" + sentUnit+"%'");
+                criteria.andCondition("sent_unit like '%" + sentUnit+"%'");
             }
             List<ScInspection> list = inspectionService.findByCondition(condition);
             PageInfo pageInfo = new PageInfo(list);
@@ -157,7 +157,7 @@ public class InspectionController {
                 criteria.andCondition("state = " + state);
             }
             if (sentUnit !=null){
-                criteria.andCondition("print_unit like '%" + sentUnit+"%'");
+                criteria.andCondition("sent_unit like '%" + sentUnit+"%'");
             }
             List<ScInspection> list = inspectionService.findByCondition(condition);
             PageInfo pageInfo = new PageInfo(list);
@@ -181,7 +181,7 @@ public class InspectionController {
                 criteria.andCondition("state = " + state);
             }
             if (sentUnit !=null){
-                criteria.andCondition("print_unit like '%" + sentUnit+"%'");
+                criteria.andCondition("sent_unit like '%" + sentUnit+"%'");
             }
             List<ScInspection> list = inspectionService.findByCondition(condition);
             PageInfo pageInfo = new PageInfo(list);
@@ -205,7 +205,7 @@ public class InspectionController {
                 criteria.andCondition("state = " + state);
             }
             if (sentUnit !=null){
-                criteria.andCondition("print_unit like '%" + sentUnit+"%'");
+                criteria.andCondition("sent_unit like '%" + sentUnit+"%'");
             }
             List<ScInspection> list = inspectionService.findByCondition(condition);
             PageInfo pageInfo = new PageInfo(list);
@@ -229,7 +229,7 @@ public class InspectionController {
                 criteria.andCondition("state = " + state);
             }
             if (sentUnit !=null){
-                criteria.andCondition("print_unit like '%" + sentUnit+"%'");
+                criteria.andCondition("sent_unit like '%" + sentUnit+"%'");
             }
             List<ScInspection> list = inspectionService.findByCondition(condition);
             PageInfo pageInfo = new PageInfo(list);
@@ -253,7 +253,7 @@ public class InspectionController {
                 criteria.andCondition("state = " + state);
             }
             if (sentUnit !=null){
-                criteria.andCondition("print_unit like '%" + sentUnit+"%'");
+                criteria.andCondition("sent_unit like '%" + sentUnit+"%'");
             }
             List<ScInspection> list = inspectionService.findByCondition(condition);
             PageInfo pageInfo = new PageInfo(list);
