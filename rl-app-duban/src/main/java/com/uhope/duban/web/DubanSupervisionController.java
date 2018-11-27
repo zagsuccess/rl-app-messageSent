@@ -94,11 +94,14 @@ public class DubanSupervisionController {
         String roleId=dubanSupervisionService.selectRoleId("河长办");
         Result<PageInfo<UserDTO>> pageInfoResult = userService.queryUserList(null, null, null, roleId, 0, 0);
         List<UserDTO> userDTOList=new ArrayList<>();
-        for (UserDTO userDTO:pageInfoResult.getData().getRecords()){
-             if (userDTO.getRegionId()%(1000 * 1000)==0 && userDTO.getRegionId()%(10000 * 10000)!=0){
-                 userDTOList.add(userDTO);
-             }
+        if (pageInfoResult.getData()!=null){
+            for (UserDTO userDTO:pageInfoResult.getData().getRecords()){
+                if (userDTO.getUsertype()==3){
+                    userDTOList.add(userDTO);
+                }
+            }
         }
+
         return ResponseMsgUtil.success(userDTOList);
     }
 
@@ -196,7 +199,7 @@ public class DubanSupervisionController {
             for (DubanFeedbackDTO scDubanFeedback1:scDubanFeedback) {
                 scDubanFeedback1.setAssessory(FmConfig.getAgentUrl() + scDubanFeedback1.getAssessory());
                 Result<UserDTO> id = userService.getById(scDubanFeedback1.getObjectid());
-                if(id!=null && id.getData()!=null){
+                if(id.getData()!=null){
                     scDubanFeedback1.setObjectname(id.getData().getName());
                 }
             }
