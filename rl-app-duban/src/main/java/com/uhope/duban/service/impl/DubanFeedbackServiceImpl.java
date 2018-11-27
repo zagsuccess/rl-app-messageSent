@@ -12,6 +12,8 @@ import com.uhope.template.service.TemplateService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 模版表-ServiceImpl接口实现类
@@ -31,5 +33,20 @@ public class DubanFeedbackServiceImpl extends AbstractService<ScDubanFeedback, D
     @Override
     public String selectRole(String id) {
         return dubanFeedbackMapper.selectRole(id);
+    }
+
+    @Override
+    public List<ScDubanFeedback> selectFeedbackBydubanid(String id, Date deadlinedate) {
+        return dubanFeedbackMapper.selectFeedbackBydubanid(id,deadlinedate);
+    }
+
+    @Override
+    public List<ScDubanFeedback> selectFeedbackBys(ScDubanFeedback dubanFeedback) {
+        return dubanFeedbackMapper.selectFeedbackBys(dubanFeedback);
+    }
+
+    @Override
+    public List<DubanFeedbackDTO> selectFeedbackByobjectid(ScDubanFeedback dubanFeedback) {
+        return dubanFeedbackMapper.selectFeedbackByobjectid(dubanFeedback);
     }
 }

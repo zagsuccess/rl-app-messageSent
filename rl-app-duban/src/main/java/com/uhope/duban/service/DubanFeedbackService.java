@@ -6,6 +6,9 @@ import com.uhope.duban.dto.DubanFeedbackDTO;
 import com.uhope.template.domain.Template;
 import com.uhope.template.dto.TemplateDTO;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * 模版表-Service接口类
  *
@@ -16,4 +19,10 @@ public interface DubanFeedbackService extends Service<ScDubanFeedback, DubanFeed
     ScDubanFeedback selectFeedback(ScDubanFeedback dubanFeedback);
 
     String selectRole(String id);
+
+    List<ScDubanFeedback> selectFeedbackBydubanid(String id, Date deadlinedate);
+
+    List<ScDubanFeedback> selectFeedbackBys(ScDubanFeedback dubanFeedback);
+
+    List<DubanFeedbackDTO> selectFeedbackByobjectid(ScDubanFeedback dubanFeedback);
 }

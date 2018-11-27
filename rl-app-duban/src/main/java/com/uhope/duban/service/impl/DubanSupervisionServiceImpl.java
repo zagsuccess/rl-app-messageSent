@@ -11,6 +11,7 @@ import com.uhope.duban.service.DubanSupervisionService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,15 +35,28 @@ public class DubanSupervisionServiceImpl extends AbstractService<ScDubanSupervis
     }
 
     @Override
-    public List<DeadlineDTO> selectDeadlineUserh() {
+    public List<ScDubanSupervision> selectDeadlineUserh() {
         return dubanSupervisionMapper.selectDeadlineUserh();
     }
 
     @Override
     public PageInfo<ScDubanSupervision> list(Integer pageNumber, Integer pageSize, String issuedtime, String objectname, String status,String objectid) {
         PageHelper.startPage(pageNumber, pageSize);
-        List<ScDubanSupervision> list = dubanSupervisionMapper.list(issuedtime,objectname,status,objectid);
-        PageInfo<ScDubanSupervision> pageInfo = new PageInfo(list);
+        List<ScDubanSupervision> dubanlist=new ArrayList<>();
+        List<ScDubanSupervision> list = dubanSupervisionMapper.list(issuedtime,objectname,status);
+        if(objectid==null || "".equals(objectid)){
+            PageInfo<ScDubanSupervision> pageInfo = new PageInfo(list);
+            return pageInfo;
+        }
+        if(list!=null && list.size()>0){
+            for (ScDubanSupervision scDubanSupervision:list) {
+                if (scDubanSupervision.getObjectid().contains(objectid)) {
+                    dubanlist.add(scDubanSupervision);
+                }
+            }
+        }
+        PageInfo<ScDubanSupervision> pageInfo = new PageInfo(dubanlist);
         return pageInfo;
     }
+
 }

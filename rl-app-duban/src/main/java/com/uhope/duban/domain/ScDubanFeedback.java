@@ -18,6 +18,14 @@ public class ScDubanFeedback implements Serializable {
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private java.util.Date feedbacktime;
     /**
+     * 督办对象id
+     */
+    private String objectid;
+    /**
+     * 是否现场核查
+     */
+    private String whetherlocale;
+    /**
      * 是否完成
      */
     private String whether;
@@ -38,17 +46,22 @@ public class ScDubanFeedback implements Serializable {
      */
     private String status;
 
+    private Date createtime;
+
     public ScDubanFeedback() {
         super();
     }
 
-    public ScDubanFeedback(Date feedbacktime, String whether, String description, String assessory, String supervisionid, String status) {
+    public ScDubanFeedback(Date feedbacktime, String objectid, String whetherlocale, String whether, String description, String assessory, String supervisionid, String status, Date createtime) {
         this.feedbacktime = feedbacktime;
+        this.objectid = objectid;
+        this.whetherlocale = whetherlocale;
         this.whether = whether;
         this.description = description;
         this.assessory = assessory;
         this.supervisionid = supervisionid;
         this.status = status;
+        this.createtime = createtime;
     }
 
     public String getId() {
@@ -107,16 +120,43 @@ public class ScDubanFeedback implements Serializable {
         this.status = status;
     }
 
+    public String getObjectid() {
+        return objectid;
+    }
+
+    public void setObjectid(String objectid) {
+        this.objectid = objectid;
+    }
+
+    public String getWhetherlocale() {
+        return whetherlocale;
+    }
+
+    public void setWhetherlocale(String whetherlocale) {
+        this.whetherlocale = whetherlocale;
+    }
+
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
+
     @Override
     public String toString() {
         return "ScDubanFeedback{" +
                 "id='" + id + '\'' +
                 ", feedbacktime=" + feedbacktime +
+                ", objectid='" + objectid + '\'' +
+                ", whetherlocale='" + whetherlocale + '\'' +
                 ", whether='" + whether + '\'' +
                 ", description='" + description + '\'' +
                 ", assessory='" + assessory + '\'' +
                 ", supervisionid='" + supervisionid + '\'' +
                 ", status='" + status + '\'' +
+                ", createtime=" + createtime +
                 '}';
     }
 }
