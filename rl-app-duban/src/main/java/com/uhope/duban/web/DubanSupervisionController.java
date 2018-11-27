@@ -96,7 +96,7 @@ public class DubanSupervisionController {
         List<UserDTO> userDTOList=new ArrayList<>();
         if (pageInfoResult.getData()!=null){
             for (UserDTO userDTO:pageInfoResult.getData().getRecords()){
-                if (userDTO.getUsertype()==3){
+                if (userDTO.getRegionId()%(1000 * 1000)==0 && userDTO.getRegionId()%(10000 * 10000)!=0){
                     userDTOList.add(userDTO);
                 }
             }
