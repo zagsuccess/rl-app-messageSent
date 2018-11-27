@@ -72,7 +72,7 @@ public class SocialEvaluationController {
     @PutMapping("/updateEvaluation")
     public Result<ShSocialEvaluation> updateEvaluation(ShSocialEvaluation socialEvaluation){
         socialEvaluationService.update(socialEvaluation);
-        return ResponseMsgUtil.success(socialEvaluation);
+        return ResponseMsgUtil.success(socialEvaluationService.get(socialEvaluation.getId()));
     }
 
     /**
