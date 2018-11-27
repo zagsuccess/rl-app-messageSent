@@ -37,13 +37,17 @@ public class SuperviseController {
             @RequestParam String contact,
             @RequestParam String phone,
             @RequestParam String department,
-            @RequestParam String inspectionid
+            @RequestParam String inspectionid,
+            @RequestParam String supervisePerson,
+            @RequestParam String personPhone
     ){
         ScSupervise scSupervise =new ScSupervise();
         scSupervise.setArea(area);
         scSupervise.setContact(contact);
         scSupervise.setDepartment(department);
         scSupervise.setGrouping(grouping);
+        scSupervise.setPersonPhone(personPhone);
+        scSupervise.setSupervisePerson(supervisePerson);
         scSupervise.setGroupLeader(groupLeader);
         scSupervise.setPhone(phone);
         scSupervise.setInspectionid(inspectionid);

@@ -29,7 +29,7 @@ public class ComtactPersonController {
             @RequestParam String inspectionid,
             @RequestParam String name,
             @RequestParam String duty,
-            @RequestParam String phone
+             String phone
     ) {
         ScComtactPerson scComtactPerson = new ScComtactPerson();
         scComtactPerson.setDuty(duty);

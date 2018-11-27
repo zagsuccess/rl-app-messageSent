@@ -60,7 +60,8 @@ public class InspectionController {
             @RequestParam String inspectType,
             @RequestParam String sentRegion,
             @RequestParam(required = false) String accessory,
-            @RequestParam String content
+            @RequestParam String content,
+            @RequestParam String sentUnit
     ) {
         ScInspection scInspection = new ScInspection();
         scInspection.setContent(content);
@@ -69,6 +70,7 @@ public class InspectionController {
         scInspection.setPrintDate(printDate);
         scInspection.setRenumber(renumber);
         scInspection.setTitle(title);
+        scInspection.setSentUnit(sentUnit);
         scInspection.setSentRegion(sentRegion);
         scInspection.setState(1);
         inspectionService.insert(scInspection);
@@ -80,11 +82,189 @@ public class InspectionController {
                                                      @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
                                                      String printDate,
                                                      String renumber,
-                                                     Integer state
+                                                     String title,
+                                                     Integer state,
+                                                     HttpServletRequest request
     ) {
+        //获取当前用户信息
+        UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
+        if(userDTO == null ){
+            return ResponseMsgUtil.failure("获取用户失败");
+        }
+
+
+        if("市河长办".equals(inspectionService.selectRole(userDTO.getId()))){
+            PageHelper.startPage(pageNumber, pageSize);
+            Condition condition = new Condition(ScInspection.class);
+            Example.Criteria criteria = condition.createCriteria();
+
+            if (title != null && title != "") {
+                criteria.andCondition("title like '%" + title+"%'");
+            }
+            if (printDate != null && printDate != "") {
+                criteria.andCondition("print_date like '%" + printDate+"%'");
+            }
+            if (renumber != null && renumber != "") {
+                criteria.andCondition("renumber = " + renumber);
+            }
+            if (state != null) {
+                criteria.andCondition("state = " + state);
+            }
+
+            List<ScInspection> list = inspectionService.findByCondition(condition);
+            PageInfo pageInfo = new PageInfo(list);
+            return ResponseMsgUtil.success(pageInfo);
+        }
+        if ("市环保局".equals(inspectionService.selectRole(userDTO.getId()))){
+            PageHelper.startPage(pageNumber, pageSize);
+            Condition condition = new Condition(ScInspection.class);
+            Example.Criteria criteria = condition.createCriteria();
+            String sentUnit="市环保局";
+            if (title != null && title != "") {
+                criteria.andCondition("title like '%" + title+"%'");
+            }
+            if (printDate != null && printDate != "") {
+                criteria.andCondition("print_date like '%" + printDate+"%'");
+            }
+            if (renumber != null && renumber != "") {
+                criteria.andCondition("renumber = " + renumber);
+            }
+            if (state != null) {
+                criteria.andCondition("state = " + state);
+            }
+            if (sentUnit !=null){
+                criteria.andCondition("sent_unit like '%" + sentUnit+"%'");
+            }
+            List<ScInspection> list = inspectionService.findByCondition(condition);
+            PageInfo pageInfo = new PageInfo(list);
+            return ResponseMsgUtil.success(pageInfo);
+        }
+        if ("市市容园林委".equals(inspectionService.selectRole(userDTO.getId()))){
+            PageHelper.startPage(pageNumber, pageSize);
+            Condition condition = new Condition(ScInspection.class);
+            Example.Criteria criteria = condition.createCriteria();
+            String sentUnit="市市容园林委";
+            if (title != null && title != "") {
+                criteria.andCondition("title like '%" + title+"%'");
+            }
+            if (printDate != null && printDate != "") {
+                criteria.andCondition("print_date like '%" + printDate+"%'");
+            }
+            if (renumber != null && renumber != "") {
+                criteria.andCondition("renumber = " + renumber);
+            }
+            if (state != null) {
+                criteria.andCondition("state = " + state);
+            }
+            if (sentUnit !=null){
+                criteria.andCondition("sent_unit like '%" + sentUnit+"%'");
+            }
+            List<ScInspection> list = inspectionService.findByCondition(condition);
+            PageInfo pageInfo = new PageInfo(list);
+            return ResponseMsgUtil.success(pageInfo);
+        }
+        if ("市农委".equals(inspectionService.selectRole(userDTO.getId()))){
+            PageHelper.startPage(pageNumber, pageSize);
+            Condition condition = new Condition(ScInspection.class);
+            Example.Criteria criteria = condition.createCriteria();
+            String sentUnit="市农委";
+            if (title != null && title != "") {
+                criteria.andCondition("title like '%" + title+"%'");
+            }
+            if (printDate != null && printDate != "") {
+                criteria.andCondition("print_date like '%" + printDate+"%'");
+            }
+            if (renumber != null && renumber != "") {
+                criteria.andCondition("renumber = " + renumber);
+            }
+            if (state != null) {
+                criteria.andCondition("state = " + state);
+            }
+            if (sentUnit !=null){
+                criteria.andCondition("sent_unit like '%" + sentUnit+"%'");
+            }
+            List<ScInspection> list = inspectionService.findByCondition(condition);
+            PageInfo pageInfo = new PageInfo(list);
+            return ResponseMsgUtil.success(pageInfo);
+        }
+        if ("市建委".equals(inspectionService.selectRole(userDTO.getId()))){
+            PageHelper.startPage(pageNumber, pageSize);
+            Condition condition = new Condition(ScInspection.class);
+            Example.Criteria criteria = condition.createCriteria();
+            String sentUnit="市建委";
+            if (title != null && title != "") {
+                criteria.andCondition("title like '%" + title+"%'");
+            }
+            if (printDate != null && printDate != "") {
+                criteria.andCondition("print_date like '%" + printDate+"%'");
+            }
+            if (renumber != null && renumber != "") {
+                criteria.andCondition("renumber = " + renumber);
+            }
+            if (state != null) {
+                criteria.andCondition("state = " + state);
+            }
+            if (sentUnit !=null){
+                criteria.andCondition("sent_unit like '%" + sentUnit+"%'");
+            }
+            List<ScInspection> list = inspectionService.findByCondition(condition);
+            PageInfo pageInfo = new PageInfo(list);
+            return ResponseMsgUtil.success(pageInfo);
+        }
+        if ("市国土房管局".equals(inspectionService.selectRole(userDTO.getId()))){
+            PageHelper.startPage(pageNumber, pageSize);
+            Condition condition = new Condition(ScInspection.class);
+            Example.Criteria criteria = condition.createCriteria();
+            String sentUnit="市国土房管局";
+            if (title != null && title != "") {
+                criteria.andCondition("title like '%" + title+"%'");
+            }
+            if (printDate != null && printDate != "") {
+                criteria.andCondition("print_date like '%" + printDate+"%'");
+            }
+            if (renumber != null && renumber != "") {
+                criteria.andCondition("renumber = " + renumber);
+            }
+            if (state != null) {
+                criteria.andCondition("state = " + state);
+            }
+            if (sentUnit !=null){
+                criteria.andCondition("sent_unit like '%" + sentUnit+"%'");
+            }
+            List<ScInspection> list = inspectionService.findByCondition(condition);
+            PageInfo pageInfo = new PageInfo(list);
+            return ResponseMsgUtil.success(pageInfo);
+        }
+        if ("市财政局".equals(inspectionService.selectRole(userDTO.getId()))){
+            PageHelper.startPage(pageNumber, pageSize);
+            Condition condition = new Condition(ScInspection.class);
+            Example.Criteria criteria = condition.createCriteria();
+            String sentUnit="市财政局";
+            if (title != null && title != "") {
+                criteria.andCondition("title like '%" + title+"%'");
+            }
+            if (printDate != null && printDate != "") {
+                criteria.andCondition("print_date like '%" + printDate+"%'");
+            }
+            if (renumber != null && renumber != "") {
+                criteria.andCondition("renumber = " + renumber);
+            }
+            if (state != null) {
+                criteria.andCondition("state = " + state);
+            }
+            if (sentUnit !=null){
+                criteria.andCondition("sent_unit like '%" + sentUnit+"%'");
+            }
+            List<ScInspection> list = inspectionService.findByCondition(condition);
+            PageInfo pageInfo = new PageInfo(list);
+            return ResponseMsgUtil.success(pageInfo);
+        }
         PageHelper.startPage(pageNumber, pageSize);
         Condition condition = new Condition(ScInspection.class);
         Example.Criteria criteria = condition.createCriteria();
+        if (title != null && title != "") {
+            criteria.andCondition("title like '%" + title+"%'");
+        }
         if (printDate != null && printDate != "") {
             criteria.andCondition("print_date like '%" + printDate+"%'");
         }
@@ -94,9 +274,11 @@ public class InspectionController {
         if (state != null) {
             criteria.andCondition("state = " + state);
         }
+
         List<ScInspection> list = inspectionService.findByCondition(condition);
         PageInfo pageInfo = new PageInfo(list);
         return ResponseMsgUtil.success(pageInfo);
+
     }
 
     @GetMapping("/detail")
@@ -147,10 +329,33 @@ public class InspectionController {
             grade="02";
         }
 
-        if("河长办".equals(inspectionService.selectRole(userDTO.getId()))){
+        if ("市环保局".equals(inspectionService.selectRole(userDTO.getId()))){
             grade="05";
         }
 
+        if ("市市容园林委".equals(inspectionService.selectRole(userDTO.getId()))){
+            grade="05";
+        }
+
+        if ("市农委".equals(inspectionService.selectRole(userDTO.getId()))){
+            grade="05";
+        }
+
+        if ("市建委".equals(inspectionService.selectRole(userDTO.getId()))){
+            grade="05";
+        }
+
+        if ("市国土房管局".equals(inspectionService.selectRole(userDTO.getId()))){
+            grade="05";
+        }
+
+        if ("市财政局".equals(inspectionService.selectRole(userDTO.getId()))){
+            grade="05";
+        }
+
+        if("河长办".equals(inspectionService.selectRole(userDTO.getId()))){
+            grade="05";
+        }
         return ResponseMsgUtil.success(grade);
     }
 

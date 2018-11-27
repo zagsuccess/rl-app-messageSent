@@ -62,7 +62,7 @@ public class WaterAssessController {
         PageHelper.startPage(pageNumber, pageSize);
         Condition condition = new Condition(AmWaterAssess.class);
         Example.Criteria criteria = condition.createCriteria();
-        criteria.andCondition("assess_rule like '%" + waterQualityRule + "%'");
+        criteria.andCondition("rule_name= '" + waterQualityRule + "'");
 
         if (paramType != null && paramType != "") {
             criteria.andCondition("param_type like '%" + paramType + "%'");

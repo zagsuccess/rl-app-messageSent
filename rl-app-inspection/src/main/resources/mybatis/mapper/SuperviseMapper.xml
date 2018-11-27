@@ -8,6 +8,8 @@
     <result column="area" jdbcType="VARCHAR" property="area" />
     <result column="contact" jdbcType="VARCHAR" property="contact" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="supervise_person" jdbcType="VARCHAR" property="supervisePerson" />
+    <result column="person_phone" jdbcType="VARCHAR" property="personPhone" />
     <result column="department" jdbcType="VARCHAR" property="department" />
     <result column="inspectionid" jdbcType="VARCHAR" property="inspectionid" />
   </resultMap>
