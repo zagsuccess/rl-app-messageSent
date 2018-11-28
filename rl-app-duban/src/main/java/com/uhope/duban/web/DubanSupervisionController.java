@@ -56,12 +56,12 @@ public class DubanSupervisionController {
     @PostMapping("/add")
     public Result<ScDubanSupervision> add(ScDubanSupervision dubanSupervision) {
         String[] str=dubanSupervision.getObjectid().split(",");
-        for (String s:str) {
+        /*for (String s:str) {
             Result<UserDTO> id = userService.getById(s);
             if(id.getData()!=null){
                 dubanSupervision.setObjectname(id.getData().getName());
             }
-        }
+        }*/
         dubanSupervision.setStatus("1");
         dubanSupervisionService.insert(dubanSupervision);
         for(int i=0;i<str.length;i++){
