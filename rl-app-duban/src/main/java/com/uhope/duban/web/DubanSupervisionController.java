@@ -214,7 +214,9 @@ public class DubanSupervisionController {
         dubanFeedback.setSupervisionid(supervisionid);
         dubanFeedback.setStatus("2");
         ScDubanFeedback scDubanFeedback = dubanFeedbackService.selectFeedback(dubanFeedback);
-        scDubanFeedback.setAssessory(FmConfig.getAgentUrl() + scDubanFeedback.getAssessory());
+        if(scDubanFeedback!=null){
+            scDubanFeedback.setAssessory(FmConfig.getAgentUrl() + scDubanFeedback.getAssessory());
+        }
         return ResponseMsgUtil.success(scDubanFeedback);
     }
 
