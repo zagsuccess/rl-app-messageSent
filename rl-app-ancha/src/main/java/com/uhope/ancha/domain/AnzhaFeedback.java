@@ -4,6 +4,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.Date;
 
 public class AnzhaFeedback implements Serializable {
     @Id
@@ -12,7 +13,11 @@ public class AnzhaFeedback implements Serializable {
     /**
      * 反馈时间
      */
-    private java.util.Date feedbackTime;
+    private java.util.Date feedbacktime;
+    /**
+     * 需反馈区河长办的id
+     */
+    private String objectid;
     /**
      * 是否完成
      */
@@ -20,7 +25,7 @@ public class AnzhaFeedback implements Serializable {
     /**
      * 反馈描述
      */
-    private String describe;
+    private String description;
     /**
      * 反馈附件
      */
@@ -29,18 +34,21 @@ public class AnzhaFeedback implements Serializable {
      * 对应通报的id
      */
     private String bulletinid;
+    private String status;
     public AnzhaFeedback() {
         super();
     }
-    public AnzhaFeedback(String id,java.util.Date feedbackTime,String whether,String describe,String assessory,String bulletinid) {
-        super();
-        this.id = id;
-        this.feedbackTime = feedbackTime;
+
+    public AnzhaFeedback(Date feedbacktime, String objectid, String whether, String description, String assessory, String bulletinid, String status) {
+        this.feedbacktime = feedbacktime;
+        this.objectid = objectid;
         this.whether = whether;
-        this.describe = describe;
+        this.description = description;
         this.assessory = assessory;
         this.bulletinid = bulletinid;
+        this.status = status;
     }
+
     public String getId() {
         return this.id;
     }
@@ -49,12 +57,12 @@ public class AnzhaFeedback implements Serializable {
         this.id = id;
     }
 
-    public java.util.Date getFeedbackTime() {
-        return this.feedbackTime;
+    public Date getFeedbacktime() {
+        return feedbacktime;
     }
 
-    public void setFeedbackTime(java.util.Date feedbackTime) {
-        this.feedbackTime = feedbackTime;
+    public void setFeedbacktime(Date feedbacktime) {
+        this.feedbacktime = feedbacktime;
     }
 
     public String getWhether() {
@@ -65,12 +73,12 @@ public class AnzhaFeedback implements Serializable {
         this.whether = whether;
     }
 
-    public String getDescribe() {
-        return this.describe;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getAssessory() {
@@ -89,15 +97,33 @@ public class AnzhaFeedback implements Serializable {
         this.bulletinid = bulletinid;
     }
 
+    public String getObjectid() {
+        return objectid;
+    }
+
+    public void setObjectid(String objectid) {
+        this.objectid = objectid;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "AnzhaFeedback{" +
                 "id='" + id + '\'' +
-                ", feedbackTime=" + feedbackTime +
+                ", feedbacktime=" + feedbacktime +
+                ", objectid='" + objectid + '\'' +
                 ", whether='" + whether + '\'' +
-                ", describe='" + describe + '\'' +
+                ", description='" + description + '\'' +
                 ", assessory='" + assessory + '\'' +
                 ", bulletinid='" + bulletinid + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

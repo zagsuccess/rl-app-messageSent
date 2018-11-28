@@ -13,6 +13,6 @@ import java.util.List;
  */
 public interface AnzhaReportService extends Service<AnzhaReport, AnzhaReportDTO, String> {
 
-    public List<AnzhaReport> list(String anzhaid);
+    public List<AnzhaReport> list(String anzhaid,String status);
 
 }
