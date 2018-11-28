@@ -2,12 +2,14 @@ package com.uhope.duban.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.uhope.core.AbstractService;
 import com.uhope.duban.domain.ScDubanSupervision;
 import com.uhope.duban.dto.DeadlineDTO;
 import com.uhope.duban.dto.DubanSupervisionDTO;
 import com.uhope.duban.mapper.DubanSupervisionMapper;
 import com.uhope.duban.service.DubanSupervisionService;
+import com.uhope.duban.utils.PageUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -41,22 +43,25 @@ public class DubanSupervisionServiceImpl extends AbstractService<ScDubanSupervis
 
     @Override
     public PageInfo<ScDubanSupervision> list(Integer pageNumber, Integer pageSize, String issuedtime, String objectname, String status,String objectid) {
-        PageHelper.startPage(pageNumber, pageSize);
-        List<ScDubanSupervision> dubanlist=new ArrayList<>();
-        List<ScDubanSupervision> list = dubanSupervisionMapper.list(issuedtime,objectname,status);
+        List<ScDubanSupervision> dubanlist= Lists.newArrayList();
         if(objectid==null || "".equals(objectid)){
+            PageHelper.startPage(pageNumber, pageSize);
+            List<ScDubanSupervision> list = dubanSupervisionMapper.list(issuedtime,objectname,status);
             PageInfo<ScDubanSupervision> pageInfo = new PageInfo(list);
             return pageInfo;
         }
-        if(list!=null && list.size()>0){
-            for (ScDubanSupervision scDubanSupervision:list) {
-                if (scDubanSupervision.getObjectid().contains(objectid)) {
-                    dubanlist.add(scDubanSupervision);
+        else{
+            List<ScDubanSupervision> list = dubanSupervisionMapper.list(issuedtime,objectname,status);
+            if(list!=null && list.size()>0){
+                for (ScDubanSupervision scDubanSupervision:list) {
+                    if (scDubanSupervision.getObjectid().contains(objectid)) {
+                        dubanlist.add(scDubanSupervision);
+                    }
                 }
             }
+            PageInfo pageInfo = new PageInfo(PageUtil.getPageList(dubanlist, pageNumber, pageSize));
+            return pageInfo;
         }
-        PageInfo<ScDubanSupervision> pageInfo = new PageInfo(dubanlist);
-        return pageInfo;
     }
 
 }
