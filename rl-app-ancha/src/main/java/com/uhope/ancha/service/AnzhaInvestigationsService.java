@@ -20,7 +20,7 @@ public interface AnzhaInvestigationsService extends Service<AnzhaInvestigations,
 
     List<String> findRiverByRegion(String regionid);
 
-    public PageInfo<AnzhaInvestigations> list(Integer pageNumber, Integer pageSize, String schemeid,String date, String region, String status);
+    public PageInfo<AnzhaInvestigations> list(Integer pageNumber, Integer pageSize, String schemeid,String date, String region, String status,String regionid);
 
     /*public List<AnzhaInvestigations> listMonth(String month);*/
 
