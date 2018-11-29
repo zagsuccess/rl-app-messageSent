@@ -12,6 +12,8 @@ import com.uhope.core.AbstractService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 模版表-ServiceImpl接口实现类
@@ -24,12 +26,27 @@ public class AnzhaFeedbackServiceImpl extends AbstractService<AnzhaFeedback, Anz
     private AnzhaFeedbackMapper anzhaFeedbackMapper;
 
     @Override
-    public AnzhaFeedback selectOneById(String bulletinid) {
-        return anzhaFeedbackMapper.selectOneById(bulletinid);
+    public List<AnzhaFeedbackDTO> selectOneById(String bulletinid,String objectid) {
+        return anzhaFeedbackMapper.selectOneById(bulletinid,objectid);
     }
 
     @Override
     public void insertAnzhaFeedback(AnzhaFeedback anzhaFeedback) {
         anzhaFeedbackMapper.insertAnzhaFeedback(anzhaFeedback);
+    }
+
+    @Override
+    public List<AnzhaFeedback> selectFeedbackBydubanid(String id, Date deadlinetime) {
+        return anzhaFeedbackMapper.selectFeedbackBydubanid(id,deadlinetime);
+    }
+
+    @Override
+    public int selectcountByyinum(String id) {
+        return anzhaFeedbackMapper.selectcountByyinum(id);
+    }
+
+    @Override
+    public String selectHaveyi(String bulletinid, String objectid) {
+        return anzhaFeedbackMapper.selectHaveyi(bulletinid,objectid);
     }
 }

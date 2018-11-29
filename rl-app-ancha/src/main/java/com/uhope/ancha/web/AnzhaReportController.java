@@ -45,6 +45,7 @@ public class AnzhaReportController {
                                     String peoblemType,
                                     String processLimited,
                                    String peoblemDescription,
+                                   String longitude,String latitude,
                                    String filePath) throws ParseException {
         AnzhaReport anzhaReport = new AnzhaReport();
         anzhaReport.setIssuer(issuer);
@@ -66,6 +67,8 @@ public class AnzhaReportController {
             anzhaReport.setImage(img.substring(0,img.length()-1));
         }*/
         anzhaReport.setImage(filePath);
+        anzhaReport.setLongitude(longitude);
+        anzhaReport.setLatitude(latitude);
         anzhaReportService.insert(anzhaReport);
         return ResponseMsgUtil.success(anzhaReport);
     }
@@ -155,9 +158,10 @@ public class AnzhaReportController {
     }
 
     @GetMapping("/list")
-    public Result<List<AnzhaReport>> list(@RequestParam String anzhaid ) {
+    public Result<List<AnzhaReport>> list(@RequestParam String anzhaid ,
+                                          String status) {
 
-        return ResponseMsgUtil.success(anzhaReportService.list(anzhaid));
+        return ResponseMsgUtil.success(anzhaReportService.list(anzhaid,status));
     }
 
 }

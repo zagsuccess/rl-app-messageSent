@@ -4,9 +4,10 @@
     <!-- AnzhaFeedback的resultMap,column是给数据库列起的别名,它对应property类的属性-->
     <resultMap id="afMap" type="com.uhope.ancha.domain.AnzhaFeedback">
         <id column="ID" property="id" />
-        <result column="FEEDBACK_Time" property="feedbackTime" />
+        <result column="FEEDBACKTIME" property="feedbacktime" />
+        <result column="OBJECTID" property="objectid" />
         <result column="WHETHER" property="whether" />
-        <result column="DESCRIBE" property="describe" />
+        <result column="DESCRIPTION" property="description" />
         <result column="ASSESSORY" property="assessory" />
         <result column="BULLETINID" property="bulletinid" />
     </resultMap>
@@ -15,8 +16,24 @@
         insert into AnZha_feedback values(#{id},#{feedbackTime},#{whether},#{describe},#{assessory},#{bulletinid})
     </insert>
 
-    <select id="selectOneById" resultMap="afMap" >
-        select * from AnZha_feedback where BULLETINID=#{bulletinid} order by FEEDBACK_Time desc limit 1
+    <select id="selectOneById" resultType="com.uhope.ancha.dto.AnzhaFeedbackDTO" >
+        select * from AnZha_feedback <where>
+        <if test="bulletinid!=null and bulletinid != ''">
+            and BULLETINID=#{bulletinid}
+        </if>
+        <if test="objectid!=null and objectid != ''">
+            and OBJECTID=#{objectid}
+        </if>
+    </where>
+    </select>
+    <select id="selectFeedbackBydubanid" resultType="com.uhope.ancha.domain.AnzhaFeedback">
+      select * from anzha_feedback where BULLETINID=#{id}  and DATE_FORMAT(FEEDBACKTIME,'%Y-%m-%d') <![CDATA[<=]]>DATE_FORMAT(#{deadlinetime},'%Y-%m-%d')
+    </select>
+    <select id="selectcountByyinum" resultType="java.lang.Integer">
+        select count(*) from anzha_feedback where BULLETINID=#{id} and status='1'
+    </select>
+    <select id="selectHaveyi" resultType="java.lang.String">
+        select status from anzha_feedback where BULLETINID=#{id}  and OBJECTID=#{objectid}
     </select>
 
 

@@ -45,7 +45,7 @@ public class AnzhaInvestigationsController {
                                            @RequestParam String reachname,
                                            String coordinate,
                                            @RequestParam String schemeid,
-                                            String leader,String personnel) {
+                                           String personnel) {
         AnzhaInvestigations anzhaInvestigations = new AnzhaInvestigations();
         anzhaInvestigations.setTitle(title);
         anzhaInvestigations.setSchemeid(schemeid);
@@ -60,7 +60,6 @@ public class AnzhaInvestigationsController {
         anzhaInvestigations.setRegionname(regionnames.substring(0,regionnames.length()-1));
         anzhaInvestigations.setReachname(reachname);
         anzhaInvestigations.setCoordinate(coordinate);
-        anzhaInvestigations.setLeader(leader);
         anzhaInvestigations.setStatus("0");
         anzhaInvestigations.setPersonnel(personnel);
         anzhaInvestigationsService.insert(anzhaInvestigations);
@@ -109,7 +108,7 @@ public class AnzhaInvestigationsController {
                                               @RequestParam String regionid,
                                               @RequestParam String reachname,
                                                String coordinate,
-                                              String leader,String personnel) {
+                                              String personnel) {
 
         AnzhaInvestigations anzhaInvestigations = new AnzhaInvestigations();
         anzhaInvestigations.setId(id);
@@ -125,7 +124,6 @@ public class AnzhaInvestigationsController {
         anzhaInvestigations.setRegionname(regionnames.substring(0,regionnames.length()-1));
         anzhaInvestigations.setReachname(reachname);
         anzhaInvestigations.setCoordinate(coordinate);
-        anzhaInvestigations.setLeader(leader);
         anzhaInvestigations.setPersonnel(personnel);
         anzhaInvestigationsService.update(anzhaInvestigations);
         return ResponseMsgUtil.success(anzhaInvestigations);
@@ -135,9 +133,9 @@ public class AnzhaInvestigationsController {
     public Result<PageInfo<AnzhaInvestigations>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                                       @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
                                                       String schemeid,
-                                                      String date, String region, String status) {
+                                                      String date, String region, String status,String regionid) {
 
-        return ResponseMsgUtil.success(anzhaInvestigationsService.list(pageNumber,pageSize,schemeid,date,region,status));
+        return ResponseMsgUtil.success(anzhaInvestigationsService.list(pageNumber,pageSize,schemeid,date,region,status,regionid));
     }
 
 
@@ -198,5 +196,21 @@ public class AnzhaInvestigationsController {
         return ResponseMsgUtil.success(grade);
     }
 
+    @GetMapping("/userinfo1")
+    public Result<String> userinfo1(String id){
+
+        //默认是00   （00表示都不是  01表示市环保局  02表示市河长办 ）
+        String grade="00";
+
+        if("市河长办".equals(anzhaInvestigationsService.selectRole(id))){
+            grade="02";
+        }
+
+        if("河长办".equals(anzhaInvestigationsService.selectRole(id))){
+            grade="05";
+        }
+
+        return ResponseMsgUtil.success(grade);
+    }
 
 }

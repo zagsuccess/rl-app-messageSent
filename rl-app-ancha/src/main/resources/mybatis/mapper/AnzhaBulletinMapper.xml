@@ -8,6 +8,9 @@
         <result column="MONTH" property="month" />
         <result column="CONTENT" property="content" />
         <result column="ACCESSORY" property="accessory" />
+        <result column="FEEDBACKAREAID" property="feedbackareaid" />
+        <result column="FEEDBACKAREANAME" property="feedbackareaname" />
+        <result column="DEADLINETIME" property="deadlinetime" />
         <result column="STATUS" property="status" />
         <result column="SCHEMEID" property="schemeid" />
     </resultMap>
@@ -28,6 +31,9 @@
                 and status !=#{num}
             </if>
         </where>
+    </select>
+    <select id="selectDeadlineUserh" resultType="com.uhope.ancha.domain.AnzhaBulletin">
+      select * from anzha_bulletin where status='1' and DATE_FORMAT(DATE_ADD(DEADLINETIME,INTERVAL 1 DAY),'%Y-%m-%d')=CURDATE()
     </select>
 
 

@@ -22,6 +22,10 @@ public class ScDubanSupervision implements Serializable {
      */
     private String project;
     /**
+     * 督办类型
+     */
+    private String type;
+    /**
      * 下发日期
      */
     @DateTimeFormat(pattern="yyyy-MM-dd")
@@ -61,9 +65,10 @@ public class ScDubanSupervision implements Serializable {
         super();
     }
 
-    public ScDubanSupervision(String title, String project, Date issuedtime, Date deadlinedate, String reason, String objectid, String objectname, String assessory, String assessorydescribe, String status) {
+    public ScDubanSupervision(String title, String project, String type, Date issuedtime, Date deadlinedate, String reason, String objectid, String objectname, String assessory, String assessorydescribe, String status) {
         this.title = title;
         this.project = project;
+        this.type = type;
         this.issuedtime = issuedtime;
         this.deadlinedate = deadlinedate;
         this.reason = reason;
@@ -162,12 +167,21 @@ public class ScDubanSupervision implements Serializable {
         this.status = status;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "ScDubanSupervision{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
                 ", project='" + project + '\'' +
+                ", type='" + type + '\'' +
                 ", issuedtime=" + issuedtime +
                 ", deadlinedate=" + deadlinedate +
                 ", reason='" + reason + '\'' +

@@ -14,4 +14,6 @@ public interface AnzhaBulletinMapper extends Mapper<AnzhaBulletin> {
                                       @Param("title")String title,
                                       @Param("status")String status,
                                       @Param("num")String num);
+
+    List<AnzhaBulletin> selectDeadlineUserh();
 }

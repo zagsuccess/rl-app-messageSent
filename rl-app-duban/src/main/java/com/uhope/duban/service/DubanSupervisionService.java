@@ -21,7 +21,8 @@ public interface DubanSupervisionService extends Service<ScDubanSupervision, Dub
 
     List<String> selectDeadlineUser();
 
-    List<DeadlineDTO> selectDeadlineUserh();
+    List<ScDubanSupervision> selectDeadlineUserh();
 
     PageInfo<ScDubanSupervision> list(Integer pageNumber, Integer pageSize, String issuedtime, String objectname, String status,String objectid);
+
 }

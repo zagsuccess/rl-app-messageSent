@@ -16,10 +16,19 @@
         <result column="PEOBLEM_DESCRIPTION" property="peoblemDescription" />
         <result column="STATUS" property="status" />
         <result column="ANZHAID" property="anzhaid" />
+        <result column="LONGITUDE" property="longitude" />
+        <result column="LATITUDE" property="latitude" />
         <result column="INCIDENTID" property="incidentid" />
     </resultMap>
     <select id="selectList" resultMap="arMap">
-        select * from AnZha_report where ANZHAID =#{anzhaid} order by date
+        select * from AnZha_report <where>
+        <if test="anzhaid != null and anzhaid !=''">
+            and ANZHAID =#{anzhaid}
+        </if>
+        <if test="status != null and status !=''">
+            and status=#{status}
+        </if>
+    </where>  order by date
     </select>
 
 </mapper>

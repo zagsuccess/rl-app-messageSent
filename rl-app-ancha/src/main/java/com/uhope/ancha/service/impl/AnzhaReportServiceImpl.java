@@ -25,8 +25,8 @@ public class AnzhaReportServiceImpl extends AbstractService<AnzhaReport, AnzhaRe
     private AnzhaReportMapper anzhaReportMapper;
 
     @Override
-    public List<AnzhaReport> list(String anzhaid) {
-        return anzhaReportMapper.selectList(anzhaid);
+    public List<AnzhaReport> list(String anzhaid,String status) {
+        return anzhaReportMapper.selectList(anzhaid,status);
     }
 
 }

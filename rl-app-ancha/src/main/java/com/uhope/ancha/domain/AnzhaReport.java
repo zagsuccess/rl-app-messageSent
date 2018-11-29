@@ -59,6 +59,14 @@ public class AnzhaReport implements Serializable {
      */
     private String anzhaid;
     /**
+     * 经度
+     */
+    private String longitude;
+    /**
+     * 纬度
+     */
+    private String latitude;
+    /**
      * 事件的id
      */
     private String incidentid;
@@ -66,7 +74,7 @@ public class AnzhaReport implements Serializable {
         super();
     }
 
-    public AnzhaReport(String issuer, Date date, String peoblemType, String regionid, String regionname, String reachid, String reachname, String image, String processLimited, String peoblemDescription, String status, String anzhaid, String incidentid) {
+    public AnzhaReport(String issuer, Date date, String peoblemType, String regionid, String regionname, String reachid, String reachname, String image, String processLimited, String peoblemDescription, String status, String anzhaid, String longitude, String latitude, String incidentid) {
         this.issuer = issuer;
         this.date = date;
         this.peoblemType = peoblemType;
@@ -79,6 +87,8 @@ public class AnzhaReport implements Serializable {
         this.peoblemDescription = peoblemDescription;
         this.status = status;
         this.anzhaid = anzhaid;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.incidentid = incidentid;
     }
 
@@ -194,6 +204,22 @@ public class AnzhaReport implements Serializable {
         this.reachname = reachname;
     }
 
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
     @Override
     public String toString() {
         return "AnzhaReport{" +
@@ -210,6 +236,8 @@ public class AnzhaReport implements Serializable {
                 ", peoblemDescription='" + peoblemDescription + '\'' +
                 ", status='" + status + '\'' +
                 ", anzhaid='" + anzhaid + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", latitude='" + latitude + '\'' +
                 ", incidentid='" + incidentid + '\'' +
                 '}';
     }

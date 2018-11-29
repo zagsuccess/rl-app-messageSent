@@ -4,6 +4,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.Date;
 
 public class AnzhaBulletin implements Serializable {
     @Id
@@ -13,6 +14,10 @@ public class AnzhaBulletin implements Serializable {
      * 通报标题
      */
     private String title;
+    /**
+     * 下发时间
+     */
+    private Date issuetime;
     /**
      * 月份
      */
@@ -30,6 +35,18 @@ public class AnzhaBulletin implements Serializable {
      */
     private String status;
     /**
+     * 需反馈区域id
+     */
+    private String feedbackareaid;
+    /**
+     * 需反馈区域名字
+     */
+    private String feedbackareaname;
+    /**
+     * 需反馈时间
+     */
+    private Date deadlinetime;
+    /**
      * 对应 scheme表的id
      **/
     private String schemeid;
@@ -37,12 +54,16 @@ public class AnzhaBulletin implements Serializable {
         super();
     }
 
-    public AnzhaBulletin(String title, String month, String content, String accessory, String status, String schemeid) {
+    public AnzhaBulletin(String title, Date issuetime, String month, String content, String accessory, String status, String feedbackareaid, String feedbackareaname, Date deadlinetime, String schemeid) {
         this.title = title;
+        this.issuetime = issuetime;
         this.month = month;
         this.content = content;
         this.accessory = accessory;
         this.status = status;
+        this.feedbackareaid = feedbackareaid;
+        this.feedbackareaname = feedbackareaname;
+        this.deadlinetime = deadlinetime;
         this.schemeid = schemeid;
     }
 
@@ -102,15 +123,51 @@ public class AnzhaBulletin implements Serializable {
         this.schemeid = schemeid;
     }
 
+    public String getFeedbackareaid() {
+        return feedbackareaid;
+    }
+
+    public void setFeedbackareaid(String feedbackareaid) {
+        this.feedbackareaid = feedbackareaid;
+    }
+
+    public String getFeedbackareaname() {
+        return feedbackareaname;
+    }
+
+    public void setFeedbackareaname(String feedbackareaname) {
+        this.feedbackareaname = feedbackareaname;
+    }
+
+    public Date getDeadlinetime() {
+        return deadlinetime;
+    }
+
+    public void setDeadlinetime(Date deadlinetime) {
+        this.deadlinetime = deadlinetime;
+    }
+
+    public Date getIssuetime() {
+        return issuetime;
+    }
+
+    public void setIssuetime(Date issuetime) {
+        this.issuetime = issuetime;
+    }
+
     @Override
     public String toString() {
         return "AnzhaBulletin{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
+                ", issuetime=" + issuetime +
                 ", month='" + month + '\'' +
                 ", content='" + content + '\'' +
                 ", accessory='" + accessory + '\'' +
                 ", status='" + status + '\'' +
+                ", feedbackareaid='" + feedbackareaid + '\'' +
+                ", feedbackareaname='" + feedbackareaname + '\'' +
+                ", deadlinetime=" + deadlinetime +
                 ", schemeid='" + schemeid + '\'' +
                 '}';
     }

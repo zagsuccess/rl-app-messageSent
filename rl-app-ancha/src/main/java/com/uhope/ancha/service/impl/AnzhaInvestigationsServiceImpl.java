@@ -14,6 +14,7 @@ import com.uhope.core.AbstractService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,10 +34,22 @@ public class AnzhaInvestigationsServiceImpl extends AbstractService<AnzhaInvesti
     }
 
     @Override
-    public PageInfo<AnzhaInvestigations> list(Integer pageNumber, Integer pageSize, String schemeid,String date, String region, String status) {
+    public PageInfo<AnzhaInvestigations> list(Integer pageNumber, Integer pageSize, String schemeid,String date, String region, String status,String regionid) {
         PageHelper.startPage(pageNumber, pageSize);
         List<AnzhaInvestigations> list=anzhaInvestigationsMapper.selectList(schemeid,date,region,status);
-        PageInfo<AnzhaInvestigations> pageInfo = new PageInfo(list);
+        List<AnzhaInvestigations> anzhaInvestigations=new ArrayList<>();
+        if(regionid==null || "".equals(regionid)){
+            PageInfo<AnzhaInvestigations> pageInfo = new PageInfo(list);
+            return pageInfo;
+        }
+        if(list!=null && list.size()>0 ){
+            for (AnzhaInvestigations anzhaInvestigations1:list) {
+                 if(anzhaInvestigations1.getRegionid().contains(regionid)){
+                     anzhaInvestigations.add(anzhaInvestigations1);
+                 }
+            }
+        }
+        PageInfo<AnzhaInvestigations> pageInfo = new PageInfo(anzhaInvestigations);
         return pageInfo;
     }
 
