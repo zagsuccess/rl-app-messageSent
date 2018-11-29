@@ -8,7 +8,7 @@
         <result column="patrol_date" jdbcType="TIMESTAMP" property="patrolDate"/>
         <result column="river_question" jdbcType="VARCHAR" property="riverQuestion"/>
         <result column="points_type" jdbcType="VARCHAR" property="pointsType"/>
-        <result column="buckle_scores" jdbcType="INTEGER" property="buckleScores"/>
+        <result column="buckle_scores" jdbcType="DOUBLE" property="buckleScores"/>
         <result column="pator_person" jdbcType="VARCHAR" property="patorPerson"/>
         <result column="location" jdbcType="VARCHAR" property="location"/>
         <result column="photo_url" jdbcType="VARCHAR" property="photoUrl"/>
