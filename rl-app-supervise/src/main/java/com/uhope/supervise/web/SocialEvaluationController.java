@@ -118,7 +118,7 @@ public class SocialEvaluationController {
         if (problemPosition != null && !"".equals(problemPosition)) {
             criteria.andCondition("problem_position like '%" + problemPosition + "%'");
         }
-        condition.orderBy("createTime");
+        condition.orderBy("termNumber");
         List<ShSocialEvaluation> list = socialEvaluationService.findByCondition(condition);
         PageInfo pageInfo = new PageInfo(list);
         return ResponseMsgUtil.success(pageInfo);
