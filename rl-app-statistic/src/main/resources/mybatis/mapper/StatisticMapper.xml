@@ -7,7 +7,7 @@
         FROM md_administrative_region
         WHERE grade=3
     </select>
-
+    <!--根据期号查询各区水质数据列表-->
     <select id="listWaterQualityData" resultType="com.uhope.statistic.dto.WaterQualityDTO">
         SELECT mar.area_name AS regionName, IFNULL(t_a.oxygen,0) AS oxygen, IFNULL(t_a.phosphorus,0) AS phosphorus, IFNULL(t_a.permanganate,0) AS permanganate, IFNULL(t_a.AN,0) AS AN
         FROM md_administrative_region mar
@@ -20,7 +20,7 @@
         )t_a ON mar.area_name = t_a.regionName
         WHERE mar.grade=3
     </select>
-    <!--社会监督满意度调查扣分-->
+    <!--根据期号查取各区社会监督满意度调查扣分-->
     <select id="listSuperviseDTOs" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
         SELECT mar.area_code AS regionId, mar.area_name AS regionName, IFNULL(t_a.num, 0) as grade
         FROM md_administrative_region mar
@@ -38,7 +38,7 @@
         WHERE mar.grade=3
         ORDER BY mar.area_code
     </select>
-    <!--根据期号查询区域地表水成绩-->
+    <!--根据期号查询各区区域地表水成绩-->
     <select id="listSurfaceWaterDTO" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SurfaceWaterDTO">
         SELECT mar.area_code, mar.area_name, IFNULL(t_a.grade, 0) as num
         FROM md_administrative_region mar
@@ -51,7 +51,7 @@
         WHERE mar.grade=3
         ORDER BY mar.area_code
     </select>
-    <!--根据期号查取社会监督网络舆情处置扣分成绩-->
+    <!--根据期号查取各区社会监督网络舆情处置扣分成绩-->
     <select id="listSuperviseSentiment" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
         SELECT mar.area_code, mar.area_name, IFNULL(t_a.num, 0) as num
         FROM md_administrative_region mar
@@ -67,7 +67,7 @@
         WHERE mar.grade=3
         ORDER BY mar.area_code
     </select>
-    <!--根据期号查取社会监督电话举报扣分-->
+    <!--根据期号查取各区社会监督电话举报扣分-->
     <select id="listSuperviseTelephone" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
         SELECT mar.area_code, mar.area_name, IFNULL(t_a.num, 0) as num
         FROM md_administrative_region mar
@@ -83,17 +83,45 @@
         WHERE mar.grade=3
         ORDER BY mar.area_code
     </select>
-    <!--根据期号查取河湖堤岸水面环境卫生扣分成绩-->
+    <!--根据期号查取各区河湖堤岸水面环境卫生扣分成绩-->
     <select id="listWaterSanitation" resultType="com.uhope.statistic.dto.SuperviseDTO">
 
     </select>
-    <!--根据期号查取河湖岸线管理扣分成绩-->
+    <!--根据期号查取各区河湖岸线管理扣分成绩-->
     <select id="listShoreLineManage" resultType="com.uhope.statistic.dto.SuperviseDTO">
 
     </select>
-    <!--根据期号查取河长巡河情况扣分项-->
-    <select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">
+    <!--&lt;!&ndash;根据期号查取各区河长巡河情况扣分项&ndash;&gt;-->
+    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
 
-    </select>
+    <!--</select>-->
+    <!--&lt;!&ndash;根据期号查取各区河湖水质感官情况成绩&ndash;&gt;-->
+    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
+
+    <!--</select>-->
+    <!--&lt;!&ndash;根据期号查取各区河湖口门排水情况成绩&ndash;&gt;-->
+    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
+
+    <!--</select>-->
+    <!--&lt;!&ndash;根据期号查取各区污水处理厂达标排放成绩&ndash;&gt;-->
+    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
+
+    <!--</select>-->
+    <!--&lt;!&ndash;根据期号查取各区堤岸卫生考核成绩&ndash;&gt;-->
+    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
+
+    <!--</select>-->
+    <!--&lt;!&ndash;根据期号查取各区岸线管理考核成绩&ndash;&gt;-->
+    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
+
+    <!--</select>-->
+    <!--&lt;!&ndash;根据期号查取各区河长巡河情况成绩&ndash;&gt;-->
+    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
+
+    <!--</select>-->
+    <!--&lt;!&ndash;根据期号查取各区河湖水生态成绩&ndash;&gt;-->
+    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
+
+    <!--</select>-->
 
 </mapper>

@@ -35,18 +35,39 @@ public class ReachAssessController {
         return ResponseMsgUtil.success(amReachAssess);
     }
 
+    /**
+     * 删除河段考核配置
+     * @param id
+     * @return
+     */
     @DeleteMapping("/deleteReachAssess")
     public Result<String> deleteReachAssess(String id){
         reachAssessService.remove(id);
         return ResponseMsgUtil.success(id);
     }
 
+    /**
+     * 更新河段考核配置
+     * @param reachAssess
+     * @return
+     */
     @PutMapping("/updateReachAssess")
     public Result<AmReachAssess> updateReachAssess(AmReachAssess reachAssess){
         reachAssessService.update(reachAssess);
         return ResponseMsgUtil.success(reachAssess);
     }
 
+    /**
+     * 河段考核配置列表
+     * @param regionName
+     * @param isSewage
+     * @param isCompensation
+     * @param isScoringRules
+     * @param isWaterQualityAssess
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
     @GetMapping("/listReachAssess")
     public Result<PageInfo> listReachAssess(
             @RequestParam(name = "regionName", required = false)String regionName
@@ -82,22 +103,43 @@ public class ReachAssessController {
         return ResponseMsgUtil.success(pageInfo);
     }
 
+    /**
+     * 通过id查找河段考核
+     * @param id
+     * @return
+     */
     @GetMapping("/findReachAssessById")
     public Result<AmReachAssess> findReachAssessById(String id){
         AmReachAssess reachAssess = reachAssessService.get(id);
         return ResponseMsgUtil.success(reachAssess);
     }
 
-
+    /**
+     * 16个区列表
+     * @return
+     */
     @GetMapping("/regionList")
     public Result<List<String>> regionList(){
         List<String> list = reachAssessService.regionList();
         return ResponseMsgUtil.success(list);
     }
 
+    /**
+     * 水质评分规则列表
+     * @return
+     */
     @GetMapping("/waterQualityRuleList")
     public Result<List<String>> waterQualityRuleList(){
         List<String> list = reachAssessService.waterQualityRuleList();
         return ResponseMsgUtil.success(list);
+    }
+
+    /**
+     * 断面列表
+     * @return
+     */
+    @GetMapping("/listSections")
+    public Result<List<String>> listSections(){
+        return ResponseMsgUtil.success(reachAssessService.listSections());
     }
 }
