@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.messageSent.mapper.InspectionMapper">
+  <resultMap id="BaseResultMap" type="com.uhope.messageSent.domain.ScInspection">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="renumber" jdbcType="VARCHAR" property="renumber" />
+    <result column="print_date" jdbcType="VARCHAR" property="printDate" />
+    <result column="inspect_type" jdbcType="VARCHAR" property="inspectType" />
+    <result column="sent_region" jdbcType="VARCHAR" property="sentRegion" />
+    <result column="accessory" jdbcType="VARCHAR" property="accessory" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="sent_unit" jdbcType="VARCHAR" property="sentUnit" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="oneregion" jdbcType="INTEGER" property="oneregion" />
+  </resultMap>
+  <select id="selectRole" resultType="java.lang.String">
+    select name from sm_role sr inner join (select sur.role_id from sm_user_role sur where sur.user_id=#{id}) s on
+     sr.id=s.role_id
+  </select>
+
+  <select id="selectBelong" resultMap="BaseResultMap">
+    select * from sc_inspection si where si.sent_unit like CONCAT('%',#{sentUnit},'%')
+  </select>
+
+</mapper>

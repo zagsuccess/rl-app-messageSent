@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.messageSent.mapper.MsWeekReturnMapper">
+  <resultMap id="BaseResultMap" type="com.uhope.messageSent.domain.MsWeekReturn">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="week_submission_id" jdbcType="VARCHAR" property="weekSubmissionId" />
+    <result column="return_date" jdbcType="VARCHAR" property="returnDate" />
+    <result column="return_reason" jdbcType="VARCHAR" property="returnReason" />
+  </resultMap>
+</mapper>
