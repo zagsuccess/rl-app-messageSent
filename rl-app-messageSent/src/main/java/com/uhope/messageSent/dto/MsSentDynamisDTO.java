@@ -1,0 +1,10 @@
+package com.uhope.messageSent.dto;
+import com.uhope.messageSent.domain.MsSentDynamis;
+
+/**
+ * 周动态报送表-DTO数据传输对象类
+ * @author mengaoran on 2018/11/27
+ */
+public class MsSentDynamisDTO extends MsSentDynamis {
+
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.messageSent.mapper.MsWeekDynamicMapper">
+  <resultMap id="BaseResultMap" type="com.uhope.messageSent.domain.MsWeekDynamic">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="sent_region" jdbcType="VARCHAR" property="sentRegion" />
+    <result column="sent_time_start" jdbcType="VARCHAR" property="sentTimeStart" />
+    <result column="sent_time_end" jdbcType="VARCHAR" property="sentTimeEnd" />
+    <result column="deadline" jdbcType="VARCHAR" property="deadline" />
+    <result column="initiator" jdbcType="VARCHAR" property="initiator" />
+    <result column="send_region" jdbcType="VARCHAR" property="sendRegion" />
+    <result column="direction" jdbcType="VARCHAR" property="direction" />
+    <result column="weather_sent" jdbcType="INTEGER" property="weatherSent" />
+    <result column="weather_accept" jdbcType="INTEGER" property="weatherAccept" />
+    <result column="begin_time" jdbcType="VARCHAR" property="beginTime" />
+    <result column="accept_region" jdbcType="VARCHAR" property="acceptRegion" />
+  </resultMap>
+</mapper>
