@@ -57,7 +57,7 @@ public class AnzhaBulletinController {
     @GetMapping("/detail")
     public Result<AnzhaBulletin> detail(@RequestParam String id) {
         AnzhaBulletin anzhaBulletin = anzhaBulletinService.get(id);
-        anzhaBulletin.setAccessory(FmConfig.getAgentUrl()+anzhaBulletin.getAccessory());
+        anzhaBulletin.setAccessory(FmConfig.getFmUrl()+anzhaBulletin.getAccessory());
         return ResponseMsgUtil.success(anzhaBulletin);
     }
 

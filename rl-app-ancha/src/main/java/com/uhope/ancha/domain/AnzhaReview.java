@@ -4,6 +4,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.Date;
 
 public class AnzhaReview implements Serializable {
     @Id
@@ -20,11 +21,15 @@ public class AnzhaReview implements Serializable {
     /**
      * 复查描述
      */
-    private String describe;
+    private String description;
     /**
      * 复查附件
      */
     private String assessory;
+    /**
+     * 创建时间
+     */
+    private Date createtime;
     /**
      * 对应通报的id
      */
@@ -32,15 +37,25 @@ public class AnzhaReview implements Serializable {
     public AnzhaReview() {
         super();
     }
-    public AnzhaReview(String id,java.util.Date reviewTime,String whether,String describe,String assessory,String bulletinid) {
+    public AnzhaReview(String id,java.util.Date reviewTime,String whether,String description,String assessory,String bulletinid) {
         super();
         this.id = id;
         this.reviewTime = reviewTime;
         this.whether = whether;
-        this.describe = describe;
+        this.description = description;
         this.assessory = assessory;
         this.bulletinid = bulletinid;
     }
+
+    public AnzhaReview(Date reviewTime, String whether, String description, String assessory, Date createtime, String bulletinid) {
+        this.reviewTime = reviewTime;
+        this.whether = whether;
+        this.description = description;
+        this.assessory = assessory;
+        this.createtime = createtime;
+        this.bulletinid = bulletinid;
+    }
+
     public String getId() {
         return this.id;
     }
@@ -65,12 +80,12 @@ public class AnzhaReview implements Serializable {
         this.whether = whether;
     }
 
-    public String getDescribe() {
-        return this.describe;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getAssessory() {
@@ -89,14 +104,23 @@ public class AnzhaReview implements Serializable {
         this.bulletinid = bulletinid;
     }
 
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
+
     @Override
     public String toString() {
         return "AnzhaReview{" +
                 "id='" + id + '\'' +
                 ", reviewTime=" + reviewTime +
                 ", whether='" + whether + '\'' +
-                ", describe='" + describe + '\'' +
+                ", description='" + description + '\'' +
                 ", assessory='" + assessory + '\'' +
+                ", createtime=" + createtime +
                 ", bulletinid='" + bulletinid + '\'' +
                 '}';
     }

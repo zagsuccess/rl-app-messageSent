@@ -58,7 +58,7 @@ public class AnzhaFeedbackController {
         List<AnzhaFeedbackDTO> anzhaFeedback = anzhaFeedbackService.selectOneById(bulletinid,objectid);
         if (anzhaFeedback!=null && anzhaFeedback.size()>0 ){
             for (AnzhaFeedbackDTO anzhaFeedbackDTO:anzhaFeedback) {
-                anzhaFeedbackDTO.setAssessory(FmConfig.getAgentUrl() + anzhaFeedbackDTO.getAssessory());
+                anzhaFeedbackDTO.setAssessory(FmConfig.getFmUrl() + anzhaFeedbackDTO.getAssessory());
                 Result<UserDTO> id = userService.getById(anzhaFeedbackDTO.getObjectid());
                 if(id.getData()!=null){
                     anzhaFeedbackDTO.setObjectname(id.getData().getName());
