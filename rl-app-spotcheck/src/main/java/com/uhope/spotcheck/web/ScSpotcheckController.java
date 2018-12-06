@@ -183,9 +183,7 @@ public class ScSpotcheckController {
             if (regionName != null && !"".equals(regionName)) {
                 appCriteria.andLike("regionName", "%" + regionName + "%");
             }
-            appCriteria.andCondition("title like '%" + appSearch + "%'");
-            appCriteria.orLike("regionName", "%" + appSearch + "%");
-            appCriteria.orLike("checkRiver", "%" + appSearch + "%");
+            appCriteria.andCondition("concat(title, region_name, check_river) like '%" + appSearch + "%'");
             appCondition.orderBy("createTime").desc();
             List<ScSpotcheck> appList = scSpotcheckService.findByCondition(appCondition);
             PageInfo pageInfo = new PageInfo(appList);
