@@ -25,7 +25,7 @@ public class WaterQualityServiceImpl extends AbstractService<WaterQuality, Water
     private WaterQualityMapper waterQualityMapper;
 
     @Override
-    public PageInfo<WaterQuality> list(Integer pageNumber, Integer pageSize, String issue, Integer status, String createUser,Integer num) {
+    public PageInfo<WaterQuality> list(Integer pageNumber, Integer pageSize, String issue, String status, String createUser,Integer num) {
         PageHelper.startPage(pageNumber, pageSize);
         List<WaterQuality> list=waterQualityMapper.selectList(issue,status,createUser,num);
         PageInfo<WaterQuality> pageInfo = new PageInfo(list);

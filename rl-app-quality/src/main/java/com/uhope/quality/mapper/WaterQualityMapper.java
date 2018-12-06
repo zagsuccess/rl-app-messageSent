@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface WaterQualityMapper extends Mapper<WaterQuality> {
-    public List<WaterQuality> selectList(@Param("issue") String issue, @Param("status") Integer status,
+    public List<WaterQuality> selectList(@Param("issue") String issue, @Param("status") String status,
                                          @Param("createUser") String createUser, @Param("num") Integer num);
 
 

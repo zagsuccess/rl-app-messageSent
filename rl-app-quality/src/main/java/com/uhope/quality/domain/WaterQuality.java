@@ -26,7 +26,7 @@ public class WaterQuality implements Serializable {
 
     private String createuser;
 
-    private Integer status;
+    private String status;
 
     private String remark;
 
@@ -36,7 +36,7 @@ public class WaterQuality implements Serializable {
         super();
     }
 
-    public WaterQuality(String title, String BATCHNumber, String issue, Date createtime, String createuser, Integer status, String remark) {
+    public WaterQuality(String title, String BATCHNumber, String issue, Date createtime, String createuser, String status, String remark) {
         this.title = title;
         this.BATCHNumber = BATCHNumber;
         this.issue = issue;
@@ -94,11 +94,11 @@ public class WaterQuality implements Serializable {
         this.createuser = createuser;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

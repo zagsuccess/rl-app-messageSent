@@ -47,7 +47,7 @@ public class WaterQualityController {
         waterQuality.setCreateuser(createUser);
         waterQuality.setRemark(remark);
         waterQuality.setBATCHNumber(batchNumber);
-        waterQuality.setStatus(2);
+        waterQuality.setStatus("2");
         waterQualityService.insert(waterQuality);
         return ResponseMsgUtil.success(waterQuality);
     }
@@ -66,13 +66,13 @@ public class WaterQualityController {
     @GetMapping("/list")
     public Result<PageInfo<WaterQuality>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                                @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
-                                               String issue, Integer status, String createUser,Integer num) {
+                                               String issue, String status, String createUser,Integer num) {
         return ResponseMsgUtil.success(waterQualityService.list(pageNumber,pageSize,issue,status,createUser,num));
     }
 
     @PutMapping("/update")
     public Result<WaterQuality> update(@RequestParam String id,
-                                       @RequestParam Integer status) {
+                                       @RequestParam String status) {
 
         WaterQuality waterQuality = new WaterQuality();
         waterQuality.setId(id);
@@ -98,7 +98,7 @@ public class WaterQualityController {
         waterQuality.setCreateuser(createUser);
         waterQuality.setRemark(remark);
         waterQuality.setBATCHNumber(batchNumber);
-        waterQuality.setStatus(2);
+        waterQuality.setStatus("2");
         waterQualityService.update(waterQuality);
         return ResponseMsgUtil.success(waterQuality);
     }
