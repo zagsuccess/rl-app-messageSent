@@ -1,6 +1,9 @@
 package com.uhope.messageSent.web;
 import com.uhope.base.constants.Constant;
+import com.uhope.messageSent.domain.MsSentReports;
 import com.uhope.messageSent.domain.MsWeekReturn;
+import com.uhope.messageSent.domain.MsWorkReturn;
+import com.uhope.messageSent.service.MsSentReportsService;
 import com.uhope.messageSent.service.MsWeekReturnService;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
@@ -9,6 +12,11 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import tk.mybatis.mapper.entity.Condition;
+import tk.mybatis.mapper.entity.Example;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.lang.String;
 
@@ -22,9 +30,22 @@ public class MsWeekReturnController {
     @Autowired
     private MsWeekReturnService msWeekReturnService;
 
+    @Autowired
+    private MsSentReportsService msSentReportsService;
+
 
     @PostMapping("/add")
-    public Result<MsWeekReturn> add(MsWeekReturn msWeekReturn) {
+    public Result<MsWeekReturn> add(@RequestParam String returnReason,
+                                    @RequestParam String sentReportsId
+    ) {
+        MsWeekReturn msWeekReturn=new MsWeekReturn();
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        msWeekReturn.setReturnDate(simpleDateFormat.format(new Date()));
+        msWeekReturn.setReturnReason(returnReason);
+        msWeekReturn.setWeekSubmissionId(sentReportsId);
+        MsSentReports msSentReports = msSentReportsService.get(sentReportsId);
+        msSentReports.setSentState(3);
+        msSentReportsService.update(msSentReports);
         msWeekReturnService.insert(msWeekReturn);
         return ResponseMsgUtil.success(msWeekReturn);
     }
@@ -65,6 +86,22 @@ public class MsWeekReturnController {
         }
         List<MsWeekReturn> list = msWeekReturnService.find();
         PageInfo<MsWeekReturn> pageInfo = new PageInfo<>(list);
+        return ResponseMsgUtil.success(pageInfo);
+    }
+
+
+    @GetMapping("/selectList")
+    public Result<PageInfo<MsWeekReturn>> selectList(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
+                                                     @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
+                                                     @RequestParam String sentReportsId){
+        PageHelper.startPage(pageNumber, pageSize);
+        Condition condition = new Condition(MsWeekReturn.class);
+        Example.Criteria criteria = condition.createCriteria();
+        if (sentReportsId != null && sentReportsId != "") {
+            criteria.andLike("week_submission_id",sentReportsId);
+        }
+        List<MsWeekReturn> list = msWeekReturnService.findByCondition(condition);
+        PageInfo pageInfo = new PageInfo(list);
         return ResponseMsgUtil.success(pageInfo);
     }
 }

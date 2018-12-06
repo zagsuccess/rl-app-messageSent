@@ -26,4 +26,9 @@ public class MsSentReportsServiceImpl extends AbstractService<MsSentReports, MsS
     public MsSentReports findByReportId(String id, String region) {
         return msSentReportsMapper.findByReportId(id,region);
     }
+
+    @Override
+    public MsSentReports findByWorkId(String id) {
+        return msSentReportsMapper.findByWorkId(id);
+    }
 }

@@ -208,11 +208,13 @@ public class MsWorkReportsController {
                 if (msSentReports==null){
                     //weatherSend(1.已上报  2.未上报 3.已退回)
                     msWorkReports.setWeatherSent(2);
+                    msWorkReports.setReplyState(2);
                     if (sentState != null && sentState==2){
                         list1.add(msWorkReports);
                     }
                 }
                 if (msSentReports!=null){
+                    msWorkReports.setReplyState(1);
                     //weatherSend(1.已上报  2.未上报 3.已退回)
                     //sentState(1.已上报  2.未上报 3.已退回)
                     if (msSentReports.getSentState()==1){
@@ -224,6 +226,12 @@ public class MsWorkReportsController {
                     if (msSentReports.getSentState()==3){
                         msWorkReports.setWeatherSent(3);
                         if (sentState!= null && sentState ==3){
+                            list1.add(msWorkReports);
+                        }
+                    }
+                    if (msSentReports.getSentState()==2){
+                        msWorkReports.setWeatherSent(2);
+                        if (sentState!= null && sentState ==2){
                             list1.add(msWorkReports);
                         }
                     }

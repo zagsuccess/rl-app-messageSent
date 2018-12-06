@@ -2,6 +2,7 @@ package com.uhope.messageSent.web;
 import com.uhope.base.constants.Constant;
 import com.uhope.converter.client.Converter;
 import com.uhope.messageSent.domain.MsSentDynamis;
+import com.uhope.messageSent.dto.MsSentDynamisDTO;
 import com.uhope.messageSent.service.MsSentDynamisService;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
@@ -11,8 +12,13 @@ import com.uhope.messageSent.service.MsWorkReportsService;
 import com.uhope.messageSent.utils.CommonUtil;
 import com.uhope.uip.dto.UserDTO;
 import com.uhope.uip.fm.client.FileManagerClient;
+import com.uhope.uip.fm.config.FmConfig;
 import com.uhope.uip.fm.model.FileItem;
 import com.uhope.uip.service.TokenService;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +26,11 @@ import org.springframework.web.multipart.MultipartFile;
 import tk.mybatis.mapper.entity.Condition;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -76,6 +86,7 @@ public class MsSentDynamisController {
         msSentDynamis.setAccessoryUrl(accessoryUrl);
         msSentDynamis.setSentState(2);
         msSentDynamis.setAcceptState(3);
+        msSentDynamis.setReplyState(1);
         msSentDynamis.setPatrolCondition(patrolCondition);
         msSentDynamis.setMeetingCondition(meetingCondition);
         msSentDynamis.setProblemSolvingCondition(problemSolvingCondition);
@@ -143,18 +154,24 @@ public class MsSentDynamisController {
 
 
     @PutMapping("/updateSentState")
-    public Result<MsSentDynamis> updateSentState(@RequestParam String id,@RequestParam Integer sentState) {
+    public Result<MsSentDynamis> updateSentState(@RequestParam String id,@RequestParam Integer sentState,HttpServletRequest request) {
+        UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
+        String region =msWorkReportsService.selectRegion(userDTO.getRegionId());
         MsSentDynamis msSentDynamis = new MsSentDynamis();
-        msSentDynamis.setId(id);
+        msSentDynamis=msSentDynamisService.findByReportId(id,region);
+        msSentDynamis.setId(msSentDynamis.getId());
         msSentDynamis.setSentState(sentState);
         msSentDynamisService.update(msSentDynamis);
         return ResponseMsgUtil.success(msSentDynamis);
     }
 
     @PutMapping("/updateAcceptState")
-    public Result<MsSentDynamis> updateAcceptState(@RequestParam String id,@RequestParam Integer acceptState) {
+    public Result<MsSentDynamis> updateAcceptState(@RequestParam String id,@RequestParam Integer acceptState,HttpServletRequest request) {
+        UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
+        String region =msWorkReportsService.selectRegion(userDTO.getRegionId());
         MsSentDynamis msSentDynamis = new MsSentDynamis();
-        msSentDynamis.setId(id);
+        msSentDynamis=msSentDynamisService.findByReportId(id,region);
+        msSentDynamis.setId(msSentDynamis.getId());
         msSentDynamis.setAcceptState(acceptState);
         msSentDynamisService.update(msSentDynamis);
         return ResponseMsgUtil.success(msSentDynamis);
@@ -187,10 +204,27 @@ public class MsSentDynamisController {
     }
 
 
-    @GetMapping("/detail")
+    /*@GetMapping("/detail")
     public Result<MsSentDynamis> detail(@RequestParam String id) {
         MsSentDynamis msSentDynamis = msSentDynamisService.get(id);
+            String url = msSentDynamis.getAccessoryUrl();
+            msSentDynamis.setAccessoryUrl(FmConfig.getFmUrl()+url);
         return ResponseMsgUtil.success(msSentDynamis);
+    }*/
+
+    @GetMapping("/detail")
+    public Result<MsSentDynamisDTO> detail(@RequestParam String id) {
+        MsSentDynamis msSentDynamis = msSentDynamisService.get(id);
+        String url=msSentDynamis.getAccessoryUrl();
+        //undercover.setAttand_url(FmConfig.getFmUrl() + name);
+        MsSentDynamisDTO msSentDynamisDTO =new MsSentDynamisDTO();
+        BeanUtils.copyProperties(msSentDynamis,msSentDynamisDTO);
+        String[] str=msSentDynamisDTO.getAccessoryUrl().split("_");
+        String ren = str[1];
+        msSentDynamisDTO.setAccessoryUrl(FmConfig.getFmUrl() +url);
+        msSentDynamisDTO.setDownurl(FmConfig.getFmUrl() + FmConfig.getDownloadUri().substring(0,FmConfig.getDownloadUri().length()-1) + url);
+        msSentDynamisDTO.setRen(ren);
+        return ResponseMsgUtil.success(msSentDynamisDTO);
     }
 
     /**
@@ -270,4 +304,52 @@ public class MsSentDynamisController {
         }
         return ResponseMsgUtil.success(judgeResult);
     }
+
+    //合并生成PDF
+    @GetMapping("/combine")
+    public Result<List<String>> combine(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
+                                        @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
+                                        @RequestParam String reportId,
+                                        Integer sentState,
+                                        String region,
+                                        Integer acceptState,
+                                        HttpServletResponse response) throws IOException {
+        PageHelper.startPage(pageNumber, pageSize);
+        Condition condition = new Condition(MsSentDynamis.class);
+        Example.Criteria criteria = condition.createCriteria();
+        if (sentState != null) {
+            criteria.andCondition("sent_state = " + sentState);
+        }
+        if (region != null && region != "") {
+            criteria.andCondition("region like '%" + region + "%'");
+        }
+        if (acceptState != null) {
+            criteria.andCondition("accept_state = " + acceptState);
+        }
+        if (reportId != null && reportId != "") {
+            criteria.andCondition("weekid like '%" + reportId + "%'");
+        }
+        List<MsSentDynamis> list = msSentDynamisService.findByCondition(condition);
+        XWPFDocument xwpfDocument = new XWPFDocument();
+        XWPFParagraph paragraph = xwpfDocument.createParagraph();
+        XWPFRun run = paragraph.createRun();
+        for (MsSentDynamis msSentDynamis : list) {
+            run.setText(msSentDynamis.getRegion());
+            run.addCarriageReturn();
+            run.setText(msSentDynamis.getPatrolCondition());
+            run.addCarriageReturn();
+            run.setText(msSentDynamis.getMeetingCondition());
+            run.addCarriageReturn();
+            run.setText(msSentDynamis.getProblemSolvingCondition());
+            run.addCarriageReturn();
+        }
+        ServletOutputStream outputStream = response.getOutputStream();
+        response.reset();
+        response.setHeader("Content-Disposition", "attachment; filename=msSentDynamis.doc");
+        response.setContentType("application/x-msdownload");
+        xwpfDocument.write(outputStream);
+        outputStream.close();
+        return ResponseMsgUtil.success();
+    }
 }
+

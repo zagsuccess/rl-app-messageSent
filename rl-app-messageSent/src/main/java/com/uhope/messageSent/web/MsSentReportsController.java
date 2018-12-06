@@ -3,6 +3,7 @@ import com.uhope.base.constants.Constant;
 import com.uhope.converter.client.Converter;
 import com.uhope.messageSent.domain.MsSentReports;
 import com.uhope.messageSent.domain.MsWorkReports;
+import com.uhope.messageSent.dto.MsSentReportsDTO;
 import com.uhope.messageSent.service.MsSentReportsService;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
@@ -12,9 +13,11 @@ import com.uhope.messageSent.service.MsWorkReportsService;
 import com.uhope.messageSent.utils.CommonUtil;
 import com.uhope.uip.dto.UserDTO;
 import com.uhope.uip.fm.client.FileManagerClient;
+import com.uhope.uip.fm.config.FmConfig;
 import com.uhope.uip.fm.model.FileItem;
 import com.uhope.uip.service.TokenService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +52,6 @@ public class MsSentReportsController {
     @Autowired
     MsWorkReportsService msWorkReportsService;
 
-
-
     @Autowired
     private Converter converter;
 
@@ -77,6 +78,7 @@ public class MsSentReportsController {
         msSentReports.setAccessoryUrl(accessoryUrl);
         msSentReports.setSentState(2);
         msSentReports.setAcceptState(3);
+        msSentReports.setReplyState(1);
         msSentReports.setBriefDescription(briefDescription);
         msSentReportsService.insert(msSentReports);
         return ResponseMsgUtil.success(msSentReports);
@@ -139,11 +141,30 @@ public class MsSentReportsController {
     }
 
 
-    @GetMapping("/detail")
+    /*@GetMapping("/detail")
     public Result<MsSentReports> detail(@RequestParam String id) {
         MsSentReports msSentReports = msSentReportsService.get(id);
+            String url = msSentReports.getAccessoryUrl();
+            msSentReports.setAccessoryUrl(FmConfig.getFmUrl()+url);
         return ResponseMsgUtil.success(msSentReports);
+    }*/
+
+    @GetMapping("/detail")
+    public Result<MsSentReportsDTO> detail(@RequestParam String id) {
+        MsSentReports msSentReports = msSentReportsService.get(id);
+        String url=msSentReports.getAccessoryUrl();
+        //undercover.setAttand_url(FmConfig.getFmUrl() + name);
+        MsSentReportsDTO msSentReportsDTO =new MsSentReportsDTO();
+        BeanUtils.copyProperties(msSentReports,msSentReportsDTO);
+        String[] str=msSentReportsDTO.getAccessoryUrl().split("_");
+        String ren = str[1];
+        msSentReportsDTO.setAccessoryUrl(FmConfig.getFmUrl() +url);
+        msSentReportsDTO.setDownurl(FmConfig.getFmUrl() + FmConfig.getDownloadUri().substring(0,FmConfig.getDownloadUri().length()-1) + url);
+        msSentReportsDTO.setRen(ren);
+        return ResponseMsgUtil.success(msSentReportsDTO);
     }
+
+
 
     /**
      * 带分页的查询,根据条件获取菜单列表,可分页，默认查询第一页,一次" + DEFAULT_PAGE_SIZE + "条记录
@@ -203,18 +224,22 @@ public class MsSentReportsController {
     }
 
     @PutMapping("/updateSentState")
-    public Result<MsSentReports> updateSentState(@RequestParam String id,@RequestParam Integer sentState) {
-        MsSentReports msSentReports = new MsSentReports();
-        msSentReports.setId(id);
+    public Result<MsSentReports> updateSentState(@RequestParam String id,@RequestParam Integer sentState/*,HttpServletRequest request*/) {
+        /*UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
+        String region =msWorkReportsService.selectRegion(userDTO.getRegionId());*/
+        MsSentReports msSentReports = msSentReportsService.get(id);
+
         msSentReports.setSentState(sentState);
         msSentReportsService.update(msSentReports);
         return ResponseMsgUtil.success(msSentReports);
     }
 
     @PutMapping("/updateAcceptState")
-    public Result<MsSentReports> updateAcceptState(@RequestParam String id,@RequestParam Integer acceptState) {
-        MsSentReports msSentReports = new MsSentReports();
-        msSentReports.setId(id);
+    public Result<MsSentReports> updateAcceptState(@RequestParam String id,@RequestParam Integer acceptState
+                                                   /*HttpServletRequest request*/) {
+        /*UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
+        String region =msWorkReportsService.selectRegion(userDTO.getRegionId());*/
+        MsSentReports msSentReports = msSentReportsService.get(id);
         msSentReports.setAcceptState(acceptState);
         msSentReportsService.update(msSentReports);
         return ResponseMsgUtil.success(msSentReports);

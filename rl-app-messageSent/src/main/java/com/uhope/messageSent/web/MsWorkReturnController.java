@@ -1,6 +1,8 @@
 package com.uhope.messageSent.web;
 import com.uhope.base.constants.Constant;
+import com.uhope.messageSent.domain.MsSentReports;
 import com.uhope.messageSent.domain.MsWorkReturn;
+import com.uhope.messageSent.service.MsSentReportsService;
 import com.uhope.messageSent.service.MsWorkReturnService;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
@@ -27,6 +29,8 @@ public class MsWorkReturnController {
     @Autowired
     private MsWorkReturnService msWorkReturnService;
 
+    @Autowired
+    private MsSentReportsService msSentReportsService;
 
     @PostMapping("/add")
     public Result<MsWorkReturn> add(@RequestParam String returnReason,
@@ -37,6 +41,9 @@ public class MsWorkReturnController {
         msWorkReturn.setReturnDate(simpleDateFormat.format(new Date()));
         msWorkReturn.setReturnReason(returnReason);
         msWorkReturn.setSentReportsId(sentReportsId);
+        MsSentReports msSentReports = msSentReportsService.get(sentReportsId);
+        msSentReports.setSentState(3);
+        msSentReportsService.update(msSentReports);
         msWorkReturnService.insert(msWorkReturn);
         return ResponseMsgUtil.success(msWorkReturn);
     }

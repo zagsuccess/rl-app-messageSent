@@ -11,4 +11,6 @@ import java.lang.String;
 public interface MsSentReportsService extends Service<MsSentReports, MsSentReportsDTO, String> {
 
      MsSentReports findByReportId(String id,String region);
+
+    MsSentReports findByWorkId(String id);
 }

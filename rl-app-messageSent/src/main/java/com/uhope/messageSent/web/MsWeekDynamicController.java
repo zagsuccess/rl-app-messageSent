@@ -100,11 +100,10 @@ public class MsWeekDynamicController {
     public Result<PageInfo<MsWeekDynamic>> selectList(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                                       @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
                                                       String title,
-                                                      String begionTime,
+                                                      String beginTime,
                                                       String deadline,
                                                       String sentRegion,
                                                       Integer sentState,
-                                                      String direction,
                                                       HttpServletRequest request
     ){
         UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
@@ -115,8 +114,8 @@ public class MsWeekDynamicController {
             PageHelper.startPage(pageNumber, pageSize);
             Condition condition = new Condition(MsWorkReports.class);
             Example.Criteria criteria = condition.createCriteria();
-            if (begionTime != null && begionTime != "") {
-                criteria.andLike("begionTime",begionTime);
+            if (beginTime != null && beginTime != "") {
+                criteria.andLike("begionTime",beginTime);
             }
             if (deadline != null && deadline != "") {
                 criteria.andLike("deadline",deadline);
@@ -147,8 +146,8 @@ public class MsWeekDynamicController {
             if (title != null && title !="") {
                 criteria.andLike("title",title);
             }
-            if (begionTime != null && begionTime != "") {
-                criteria.andLike("begionTime",begionTime);
+            if (beginTime != null && beginTime != "") {
+                criteria.andLike("begionTime",beginTime);
             }
             if (deadline != null && deadline != "") {
                 criteria.andLike("deadline",deadline);
@@ -172,11 +171,13 @@ public class MsWeekDynamicController {
                 if (msSentDynamis==null){
                     //weatherSend(1.已上报  2.未上报 3.已退回)
                     msWeekDynamic.setWeatherSent(2);
+                    msWeekDynamic.setReplyState(2);
                     if (sentState != null && sentState==2){
                         list1.add(msWeekDynamic);
                     }
                 }
                 if (msSentDynamis!=null){
+                    msWeekDynamic.setReplyState(1);
                     //weatherSend(1.已上报  2.未上报 3.已退回)
                     //sentState(1.已上报  2.未上报 3.已退回)
                     if (msSentDynamis.getSentState()==1){
