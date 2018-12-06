@@ -6,15 +6,16 @@
         <id column="ID" property="id" />
         <result column="REVIEW_Time" property="reviewTime" />
         <result column="WHETHER" property="whether" />
-        <result column="DESCRIBE" property="describe" />
+        <result column="DESCRIPTION" property="description" />
         <result column="ASSESSORY" property="assessory" />
+        <result column="CREATETIME" property="createtime" />
         <result column="BULLETINID" property="bulletinid" />
     </resultMap>
     <insert id="insertAnzhaReview">
-        insert into anzha_review values(#{id},#{reviewTime},#{whether},#{describe},#{assessory},#{bulletinid})
+        insert into anzha_review values(#{id},#{reviewTime},#{whether},#{description},#{assessory},#{createtime},#{bulletinid})
     </insert>
     <select id="selectOneById" resultMap="AnzhaReview_Map">
-        select * from anzha_review order by REVIEW_Time desc limit 1
+        select * from anzha_review where BULLETINID=#{id} order by CREATETIME desc limit 1
     </select>
 
 

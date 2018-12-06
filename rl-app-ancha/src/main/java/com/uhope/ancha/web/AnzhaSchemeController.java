@@ -58,7 +58,7 @@ public class AnzhaSchemeController {
     @GetMapping("/detail")
     public Result<AnzhaScheme> detail(@RequestParam String id) {
         AnzhaScheme anzhaScheme = anzhaSchemeService.get(id);
-        anzhaScheme.setAssessory(FmConfig.getAgentUrl()+anzhaScheme.getAssessory());
+        anzhaScheme.setAssessory(FmConfig.getFmUrl()+anzhaScheme.getAssessory());
         return ResponseMsgUtil.success(anzhaScheme);
     }
 

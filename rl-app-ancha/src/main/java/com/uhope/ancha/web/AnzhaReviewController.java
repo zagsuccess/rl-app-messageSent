@@ -7,11 +7,13 @@ import com.uhope.ancha.service.AnzhaBulletinService;
 import com.uhope.ancha.service.AnzhaReviewService;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
+import com.uhope.uip.fm.config.FmConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -39,8 +41,9 @@ public class AnzhaReviewController {
         anzhaReview.setId(UUID.randomUUID().toString().replaceAll("-",""));
         anzhaReview.setWhether(whether);
         anzhaReview.setReviewTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(reviewTime));
-        anzhaReview.setDescribe(describe);
+        anzhaReview.setDescription(describe);
         anzhaReview.setAssessory(filePath);
+        anzhaReview.setCreatetime(new Date());
         anzhaReview.setBulletinid(bulletinid);
         anzhaReviewService.insertAnzhaReview(anzhaReview);
         AnzhaBulletin anzhaBulletin = new AnzhaBulletin();
@@ -53,6 +56,7 @@ public class AnzhaReviewController {
     @GetMapping("/detail")
     public Result<AnzhaReview> detail(@RequestParam String id) {
         AnzhaReview anzhaReview = anzhaReviewService.selectOneById(id);
+        anzhaReview.setAssessory(FmConfig.getFmUrl() + anzhaReview.getAssessory());
         return ResponseMsgUtil.success(anzhaReview);
     }
 }
