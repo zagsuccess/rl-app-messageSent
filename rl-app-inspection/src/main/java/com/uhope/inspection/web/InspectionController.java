@@ -110,8 +110,9 @@ public class InspectionController {
             if (state != null) {
                 criteria.andCondition("state = " + state);
             }
-
+                condition.orderBy("print_date").desc();
             List<ScInspection> list = inspectionService.findByCondition(condition);
+
             PageInfo pageInfo = new PageInfo(list);
             return ResponseMsgUtil.success(pageInfo);
         }
@@ -285,7 +286,7 @@ public class InspectionController {
     public Result<ScInspection> detail(@RequestParam String id) {
         ScInspection scInspection=inspectionService.get(id);
         String url=scInspection.getAccessory();
-        scInspection.setAccessory(FmConfig.getAgentUrl()+url);
+        scInspection.setAccessory(FmConfig.getFmUrl()+url);
         return ResponseMsgUtil.success(scInspection);
     }
 
