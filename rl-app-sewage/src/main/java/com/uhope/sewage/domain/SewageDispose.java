@@ -25,7 +25,7 @@ public class SewageDispose implements Serializable {
 
     private String createuser;
 
-    private Integer status;
+    private String status;
 
     private String remark;
 
@@ -111,11 +111,11 @@ public class SewageDispose implements Serializable {
         this.createuser = createuser;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -131,7 +131,7 @@ public class SewageDispose implements Serializable {
         return serialVersionUID;
     }
 
-    public SewageDispose(String title, String issue, Date createtime, String createuser, Integer status, String remark) {
+    public SewageDispose(String title, String issue, Date createtime, String createuser, String status, String remark) {
         this.title = title;
         this.issue = issue;
         this.createtime = createtime;

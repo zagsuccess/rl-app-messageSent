@@ -45,7 +45,7 @@ public class SewageDisposeController {
         sewageDispose.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(createtime));
         sewageDispose.setCreateuser(createUser);
         sewageDispose.setRemark(remark);
-        sewageDispose.setStatus(2);
+        sewageDispose.setStatus("2");
         sewageDisposeService.insert(sewageDispose);
         return ResponseMsgUtil.success(sewageDispose);
     }
@@ -64,13 +64,13 @@ public class SewageDisposeController {
     @GetMapping("/list")
     public Result<PageInfo<SewageDispose>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                                @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
-                                               String issue, Integer status, String createUser,Integer num) {
+                                               String issue, String status, String createUser,Integer num) {
         return ResponseMsgUtil.success(sewageDisposeService.list(pageNumber,pageSize,issue,status,createUser,num));
     }
 
     @PutMapping("/update")
     public Result<SewageDispose> update(@RequestParam String id,
-                                       @RequestParam Integer status) {
+                                       @RequestParam String status) {
 
         SewageDispose surfaceWater = new SewageDispose();
         surfaceWater.setId(id);
@@ -94,7 +94,7 @@ public class SewageDisposeController {
         surfaceWater.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(createtime));
         surfaceWater.setCreateuser(createUser);
         surfaceWater.setRemark(remark);
-        surfaceWater.setStatus(2);
+        surfaceWater.setStatus("2");
         sewageDisposeService.update(surfaceWater);
         return ResponseMsgUtil.success(surfaceWater);
     }

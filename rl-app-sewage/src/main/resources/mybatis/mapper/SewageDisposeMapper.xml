@@ -5,6 +5,9 @@
     <select id="selectList" resultType="com.uhope.sewage.domain.SewageDispose">
         select * from sewage_dispose
         <where>
+            <if test="num !=null and num!=''">
+                and status !=#{num}
+            </if>
             <if test="issue != null and issue!=''">
                 and issue = #{issue}
             </if>
@@ -14,9 +17,7 @@
             <if test="createUser != null and createUser !=''">
                 AND createUser like CONCAT('%',#{createUser},'%')
             </if>
-            <if test="num !=null and num!=''">
-                and status !=#{num}
-            </if>
+
         </where>
     </select>
 
