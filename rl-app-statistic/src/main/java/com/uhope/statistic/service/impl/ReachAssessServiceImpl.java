@@ -30,4 +30,9 @@ public class ReachAssessServiceImpl extends AbstractService<AmReachAssess, AmRea
     public List<String> waterQualityRuleList() {
         return reachAssessMapper.waterQualityRuleList();
     }
+
+    @Override
+    public List<String> listSections() {
+        return reachAssessMapper.listSections();
+    }
 }

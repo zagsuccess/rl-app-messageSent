@@ -12,12 +12,14 @@ import com.uhope.uip.fm.client.impl.DefaultFileManagerClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import javax.servlet.MultipartConfigElement;
 import java.nio.charset.Charset;
 
 /**
@@ -108,5 +110,19 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Bean
     public FileManagerClient fileManagerClient() {
         return new DefaultFileManagerClient(false);
+    }
+
+    /**
+     * 设置上传文件大小，配置文件属性设置无效
+     *
+     * @author 空空dream
+     * @date 2018年3月8日
+     */
+    @Bean
+    public MultipartConfigElement multipartConfigElement(){
+        MultipartConfigFactory config = new MultipartConfigFactory();
+        config.setMaxFileSize("80MB");
+        config.setMaxRequestSize("1024MB");
+        return config.createMultipartConfig();
     }
 }

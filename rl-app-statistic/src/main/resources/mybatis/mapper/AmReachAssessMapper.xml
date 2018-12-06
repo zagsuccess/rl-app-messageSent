@@ -23,4 +23,8 @@
   <select id="waterQualityRuleList" resultType="java.lang.String">
     SELECT rule_name FROM am_water_quality_rule ORDER BY sort_order
   </select>
+  <!--断面列表-->
+  <select id="listSections" resultType="java.lang.String">
+    SELECT NAME from md_section
+  </select>
 </mapper>

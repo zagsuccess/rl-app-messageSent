@@ -15,4 +15,6 @@ public interface ReachAssessService extends Service<AmReachAssess, AmReachAssess
     List<String> regionList();
 
     List<String> waterQualityRuleList();
+
+    List<String> listSections();
 }

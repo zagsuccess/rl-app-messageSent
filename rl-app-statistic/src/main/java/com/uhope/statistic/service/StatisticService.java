@@ -21,7 +21,7 @@ public interface StatisticService {
     List<RiverStatisticDTO> listRegionName();
 
     /**
-     * 根据时间查取水质数据
+     * 根据期号查取水质数据
      * @param date
      * @return
      */
@@ -75,4 +75,6 @@ public interface StatisticService {
      * @return
      */
     List<SuperviseDTO> listRiverPatrol(String date);
+
+
 }

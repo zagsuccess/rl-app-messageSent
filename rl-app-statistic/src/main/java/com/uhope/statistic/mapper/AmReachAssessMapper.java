@@ -10,4 +10,6 @@ public interface AmReachAssessMapper extends Mapper<AmReachAssess> {
     List<String> regionList();
 
     List<String> waterQualityRuleList();
+
+    List<String> listSections();
 }

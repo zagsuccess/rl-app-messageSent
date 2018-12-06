@@ -35,16 +35,17 @@ public class ExeAssPatrolController {
     @Autowired
     private FileManagerClient fileManagerClient;
 
+    //查询扣分方式（固定、录入、公式）
     @GetMapping("/selectGradeWay")
     public Result<List<String>> selectGradeWay(String gradeDetailed){
         return  ResponseMsgUtil.success(exeAssPatrolService.selectGradeWay(gradeDetailed));
     }
-
+    //扣分标准详情
     @GetMapping("/selectGradeDedetailed")
     public Result<List<String>> selectGradeDedetailed(){
         return ResponseMsgUtil.success(exeAssPatrolService.selectGradeDedetailed());
     }
-
+    //应扣分数
     @GetMapping("/selectDeductMarks")
     public Result<List<String>> selectDeductMarks(String gradeDetailed){return ResponseMsgUtil.success(exeAssPatrolService.selectDeductMarks(gradeDetailed));}
 
@@ -66,7 +67,7 @@ public class ExeAssPatrolController {
                                     @RequestParam String riverQuestion,
                                     @RequestParam String patorPerson,
                                     @RequestParam String pointsType,
-                                    @RequestParam Integer buckleScores,
+                                    @RequestParam double buckleScores,
                                     @RequestParam String location,
                                     @RequestParam(required = false) String photoUrl) throws ParseException {
         ExeAssPatrol exeAssPatrol = new ExeAssPatrol();

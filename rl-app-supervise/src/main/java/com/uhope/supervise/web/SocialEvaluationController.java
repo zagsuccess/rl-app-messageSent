@@ -72,7 +72,7 @@ public class SocialEvaluationController {
     @PutMapping("/updateEvaluation")
     public Result<ShSocialEvaluation> updateEvaluation(ShSocialEvaluation socialEvaluation){
         socialEvaluationService.update(socialEvaluation);
-        return ResponseMsgUtil.success(socialEvaluation);
+        return ResponseMsgUtil.success(socialEvaluationService.get(socialEvaluation.getId()));
     }
 
     /**
@@ -118,7 +118,7 @@ public class SocialEvaluationController {
         if (problemPosition != null && !"".equals(problemPosition)) {
             criteria.andCondition("problem_position like '%" + problemPosition + "%'");
         }
-        condition.orderBy("createTime");
+        condition.orderBy("termNumber");
         List<ShSocialEvaluation> list = socialEvaluationService.findByCondition(condition);
         PageInfo pageInfo = new PageInfo(list);
         return ResponseMsgUtil.success(pageInfo);

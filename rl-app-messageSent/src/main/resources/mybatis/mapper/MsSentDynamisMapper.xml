@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.messageSent.mapper.MsSentDynamisMapper">
+  <resultMap id="BaseResultMap" type="com.uhope.messageSent.domain.MsSentDynamis">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="weekid" jdbcType="VARCHAR" property="weekid" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="deadline" jdbcType="VARCHAR" property="deadline" />
+    <result column="initiator" jdbcType="VARCHAR" property="initiator" />
+    <result column="accessory_url" jdbcType="VARCHAR" property="accessoryUrl" />
+    <result column="sent_state" jdbcType="INTEGER" property="sentState" />
+    <result column="accept_state" jdbcType="INTEGER" property="acceptState" />
+    <result column="patrol_condition" jdbcType="LONGVARCHAR" property="patrolCondition" />
+    <result column="meeting_condition" jdbcType="LONGVARCHAR" property="meetingCondition" />
+    <result column="problem_solving_condition" jdbcType="LONGVARCHAR" property="problemSolvingCondition" />
+    <result column="begin_time" jdbcType="VARCHAR" property="beginTime" />
+  </resultMap>
+  <select id="findByReportId" resultMap="BaseResultMap">
+    select * from ms_sent_dynamis mr where mr.weekid=#{id} and mr.region = #{sentUnit}
+  </select>
+</mapper>

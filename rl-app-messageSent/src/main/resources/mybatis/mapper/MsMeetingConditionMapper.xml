@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.messageSent.mapper.MsMeetingConditionMapper">
+  <resultMap id="BaseResultMap" type="com.uhope.messageSent.domain.MsMeetingCondition">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="compere_role" jdbcType="VARCHAR" property="compereRole" />
+    <result column="compere_name" jdbcType="VARCHAR" property="compereName" />
+    <result column="duty" jdbcType="VARCHAR" property="duty" />
+    <result column="category" jdbcType="VARCHAR" property="category" />
+    <result column="meeting_time" jdbcType="TIMESTAMP" property="meetingTime" />
+    <result column="topic" jdbcType="VARCHAR" property="topic" />
+    <result column="sent_state" jdbcType="INTEGER" property="sentState" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+  <select id="selectRole" resultType="java.lang.String">
+    select name from sm_role sr inner join (select sur.role_id from sm_user_role sur where sur.user_id=#{id}) s on
+     sr.id=s.role_id
+  </select>
+  <select id="selectRegion" resultType="java.lang.String">
+    select area_name from md_administrative_region mr where mr.id=#{regionId}
+  </select>
+</mapper>

@@ -168,13 +168,25 @@ public class ScSpotcheckController {
             @RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
             @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize) {
         PageHelper.startPage(pageNumber, pageSize);
+        //update 2018-12-5 修复app端搜索bug
         if (appSearch != null && appSearch != ""){
+            //app端 点击搜索按钮，对title、regionName、checkRiver三个字段进行模糊匹配
             Condition appCondition = new Condition(ScSpotcheck.class);
             Example.Criteria appCriteria = appCondition.createCriteria();
-            appCriteria.orLike("title", "%" + appSearch + "%");
+            //点击搜索不应该仅仅对模糊搜索字段进行查找，还需要对某些字段进行限制，也就是对应的check_date、status、regionName这几个字段
+            if (checkTime != null && !"".equals(checkTime)){
+                appCriteria.andCondition("check_date = '" + checkTime + "'");
+            }
+            if (status != null && !"".equals(status)) {
+                appCriteria.andCondition("status=" + status);
+            }
+            if (regionName != null && !"".equals(regionName)) {
+                appCriteria.andLike("regionName", "%" + regionName + "%");
+            }
+            appCriteria.andCondition("title like '%" + appSearch + "%'");
             appCriteria.orLike("regionName", "%" + appSearch + "%");
             appCriteria.orLike("checkRiver", "%" + appSearch + "%");
-            appCondition.orderBy("createTime");
+            appCondition.orderBy("createTime").desc();
             List<ScSpotcheck> appList = scSpotcheckService.findByCondition(appCondition);
             PageInfo pageInfo = new PageInfo(appList);
             return ResponseMsgUtil.success(pageInfo);
@@ -203,8 +215,6 @@ public class ScSpotcheckController {
      */
     @GetMapping("/listSendPerson")
     public Result<com.uhope.base.dto.PageInfo<UserDTO>> listSendPerson() {
-        com.uhope.base.dto.PageInfo<RoleDTO> roleDTOPageInfo = CommonUtil.getFeigionServiceResultData(roleService.queryRoleList(null, null, null, 0, 0));
-        System.out.println(roleDTOPageInfo);
         String countryID = scSpotcheckProblemService.findRoleIdByName("市河长办");
         Result<com.uhope.base.dto.PageInfo<UserDTO>> list = userService.queryUserList(null, null, null, countryID, 0, 0);
         return list;
