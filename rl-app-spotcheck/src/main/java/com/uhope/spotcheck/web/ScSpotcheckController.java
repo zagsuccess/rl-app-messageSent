@@ -183,7 +183,7 @@ public class ScSpotcheckController {
             if (regionName != null && !"".equals(regionName)) {
                 appCriteria.andLike("regionName", "%" + regionName + "%");
             }
-            appCriteria.orLike("title", "%" + appSearch + "%");
+            appCriteria.andCondition("title like '%" + appSearch + "%'");
             appCriteria.orLike("regionName", "%" + appSearch + "%");
             appCriteria.orLike("checkRiver", "%" + appSearch + "%");
             appCondition.orderBy("createTime").desc();
