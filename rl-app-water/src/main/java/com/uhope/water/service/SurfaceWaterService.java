@@ -6,7 +6,7 @@ import com.uhope.water.domain.SurfaceWater;
 import com.uhope.water.dto.SurfaceWaterDTO;
 
 public interface SurfaceWaterService extends Service<SurfaceWater, SurfaceWaterDTO,String> {
-    public PageInfo<SurfaceWater> list(Integer pageNumber, Integer pageSize, String issue, Integer status, String createUser,Integer num);
+    public PageInfo<SurfaceWater> list(Integer pageNumber, Integer pageSize, String issue, String status, String createUser,Integer num);
 
     String selectRole(String id);
 

@@ -44,7 +44,7 @@ public class SurfaceWaterController {
         surfaceWater.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(createtime));
         surfaceWater.setCreateuser(createUser);
         surfaceWater.setRemark(remark);
-        surfaceWater.setStatus(2);
+        surfaceWater.setStatus("2");
         surfaceWaterService.insert(surfaceWater);
         return ResponseMsgUtil.success(surfaceWater);
     }
@@ -63,13 +63,13 @@ public class SurfaceWaterController {
     @GetMapping("/list")
     public Result<PageInfo<SurfaceWater>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                                @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
-                                               String issue, Integer status, String createUser,Integer num) {
+                                               String issue, String status, String createUser,Integer num) {
         return ResponseMsgUtil.success(surfaceWaterService.list(pageNumber,pageSize,issue,status,createUser,num));
     }
 
     @PutMapping("/update")
     public Result<SurfaceWater> update(@RequestParam String id,
-                                       @RequestParam Integer status) {
+                                       @RequestParam String status) {
 
         SurfaceWater surfaceWater = new SurfaceWater();
         surfaceWater.setId(id);
@@ -93,7 +93,7 @@ public class SurfaceWaterController {
         surfaceWater.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(createtime));
         surfaceWater.setCreateuser(createUser);
         surfaceWater.setRemark(remark);
-        surfaceWater.setStatus(2);
+        surfaceWater.setStatus("2");
         surfaceWaterService.update(surfaceWater);
         return ResponseMsgUtil.success(surfaceWater);
     }

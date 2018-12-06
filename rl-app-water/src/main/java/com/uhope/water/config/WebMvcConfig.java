@@ -98,11 +98,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return registration;
     }
 
-    /**
-     * 文件上传下载查看
-     */
-    @Bean
-    public FileManagerClient fileManagerClient() { return new DefaultFileManagerClient(false); }
 
 
 
