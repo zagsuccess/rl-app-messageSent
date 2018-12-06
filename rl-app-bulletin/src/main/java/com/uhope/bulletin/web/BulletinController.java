@@ -117,11 +117,12 @@ public class    BulletinController {
     public Result<BulletinDTO> detail(@RequestParam String id) {
         Bulletin undercover = bulletinService.get(id);
         String name=undercover.getAttand_url();
-        undercover.setAttand_url(FmConfig.getAgentUrl() + name);
+        //undercover.setAttand_url(FmConfig.getFmUrl() + name);
         BulletinDTO bulletinDTO =new BulletinDTO();
         BeanUtils.copyProperties(undercover,bulletinDTO);
         String[] str=bulletinDTO.getAttand_url().split("_");
         String ren = str[1];
+        bulletinDTO.setAttand_url(FmConfig.getFmUrl() +name);
         bulletinDTO.setDownurl(FmConfig.getFmUrl() + FmConfig.getDownloadUri().substring(0,FmConfig.getDownloadUri().length()-1) + name);
         bulletinDTO.setRen(ren);
         return ResponseMsgUtil.success(bulletinDTO);
