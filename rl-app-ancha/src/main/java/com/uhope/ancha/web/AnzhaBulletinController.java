@@ -8,6 +8,7 @@ import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
 import com.uhope.uip.dto.UserDTO;
+import com.uhope.uip.fm.config.FmConfig;
 import com.uhope.uip.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +57,7 @@ public class AnzhaBulletinController {
     @GetMapping("/detail")
     public Result<AnzhaBulletin> detail(@RequestParam String id) {
         AnzhaBulletin anzhaBulletin = anzhaBulletinService.get(id);
+        anzhaBulletin.setAccessory(FmConfig.getAgentUrl()+anzhaBulletin.getAccessory());
         return ResponseMsgUtil.success(anzhaBulletin);
     }
 

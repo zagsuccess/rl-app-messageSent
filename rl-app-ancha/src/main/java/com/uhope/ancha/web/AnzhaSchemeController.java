@@ -9,6 +9,7 @@ import com.uhope.ancha.service.AnzhaSchemeService;
 import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
+import com.uhope.uip.fm.config.FmConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,6 +58,7 @@ public class AnzhaSchemeController {
     @GetMapping("/detail")
     public Result<AnzhaScheme> detail(@RequestParam String id) {
         AnzhaScheme anzhaScheme = anzhaSchemeService.get(id);
+        anzhaScheme.setAssessory(FmConfig.getAgentUrl()+anzhaScheme.getAssessory());
         return ResponseMsgUtil.success(anzhaScheme);
     }
 
