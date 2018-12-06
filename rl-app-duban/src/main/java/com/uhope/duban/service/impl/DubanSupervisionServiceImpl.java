@@ -60,6 +60,7 @@ public class DubanSupervisionServiceImpl extends AbstractService<ScDubanSupervis
                 }
             }
             PageInfo pageInfo = new PageInfo(PageUtil.getPageList(dubanlist, pageNumber, pageSize));
+            pageInfo.setTotal(dubanlist.size());
             return pageInfo;
         }
     }
