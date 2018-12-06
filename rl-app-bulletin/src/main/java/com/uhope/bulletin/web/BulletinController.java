@@ -121,7 +121,10 @@ public class    BulletinController {
         BulletinDTO bulletinDTO =new BulletinDTO();
         BeanUtils.copyProperties(undercover,bulletinDTO);
         String[] str=bulletinDTO.getAttand_url().split("_");
-        String ren = str[1];
+        String ren="";
+        if(str!=null && str.length>1){
+             ren = str[1];
+        }
         bulletinDTO.setAttand_url(FmConfig.getFmUrl() +name);
         bulletinDTO.setDownurl(FmConfig.getFmUrl() + FmConfig.getDownloadUri().substring(0,FmConfig.getDownloadUri().length()-1) + name);
         bulletinDTO.setRen(ren);
