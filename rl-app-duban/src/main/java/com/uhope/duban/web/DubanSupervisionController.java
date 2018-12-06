@@ -82,7 +82,7 @@ public class DubanSupervisionController {
     public Result<ScDubanSupervision> detail(@RequestParam String id) {
         ScDubanSupervision dubanSupervision = dubanSupervisionService.get(id);
         if(dubanSupervision!=null){
-            dubanSupervision.setAssessory(FmConfig.getAgentUrl() + dubanSupervision.getAssessory());
+            dubanSupervision.setAssessory(FmConfig.getFmUrl() + dubanSupervision.getAssessory());
         }
         return ResponseMsgUtil.success(dubanSupervision);
     }
@@ -197,7 +197,7 @@ public class DubanSupervisionController {
         List<DubanFeedbackDTO> scDubanFeedback = dubanFeedbackService.selectFeedbackByobjectid(dubanFeedback);
         if (scDubanFeedback!=null && scDubanFeedback.size()>0 ){
             for (DubanFeedbackDTO scDubanFeedback1:scDubanFeedback) {
-                scDubanFeedback1.setAssessory(FmConfig.getAgentUrl() + scDubanFeedback1.getAssessory());
+                scDubanFeedback1.setAssessory(FmConfig.getFmUrl() + scDubanFeedback1.getAssessory());
                 Result<UserDTO> id = userService.getById(scDubanFeedback1.getObjectid());
                 if(id.getData()!=null){
                     scDubanFeedback1.setObjectname(id.getData().getName());
@@ -215,7 +215,7 @@ public class DubanSupervisionController {
         dubanFeedback.setStatus("2");
         ScDubanFeedback scDubanFeedback = dubanFeedbackService.selectFeedback(dubanFeedback);
         if(scDubanFeedback!=null){
-            scDubanFeedback.setAssessory(FmConfig.getAgentUrl() + scDubanFeedback.getAssessory());
+            scDubanFeedback.setAssessory(FmConfig.getFmUrl() + scDubanFeedback.getAssessory());
         }
         return ResponseMsgUtil.success(scDubanFeedback);
     }
