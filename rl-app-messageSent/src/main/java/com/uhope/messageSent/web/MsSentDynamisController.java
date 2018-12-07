@@ -1,4 +1,10 @@
 package com.uhope.messageSent.web;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.uhope.base.constants.Constant;
 import com.uhope.converter.client.Converter;
 import com.uhope.messageSent.domain.MsSentDynamis;
@@ -349,6 +355,95 @@ public class MsSentDynamisController {
         response.setContentType("application/x-msdownload");
         xwpfDocument.write(outputStream);
         outputStream.close();
+        return ResponseMsgUtil.success();
+    }
+
+    @GetMapping("/pdfView")
+    public Result<PageInfo<MsSentDynamis>> pdfView(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
+                                                      @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
+                                                      @RequestParam String reportId,
+                                                      Integer sentState,
+                                                      String region,
+                                                      Integer acceptState,
+                                                   HttpServletResponse response
+    ) throws IOException, DocumentException {
+        PageHelper.startPage(pageNumber, pageSize);
+        Condition condition = new Condition(MsSentDynamis.class);
+        Example.Criteria criteria = condition.createCriteria();
+        if (sentState != null) {
+            criteria.andCondition("sent_state = " + sentState);
+        }
+        if (region != null && region != "") {
+            criteria.andCondition("region like '%" + region + "%'");
+        }
+        if (acceptState != null) {
+            criteria.andCondition("accept_state = " + acceptState);
+        }
+
+        System.out.println("-----------reportId-------------:" + reportId);
+
+        if (reportId != null && reportId != "") {
+            criteria.andCondition("weekid like '%" + reportId + "%'");
+        }
+        List<MsSentDynamis> list = msSentDynamisService.findByCondition(condition);
+        //--------------------------------------
+        //数据组装
+        ArrayList<Object[]> dataList = new ArrayList<>();
+        if (list != null && list.size() > 0) {
+            for (MsSentDynamis msSentDynamis : list) {
+                Object[] obj = {msSentDynamis.getAcceptState(), msSentDynamis.getAccessoryUrl(), msSentDynamis.getBeginTime(), msSentDynamis.getDeadline(), msSentDynamis.getId(), msSentDynamis.getInitiator(), msSentDynamis.getMeetingCondition(), msSentDynamis.getPatrolCondition(), msSentDynamis.getProblemSolvingCondition(), msSentDynamis.getRegion(), msSentDynamis.getSentState(), msSentDynamis.getTitle(), msSentDynamis.getWeekid()};
+                dataList.add(obj);
+            }
+        }
+        String[] column = {"acceptState", "accessoryUrl", "beginTime", "deadline", "id", "initiator", "meetingCondition", "patrolCondition", "problemSolvingCondition", "region", "sentState", "title", "weekid"};
+        //获得从数据库中查询出来的数据
+        if (dataList != null && dataList.size() > 0) {
+            String str5 = "";
+            //循环list中的数据
+            for (int i = 0; i < dataList.size(); i++) {
+                Object[] objs = dataList.get(i);
+                //HSSFRow dataRow = sheet.createRow(i + 1);
+                //HSSFCell data[] = new HSSFCell[column.length];
+
+                String str1 = "";
+                String str2 = "";
+                String str3 = "";
+                String str4 = "";
+
+                for (int j = 0; j < column.length; j++) {
+                    //data[j] = dataRow.createCell(j);
+                    if (j == 6) {
+                        str3 = String.valueOf(objs[j]) + "\n";
+                    }
+                    if (j == 7) {
+                        str2 = String.valueOf(objs[j]) + "\n";
+                    }
+                    if (j == 8) {
+                        str4 = String.valueOf(objs[j]) + "\n";
+                    }
+                    if (j == 9) {
+                        str1 = String.valueOf(objs[j]) + ":" + "\n";
+                        str5 += str1 + str2 + str3 + str4 + "\n";
+                        //String info = String.valueOf(objs[j]);
+                        //System.out.println("-------------------------------");
+                        //System.out.println("messagesentstr5-------:" + str5);
+                    }
+                    //data[j].setCellValue((info == null) ? "" : info);
+                }
+            }
+            System.out.println("totalmessagesentstr5-------:" + str5);
+            response.reset();
+            response.setHeader("Content-Disposition", "inline; filename=msSentDynamis.pdf");
+            response.setContentType("application/pdf");
+            ServletOutputStream outputStream = response.getOutputStream();
+            Document document = new Document();
+            PdfWriter.getInstance(document, outputStream);
+            document.open();
+            BaseFont bfChinese = BaseFont.createFont( "STSongStd-Light" ,"UniGB-UCS2-H",BaseFont.NOT_EMBEDDED);
+            Font font = new Font(bfChinese, 12, Font.NORMAL);
+            document.add(new Paragraph(str5, font));
+            document.close();
+        }
         return ResponseMsgUtil.success();
     }
 }
