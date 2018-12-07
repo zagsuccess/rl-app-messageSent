@@ -16,6 +16,7 @@
     <result column="direction" jdbcType="VARCHAR" property="direction" />
     <result column="weather_sent" jdbcType="INTEGER" property="weatherSent" />
     <result column="weather_accept" jdbcType="INTEGER" property="weatherAccept" />
+    <result column="reply_state" jdbcType="INTEGER" property="replyState" />
     <result column="begin_time" jdbcType="VARCHAR" property="beginTime" />
     <result column="accept_region" jdbcType="VARCHAR" property="acceptRegion" />
   </resultMap>

@@ -31,6 +31,9 @@ public class MsSentDynamis implements Serializable {
     @Column(name = "accept_state")
     private Integer acceptState;
 
+    @Column(name = "reply_state")
+    private Integer replyState;
+
     @Column(name = "patrol_condition")
     private String patrolCondition;
 
@@ -284,5 +287,13 @@ public class MsSentDynamis implements Serializable {
 
     public void setBeginTime(String beginTime) {
         this.beginTime = beginTime;
+    }
+
+    public Integer getReplyState() {
+        return replyState;
+    }
+
+    public void setReplyState(Integer replyState) {
+        this.replyState = replyState;
     }
 }

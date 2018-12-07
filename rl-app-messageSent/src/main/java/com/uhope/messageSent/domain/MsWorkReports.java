@@ -41,6 +41,9 @@ public class MsWorkReports implements Serializable {
     @Column(name = "accrpt_region")
     private String accrptRegion;
 
+    @Column(name = "reply_state")
+    private Integer replyState;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -258,5 +261,13 @@ public class MsWorkReports implements Serializable {
 
     public void setBeginTime(String beginTime) {
         this.beginTime = beginTime;
+    }
+
+    public Integer getReplyState() {
+        return replyState;
+    }
+
+    public void setReplyState(Integer replyState) {
+        this.replyState = replyState;
     }
 }

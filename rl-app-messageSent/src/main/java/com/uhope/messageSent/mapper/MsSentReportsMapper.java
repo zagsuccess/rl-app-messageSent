@@ -6,4 +6,6 @@ import org.apache.ibatis.annotations.Param;
 
 public interface MsSentReportsMapper extends Mapper<MsSentReports> {
     MsSentReports findByReportId(@Param("id") String id,@Param("region") String region);
+
+    MsSentReports findByWorkId(@Param("id") String id);
 }

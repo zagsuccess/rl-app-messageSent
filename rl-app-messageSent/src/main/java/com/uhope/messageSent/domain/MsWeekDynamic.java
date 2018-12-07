@@ -33,6 +33,9 @@ public class MsWeekDynamic implements Serializable {
     @Column(name = "weather_accept")
     private Integer weatherAccept;
 
+    @Column(name = "reply_state")
+    private Integer replyState;
+
     private String initiator;
 
     @Column(name = "send_region")
@@ -258,5 +261,13 @@ public class MsWeekDynamic implements Serializable {
 
     public void setWeatherAccept(Integer weatherAccept) {
         this.weatherAccept = weatherAccept;
+    }
+
+    public Integer getReplyState() {
+        return replyState;
+    }
+
+    public void setReplyState(Integer replyState) {
+        this.replyState = replyState;
     }
 }
