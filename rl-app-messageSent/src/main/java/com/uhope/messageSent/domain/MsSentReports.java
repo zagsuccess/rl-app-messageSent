@@ -38,6 +38,9 @@ public class MsSentReports implements Serializable {
     @Column(name = "brief_description")
     private String briefDescription;
 
+    @Column(name = "pdf_url")
+    private String pdfUrl;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -256,5 +259,13 @@ public class MsSentReports implements Serializable {
 
     public void setReplyState(Integer replyState) {
         this.replyState = replyState;
+    }
+
+    public String getPdfUrl() {
+        return pdfUrl;
+    }
+
+    public void setPdfUrl(String pdfUrl) {
+        this.pdfUrl = pdfUrl;
     }
 }

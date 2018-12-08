@@ -76,6 +76,12 @@ public class MsSentReportsController {
         msSentReports.setDeadline(deadline);
         msSentReports.setInitiator(initiator);
         msSentReports.setAccessoryUrl(accessoryUrl);
+        String tempString=accessoryUrl.substring(accessoryUrl.lastIndexOf(".")+1);
+        String pdfUrl=accessoryUrl;
+        if(tempString.contains("doc")){
+            pdfUrl=converter.startConverter(accessoryUrl);
+        }
+        msSentReports.setPdfUrl(pdfUrl);
         msSentReports.setSentState(2);
         msSentReports.setAcceptState(3);
         msSentReports.setReplyState(1);
@@ -135,31 +141,36 @@ public class MsSentReportsController {
 
 
     @PutMapping("/update")
-    public Result<MsSentReports> update(MsSentReports msSentReports) {
+    public Result<MsSentReports> update(String title,
+                                        String region,
+                                        String deadline,
+                                        String accessoryUrl,
+                                        String briefDescription,
+                                        @RequestParam String id) {
+        MsSentReports msSentReports = msSentReportsService.get(id);
+        msSentReports.setTitle(title);
+        msSentReports.setRegion(region);
+        msSentReports.setDeadline(deadline);
+        msSentReports.setAccessoryUrl(accessoryUrl);
+        msSentReports.setBriefDescription(briefDescription);
         msSentReportsService.update(msSentReports);
         return ResponseMsgUtil.success(msSentReports);
     }
 
 
-    /*@GetMapping("/detail")
-    public Result<MsSentReports> detail(@RequestParam String id) {
-        MsSentReports msSentReports = msSentReportsService.get(id);
-            String url = msSentReports.getAccessoryUrl();
-            msSentReports.setAccessoryUrl(FmConfig.getFmUrl()+url);
-        return ResponseMsgUtil.success(msSentReports);
-    }*/
+
 
     @GetMapping("/detail")
     public Result<MsSentReportsDTO> detail(@RequestParam String id) {
         MsSentReports msSentReports = msSentReportsService.get(id);
         String url=msSentReports.getAccessoryUrl();
-        //undercover.setAttand_url(FmConfig.getFmUrl() + name);
+        String pdf=msSentReports.getPdfUrl();
         MsSentReportsDTO msSentReportsDTO =new MsSentReportsDTO();
         BeanUtils.copyProperties(msSentReports,msSentReportsDTO);
         String[] str=msSentReportsDTO.getAccessoryUrl().split("_");
         String ren = str[1];
-        msSentReportsDTO.setAccessoryUrl(FmConfig.getFmUrl() +url);
-        msSentReportsDTO.setDownurl(FmConfig.getFmUrl() + FmConfig.getDownloadUri().substring(0,FmConfig.getDownloadUri().length()-1) + url);
+        msSentReportsDTO.setAccessoryUrl(FmConfig.getAgentUrl()+url);
+        msSentReportsDTO.setPdfUrl(FmConfig.getAgentUrl()+pdf);
         msSentReportsDTO.setRen(ren);
         return ResponseMsgUtil.success(msSentReportsDTO);
     }
@@ -252,12 +263,8 @@ public class MsSentReportsController {
         for (int i=0;i<files.length;i++){
             byte[] bytes = files[i].getBytes();
             String fileName = files[i].getOriginalFilename();
-            String lastName = fileName.substring(fileName.lastIndexOf(".") + 1);
             FileItem fileItem = fileManagerClient.upload(bytes, fileName).getData();
             String filePath = fileItem.getVirtualPath();
-            if (lastName.contains("doc")){
-                filePath = converter.startConverter(fileItem.getVirtualPath());
-            }
             list.add(filePath);
         }
         return ResponseMsgUtil.success(list);

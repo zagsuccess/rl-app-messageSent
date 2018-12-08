@@ -44,6 +44,9 @@ public class MsWorkReports implements Serializable {
     @Column(name = "reply_state")
     private Integer replyState;
 
+    @Column(name = "accessory_url")
+    private String accessoryUrl;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -269,5 +272,13 @@ public class MsWorkReports implements Serializable {
 
     public void setReplyState(Integer replyState) {
         this.replyState = replyState;
+    }
+
+    public String getAccessoryUrl() {
+        return accessoryUrl;
+    }
+
+    public void setAccessoryUrl(String accessoryUrl) {
+        this.accessoryUrl = accessoryUrl;
     }
 }

@@ -20,4 +20,7 @@
     <result column="begin_time" jdbcType="VARCHAR" property="beginTime" />
     <result column="accept_region" jdbcType="VARCHAR" property="acceptRegion" />
   </resultMap>
+  <select id="selectArea" resultType="string">
+    select county_name from md_administrative_region where grade = 3
+  </select>
 </mapper>
