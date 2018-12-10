@@ -25,7 +25,7 @@ public class SewageDisposeServiceImpl extends AbstractService<SewageDispose, Sew
     private SewageDisposeMapper sewageDisposeMapper;
 
     @Override
-    public PageInfo<SewageDispose> list(Integer pageNumber, Integer pageSize, String issue, String status, String createUser,Integer num) {
+    public PageInfo<SewageDispose> list(Integer pageNumber, Integer pageSize, String issue, String status, String createUser,String num) {
         PageHelper.startPage(pageNumber, pageSize);
         List<SewageDispose> list=sewageDisposeMapper.selectList(issue,status,createUser,num);
         PageInfo<SewageDispose> pageInfo = new PageInfo(list);
