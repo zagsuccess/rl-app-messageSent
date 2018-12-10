@@ -3,6 +3,7 @@ import com.uhope.messageSent.domain.MsWeekDynamic;
 import com.uhope.messageSent.dto.MsWeekDynamicDTO;
 import com.uhope.core.Service;
 import java.lang.String;
+import java.util.List;
 
 /**
  * 周动态表-Service接口类
@@ -10,4 +11,5 @@ import java.lang.String;
  */
 public interface MsWeekDynamicService extends Service<MsWeekDynamic, MsWeekDynamicDTO, String> {
 
+    List<String> selectArea();
 }

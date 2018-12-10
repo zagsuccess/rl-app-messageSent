@@ -12,6 +12,7 @@
     <result column="deadline" jdbcType="VARCHAR" property="deadline" />
     <result column="initiator" jdbcType="VARCHAR" property="initiator" />
     <result column="accessory_url" jdbcType="VARCHAR" property="accessoryUrl" />
+    <result column="pdf_url" jdbcType="VARCHAR" property="pdfUrl" />
     <result column="sent_state" jdbcType="INTEGER" property="sentState" />
     <result column="accept_state" jdbcType="INTEGER" property="acceptState" />
     <result column="reply_state" jdbcType="INTEGER" property="replyState" />

@@ -19,6 +19,7 @@
     <result column="reply_state" jdbcType="INTEGER" property="replyState" />
     <result column="direction" jdbcType="VARCHAR" property="direction" />
     <result column="begin_time" jdbcType="VARCHAR" property="beginTime" />
+    <result column="accessory_url" jdbcType="VARCHAR" property="accessoryUrl" />
   </resultMap>
   <select id="selectRegion" resultType="java.lang.String">
     select area_name from md_administrative_region mr where mr.id=#{regionId}

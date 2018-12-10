@@ -8,6 +8,7 @@ import com.uhope.core.AbstractService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.lang.String;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -21,4 +22,8 @@ public class MsWeekDynamicServiceImpl extends AbstractService<MsWeekDynamic, MsW
     @Resource
     private MsWeekDynamicMapper msWeekDynamicMapper;
 
+    @Override
+    public List<String> selectArea() {
+        return msWeekDynamicMapper.selectArea();
+    }
 }

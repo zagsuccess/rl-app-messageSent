@@ -71,6 +71,8 @@ public class MsWeekDynamicController {
     }
 
 
+
+
     @PostMapping("/add")
     public Result<MsWeekDynamic> add(@RequestParam String title,
                                      @RequestParam String sentRegion,

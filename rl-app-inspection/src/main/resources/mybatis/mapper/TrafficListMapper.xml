@@ -5,6 +5,7 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="region" jdbcType="VARCHAR" property="region" />
     <result column="accessory" jdbcType="VARCHAR" property="accessory" />
+    <result column="pdf_url" jdbcType="VARCHAR" property="pdfUrl" />
     <result column="inspection_id" jdbcType="VARCHAR" property="inspectionId" />
     <result column="traffic_date" jdbcType="VARCHAR" property="trafficDate" />
     <result column="traffic_content" jdbcType="VARCHAR" property="trafficContent" />

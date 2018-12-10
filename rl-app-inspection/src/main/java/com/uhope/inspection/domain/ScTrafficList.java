@@ -2,6 +2,7 @@ package com.uhope.inspection.domain;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,6 +29,9 @@ public class ScTrafficList implements Serializable {
     private String trafficContent;
 
     private Integer oneregion;
+
+    @Column(name = "pdf_url")
+    private String pdfUrl;
 
     private static final long serialVersionUID = 1L;
 

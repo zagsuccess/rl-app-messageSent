@@ -43,6 +43,12 @@ public class MsSentDynamis implements Serializable {
     @Column(name = "problem_solving_condition")
     private String problemSolvingCondition;
 
+    @Column(name = "other_condition")
+    private String otherCondition;
+
+    @Column(name = "pdf_url")
+    private String pdfUrl;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -295,5 +301,21 @@ public class MsSentDynamis implements Serializable {
 
     public void setReplyState(Integer replyState) {
         this.replyState = replyState;
+    }
+
+    public String getOtherCondition() {
+        return otherCondition;
+    }
+
+    public void setOtherCondition(String otherCondition) {
+        this.otherCondition = otherCondition;
+    }
+
+    public String getPdfUrl() {
+        return pdfUrl;
+    }
+
+    public void setPdfUrl(String pdfUrl) {
+        this.pdfUrl = pdfUrl;
     }
 }

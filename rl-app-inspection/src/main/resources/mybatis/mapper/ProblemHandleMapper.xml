@@ -7,6 +7,7 @@
     <result column="sent_date" jdbcType="VARCHAR" property="sentDate" />
     <result column="state" jdbcType="INTEGER" property="state" />
     <result column="accessory" jdbcType="VARCHAR" property="accessory" />
+    <result column="pdf_url" jdbcType="VARCHAR" property="pdfUrl" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.uhope.inspection.domain.ScProblemHandle">
     <result column="description" jdbcType="LONGVARCHAR" property="description" />
