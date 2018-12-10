@@ -27,7 +27,7 @@ public class TimeController {
     @Autowired
     private MsWeekDynamicService msWeekDynamicService;
 
-    @Scheduled(cron = "0 0 0 0 0 1")
+    @Scheduled(cron = "0 0 0 ? 1-12 2")
     private void addWeekDynamis(){
         MsWeekDynamic msWeekDynamic=new MsWeekDynamic();
         msWeekDynamic.setInitiator("天津市河长办");
