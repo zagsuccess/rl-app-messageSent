@@ -1,10 +1,11 @@
 package com.uhope.statistic.service;
 
+import com.uhope.statistic.dto.RegionStatisticDTO;
 import com.uhope.statistic.dto.RiverStatisticDTO;
 import com.uhope.statistic.dto.SuperviseDTO;
-import com.uhope.statistic.dto.SurfaceWaterDTO;
 import com.uhope.statistic.dto.WaterQualityDTO;
 
+import javax.swing.plaf.synth.Region;
 import java.util.List;
 
 /**
@@ -28,53 +29,79 @@ public interface StatisticService {
     List<WaterQualityDTO> listWaterQualityData(String date);
 
     /**
-     * 根据期号查取所有地表水成绩
+     * 1. 根据期号查询各区区域地表水成绩
      * @param date
      * @return
      */
-    List<SurfaceWaterDTO> listSurfaceWaterDTO(String date);
+    List<SuperviseDTO> listSurfaceWaterDTO(String date);
 
     /**
-     * 根据时间查取所有的社会监督满意度考核成绩
+     * 2.1. 河湖水质考核成绩
      * @param date
      * @return
      */
-    List<SuperviseDTO> listSuperviseDTOs(String date);
+    List<SuperviseDTO> queryWaterQualityAssessment(String date);
 
     /**
-     * 根据期号查取网络舆情扣分成绩
+     * 2.2. 河湖堤岸水面环境卫生考核成绩
      * @param date
      * @return
      */
-    List<SuperviseDTO> listSuperviseSentiment(String date);
+    List<SuperviseDTO> queryWaterSurfaceSanitation(String date);
 
     /**
-     * 根据期号查取社会监督电话扣分成绩
+     * 2.3. 河湖岸线管理考核成绩
      * @param date
      * @return
      */
-    List<SuperviseDTO> listSuperviseTelephone(String date);
+    List<SuperviseDTO> queryShorelineManagement(String date);
 
     /**
-     * 根据期号查取河湖堤岸水面环境卫生扣分成绩
+     * 2.4. 河长巡河情况扣分成绩
      * @param date
      * @return
      */
-    List<SuperviseDTO> listWaterSanitation(String date);
+    List<SuperviseDTO> queryPatrolSituation(String date);
 
     /**
-     * 根据期号查取河湖岸线管理扣分成绩
+     * 3.1. 社会监督员满意度调查成绩
      * @param date
      * @return
      */
-    List<SuperviseDTO> listShoreLineManage(String date);
+    List<SuperviseDTO> querySupervisorSatisfaction(String date);
 
     /**
-     * 根据期号查取河长巡河情况扣分项
+     * 3.2.1. 河长制社会监督电话受理事项处置情况
      * @param date
      * @return
      */
-    List<SuperviseDTO> listRiverPatrol(String date);
+    List<SuperviseDTO> querySupervisionPhone(String date);
 
+    /**
+     * 3.2.2. 网络舆情等网络受理事项处置情况
+     * @param date
+     * @return
+     */
+    List<SuperviseDTO> queryNetworkAcceptance(String date);
 
+    /**
+     * 获得社会监督评价考核成绩(45%)
+     * @param date
+     * @return
+     */
+    List<SuperviseDTO> getSupervisionScore(String date);
+
+    /**
+     * 获得河湖水质排名统计数据
+     * @param date
+     * @return
+     */
+    List<RiverStatisticDTO> getRiverStatistic(String date);
+
+    /**
+     * 获得区考核排名统计数据
+     * @param date
+     * @return
+     */
+    List<RegionStatisticDTO> getRegionStatistic(String date);
 }

@@ -21,10 +21,10 @@ import java.util.Date;
  * @create 2018-12-07 14:31
  */
 @Service
-public class ScheduledForDynamicCron implements SchedulingConfigurer {
+public class ScheduledForDynamicCron /*implements SchedulingConfigurer*/ {
 
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    /*private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
     private static final String DEFAULT_CRON = "0/5 * * * * ?";
     private String cron = DEFAULT_CRON;
@@ -70,5 +70,5 @@ public class ScheduledForDynamicCron implements SchedulingConfigurer {
     public void setDeadline(String deadline) {
         System.out.println("deadline="+this.deadline+"->将被改变为："+deadline);
         this.deadline = deadline;
-    }
+    }*/
 }
