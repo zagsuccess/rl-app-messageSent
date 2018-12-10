@@ -63,6 +63,13 @@ public class    BulletinController {
         bulletin.setIssuer(bulletin.getIssuer());
         bulletin.setType(bulletin.getType());
         bulletin.setCreate_time(new Date());
+        String detailUrl = bulletin.getAttand_url();
+        String tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
+        String url =detailUrl;
+        if (tempString.contains("doc")){
+            url = converter.startConverter(bulletin.getAttand_url());
+        }
+        bulletin.setDetail_url(url);
         bulletinService.insert(bulletin);
         return ResponseMsgUtil.success(bulletin);
     }
@@ -104,9 +111,9 @@ public class    BulletinController {
             String lastName = fileName.substring(fileName.lastIndexOf(".") + 1);
             FileItem fileItem = fileManagerClient.upload(bytes, fileName).getData();
             String filePath = fileItem.getVirtualPath();
-            if (lastName.contains("doc") || lastName.contains("xls")){
+            /*if (lastName.contains("doc") || lastName.contains("xls")){
                 filePath = converter.startConverter(fileItem.getVirtualPath());
-            }
+            }*/
             list.add(filePath);
         }
         return ResponseMsgUtil.success(list);
@@ -117,7 +124,7 @@ public class    BulletinController {
     public Result<BulletinDTO> detail(@RequestParam String id) {
         Bulletin undercover = bulletinService.get(id);
         String name=undercover.getAttand_url();
-        //undercover.setAttand_url(FmConfig.getFmUrl() + name);
+        String name1=undercover.getDetail_url();
         BulletinDTO bulletinDTO =new BulletinDTO();
         BeanUtils.copyProperties(undercover,bulletinDTO);
         String[] str=bulletinDTO.getAttand_url().split("_");
@@ -125,8 +132,8 @@ public class    BulletinController {
         if(str!=null && str.length>1){
              ren = str[1];
         }
-        bulletinDTO.setAttand_url(FmConfig.getFmUrl() +name);
-        bulletinDTO.setDownurl(FmConfig.getFmUrl() + FmConfig.getDownloadUri().substring(0,FmConfig.getDownloadUri().length()-1) + name);
+        bulletinDTO.setAttand_url(FmConfig.getAgentUrl() +name);
+        bulletinDTO.setDetail_url(FmConfig.getAgentUrl() +name1);
         bulletinDTO.setRen(ren);
         return ResponseMsgUtil.success(bulletinDTO);
     }

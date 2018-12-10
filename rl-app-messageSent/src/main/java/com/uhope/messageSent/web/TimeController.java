@@ -1,8 +1,16 @@
 package com.uhope.messageSent.web;
 
+import com.uhope.messageSent.domain.MsWeekDynamic;
+import com.uhope.messageSent.service.MsWeekDynamicService;
+import com.uhope.messageSent.utils.CommonUtil;
+import com.uhope.uip.dto.UserDTO;
+import com.uhope.uip.service.TokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -15,9 +23,30 @@ import java.util.Date;
  */
 @Component
 public class TimeController {
-    @Scheduled(cron = "5 08 10 28 11 *")
-    private void test(){
-        System.out.println(new Date()+"没错，我是定时器");
+
+    @Autowired
+    private MsWeekDynamicService msWeekDynamicService;
+
+    @Scheduled(cron = "0 0 0 ? 1-12 2")
+    private void addWeekDynamis(){
+        MsWeekDynamic msWeekDynamic=new MsWeekDynamic();
+        msWeekDynamic.setInitiator("天津市河长办");
+        msWeekDynamic.setTitle("工作简报");
+        String sent=null;
+        for (String region:msWeekDynamicService.selectArea()){
+            sent=sent+region;
+        }
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        msWeekDynamic.setSentRegion(sent);
+        msWeekDynamic.setSentTimeStart(simpleDateFormat.format(new Date()));
+        Date today=new Date();
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(today);
+        calendar.add(Calendar.DAY_OF_WEEK,1);
+        Date deadline=calendar.getTime();
+        msWeekDynamic.setDeadline(simpleDateFormat.format(deadline));
+        msWeekDynamic.setBeginTime(simpleDateFormat.format(new Date()));
+        msWeekDynamicService.insert(msWeekDynamic);
     }
 
     /*@Scheduled(cron = "1-10 * * * * *")

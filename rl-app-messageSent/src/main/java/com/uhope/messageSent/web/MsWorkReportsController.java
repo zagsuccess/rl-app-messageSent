@@ -2,8 +2,11 @@ package com.uhope.messageSent.web;
 import com.google.common.collect.Lists;
 import com.uhope.base.constants.Constant;
 import com.uhope.converter.client.Converter;
+import com.uhope.messageSent.domain.MsSentDynamis;
 import com.uhope.messageSent.domain.MsSentReports;
 import com.uhope.messageSent.domain.MsWorkReports;
+import com.uhope.messageSent.dto.MsSentDynamisDTO;
+import com.uhope.messageSent.dto.MsWorkReportsDTO;
 import com.uhope.messageSent.service.MsMeetingConditionService;
 import com.uhope.messageSent.service.MsSentReportsService;
 import com.uhope.messageSent.service.MsWorkReportsService;
@@ -14,7 +17,9 @@ import com.github.pagehelper.PageInfo;
 import com.uhope.messageSent.utils.CommonUtil;
 import com.uhope.uip.dto.UserDTO;
 import com.uhope.uip.fm.client.FileManagerClient;
+import com.uhope.uip.fm.config.FmConfig;
 import com.uhope.uip.service.TokenService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +82,7 @@ public class MsWorkReportsController {
                                      @RequestParam String sentTimeStart,
                                      @RequestParam String sentTimeEnd,
                                      @RequestParam String deadline,
+                                     String accessoryUrl,
                                      HttpServletRequest request) {
         UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
         String initiator=userDTO.getName();
@@ -87,6 +93,7 @@ public class MsWorkReportsController {
         msWorkReports.setSentRegion(sentRegion);
         msWorkReports.setSentTimeStart(sentTimeStart);
         msWorkReports.setSentTimeEnd(sentTimeEnd);
+        msWorkReports.setAccessoryUrl(accessoryUrl);
         msWorkReports.setDeadline(deadline);
         msWorkReports.setInitiator(initiator);
         msWorkReportsService.insert(msWorkReports);
@@ -109,9 +116,18 @@ public class MsWorkReportsController {
 
 
     @GetMapping("/detail")
-    public Result<MsWorkReports> detail(@RequestParam String id) {
+    public Result<MsWorkReportsDTO> detail(@RequestParam String id) {
         MsWorkReports msWorkReports = msWorkReportsService.get(id);
-        return ResponseMsgUtil.success(msWorkReports);
+        String url=msWorkReports.getAccessoryUrl();
+        //undercover.setAttand_url(FmConfig.getFmUrl() + name);
+        MsWorkReportsDTO msWorkReportsDTO =new MsWorkReportsDTO();
+        BeanUtils.copyProperties(msWorkReports,msWorkReportsDTO);
+        String[] str=msWorkReportsDTO.getAccessoryUrl().split("_");
+        String ren = str[1];
+        msWorkReportsDTO.setAccessoryUrl(FmConfig.getAgentUrl()+url);
+        msWorkReportsDTO.setDownurl(FmConfig.getAgentUrl()+url);
+        msWorkReportsDTO.setRen(ren);
+        return ResponseMsgUtil.success(msWorkReportsDTO);
     }
 
     /**

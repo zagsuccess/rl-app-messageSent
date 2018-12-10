@@ -66,6 +66,12 @@ public class InspectionController {
         ScInspection scInspection = new ScInspection();
         scInspection.setContent(content);
         scInspection.setAccessory(accessory);
+        String tempString=accessory.substring(accessory.lastIndexOf(".")+1);
+        String pdfUrl=accessory;
+        if(tempString.contains("doc")){
+            pdfUrl=converter.startConverter(accessory);
+        }
+        scInspection.setPdfUrl(pdfUrl);
         scInspection.setInspectType(inspectType);
         scInspection.setPrintDate(printDate);
         scInspection.setRenumber(renumber);
@@ -286,7 +292,9 @@ public class InspectionController {
     public Result<ScInspection> detail(@RequestParam String id) {
         ScInspection scInspection=inspectionService.get(id);
         String url=scInspection.getAccessory();
+        String url1=scInspection.getPdfUrl();
         scInspection.setAccessory(FmConfig.getFmUrl()+url);
+        scInspection.setPdfUrl(FmConfig.getFmUrl()+url1);
         return ResponseMsgUtil.success(scInspection);
     }
 
@@ -387,12 +395,8 @@ public class InspectionController {
         for (int i=0;i<files.length;i++){
             byte[] bytes = files[i].getBytes();
             String fileName = files[i].getOriginalFilename();
-            String lastName = fileName.substring(fileName.lastIndexOf(".") + 1);
             FileItem fileItem = fileManagerClient.upload(bytes, fileName).getData();
             String filePath = fileItem.getVirtualPath();
-            if (lastName.contains("doc")){
-                filePath = converter.startConverter(fileItem.getVirtualPath());
-            }
             list.add(filePath);
         }
         return ResponseMsgUtil.success(list);

@@ -57,6 +57,12 @@ public class TrafficListController {
         inspectionService.update(scInspection);
         ScTrafficList scTrafficList =new ScTrafficList();
         scTrafficList.setAccessory(accessory);
+        String tempString=accessory.substring(accessory.lastIndexOf(".")+1);
+        String pdfUrl=accessory;
+        if(tempString.contains("doc")){
+            pdfUrl=converter.startConverter(accessory);
+        }
+        scTrafficList.setPdfUrl(pdfUrl);
         scTrafficList.setInspectionId(inspectionId);
         scTrafficList.setOneregion(oneregion);
         scTrafficList.setRegion(region);
@@ -78,7 +84,9 @@ public class TrafficListController {
     public Result<ScTrafficList> detail(@RequestParam String id) {
         ScTrafficList scTrafficList=trafficListService.get(id);
         String url=scTrafficList.getAccessory();
-        scTrafficList.setAccessory(FmConfig.getAgentUrl()+url);
+        String url1=scTrafficList.getPdfUrl();
+        scTrafficList.setAccessory(FmConfig.getFmUrl()+url);
+        scTrafficList.setPdfUrl(FmConfig.getFmUrl()+url1);
         return ResponseMsgUtil.success(scTrafficList);
     }
 
@@ -88,12 +96,8 @@ public class TrafficListController {
         for (int i=0;i<files.length;i++){
             byte[] bytes = files[i].getBytes();
             String fileName = files[i].getOriginalFilename();
-            String lastName = fileName.substring(fileName.lastIndexOf(".") + 1);
             FileItem fileItem = fileManagerClient.upload(bytes, fileName).getData();
             String filePath = fileItem.getVirtualPath();
-            if (lastName.contains("doc")){
-                filePath = converter.startConverter(fileItem.getVirtualPath());
-            }
             list.add(filePath);
         }
         return ResponseMsgUtil.success(list);

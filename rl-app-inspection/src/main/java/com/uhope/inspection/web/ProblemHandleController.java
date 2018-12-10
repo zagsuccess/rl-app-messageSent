@@ -51,6 +51,12 @@ public class ProblemHandleController {
         inspectionService.update(scInspection);
         ScProblemHandle scProblemHandle =new ScProblemHandle();
         scProblemHandle.setAccessory(accessory);
+        String tempString=accessory.substring(accessory.lastIndexOf(".")+1);
+        String pdfUrl=accessory;
+        if(tempString.contains("doc")){
+            pdfUrl=converter.startConverter(accessory);
+        }
+        scProblemHandle.setPdfUrl(pdfUrl);
         scProblemHandle.setDescription(description);
         scProblemHandle.setSentDate(sentDate);
         scProblemHandle.setState(state);
@@ -63,7 +69,9 @@ public class ProblemHandleController {
     public Result<ScProblemHandle> detail(@RequestParam String id) {
         ScProblemHandle scProblemHandle=problemHandleService.get(id);
         String url=scProblemHandle.getAccessory();
-        scProblemHandle.setAccessory(FmConfig.getAgentUrl()+url);
+        String url1=scProblemHandle.getPdfUrl();
+        scProblemHandle.setAccessory(FmConfig.getFmUrl()+url);
+        scProblemHandle.setPdfUrl(FmConfig.getFmUrl()+url1);
         return ResponseMsgUtil.success(scProblemHandle);
     }
 
@@ -82,12 +90,8 @@ public class ProblemHandleController {
         for (int i=0;i<files.length;i++){
             byte[] bytes = files[i].getBytes();
             String fileName = files[i].getOriginalFilename();
-            String lastName = fileName.substring(fileName.lastIndexOf(".") + 1);
             FileItem fileItem = fileManagerClient.upload(bytes, fileName).getData();
             String filePath = fileItem.getVirtualPath();
-            if (lastName.contains("doc")|| lastName.contains("xls")){
-                filePath = converter.startConverter(fileItem.getVirtualPath());
-            }
             list.add(filePath);
         }
         return ResponseMsgUtil.success(list);

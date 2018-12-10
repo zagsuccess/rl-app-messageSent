@@ -77,6 +77,7 @@ public class MsSentDynamisController {
                                      @RequestParam String patrolCondition,
                                      @RequestParam String meetingCondition,
                                      @RequestParam String problemSolvingCondition,
+                                     String otherCondition,
                                      HttpServletRequest request
     ) {
         UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
@@ -90,6 +91,13 @@ public class MsSentDynamisController {
         msSentDynamis.setDeadline(deadline);
         msSentDynamis.setInitiator(initiator);
         msSentDynamis.setAccessoryUrl(accessoryUrl);
+        String tempString=accessoryUrl.substring(accessoryUrl.lastIndexOf(".")+1);
+        String pdfUrl=accessoryUrl;
+        if(tempString.contains("doc")){
+            pdfUrl=converter.startConverter(accessoryUrl);
+        }
+        msSentDynamis.setPdfUrl(pdfUrl);
+        msSentDynamis.setOtherCondition(otherCondition);
         msSentDynamis.setSentState(2);
         msSentDynamis.setAcceptState(3);
         msSentDynamis.setReplyState(1);
@@ -100,7 +108,7 @@ public class MsSentDynamisController {
         return ResponseMsgUtil.success(msSentDynamis);
     }
 
-    //保存且上报
+    /*//保存且上报
     @PostMapping("/addAndSave")
     public Result<MsSentDynamis> addAndSave(@RequestParam String title,
                                      @RequestParam String weekId,
@@ -130,7 +138,7 @@ public class MsSentDynamisController {
         msSentDynamis.setProblemSolvingCondition(problemSolvingCondition);
         msSentDynamisService.insert(msSentDynamis);
         return ResponseMsgUtil.success(msSentDynamis);
-    }
+    }*/
 
     @PostMapping("/upload")
     public Result<List<String>> upload(@RequestParam(required = true) MultipartFile files[]) throws IOException {
@@ -138,12 +146,8 @@ public class MsSentDynamisController {
         for (int i=0;i<files.length;i++){
             byte[] bytes = files[i].getBytes();
             String fileName = files[i].getOriginalFilename();
-            String lastName = fileName.substring(fileName.lastIndexOf(".") + 1);
             FileItem fileItem = fileManagerClient.upload(bytes, fileName).getData();
             String filePath = fileItem.getVirtualPath();
-            if (lastName.contains("doc")){
-                filePath = converter.startConverter(fileItem.getVirtualPath());
-            }
             list.add(filePath);
         }
         return ResponseMsgUtil.success(list);
@@ -210,25 +214,19 @@ public class MsSentDynamisController {
     }
 
 
-    /*@GetMapping("/detail")
-    public Result<MsSentDynamis> detail(@RequestParam String id) {
-        MsSentDynamis msSentDynamis = msSentDynamisService.get(id);
-            String url = msSentDynamis.getAccessoryUrl();
-            msSentDynamis.setAccessoryUrl(FmConfig.getFmUrl()+url);
-        return ResponseMsgUtil.success(msSentDynamis);
-    }*/
+
 
     @GetMapping("/detail")
     public Result<MsSentDynamisDTO> detail(@RequestParam String id) {
         MsSentDynamis msSentDynamis = msSentDynamisService.get(id);
         String url=msSentDynamis.getAccessoryUrl();
-        //undercover.setAttand_url(FmConfig.getFmUrl() + name);
+        String pdf=msSentDynamis.getPdfUrl();
         MsSentDynamisDTO msSentDynamisDTO =new MsSentDynamisDTO();
         BeanUtils.copyProperties(msSentDynamis,msSentDynamisDTO);
         String[] str=msSentDynamisDTO.getAccessoryUrl().split("_");
         String ren = str[1];
-        msSentDynamisDTO.setAccessoryUrl(FmConfig.getFmUrl() +url);
-        msSentDynamisDTO.setDownurl(FmConfig.getFmUrl() + FmConfig.getDownloadUri().substring(0,FmConfig.getDownloadUri().length()-1) + url);
+        msSentDynamisDTO.setAccessoryUrl(FmConfig.getAgentUrl()+url);
+        msSentDynamisDTO.setPdfUrl(FmConfig.getAgentUrl()+pdf);
         msSentDynamisDTO.setRen(ren);
         return ResponseMsgUtil.success(msSentDynamisDTO);
     }
@@ -347,6 +345,8 @@ public class MsSentDynamisController {
             run.setText(msSentDynamis.getMeetingCondition());
             run.addCarriageReturn();
             run.setText(msSentDynamis.getProblemSolvingCondition());
+            run.addCarriageReturn();
+            run.setText(msSentDynamis.getOtherCondition());
             run.addCarriageReturn();
         }
         ServletOutputStream outputStream = response.getOutputStream();

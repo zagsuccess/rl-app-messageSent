@@ -9,6 +9,7 @@
     <result column="inspect_type" jdbcType="VARCHAR" property="inspectType" />
     <result column="sent_region" jdbcType="VARCHAR" property="sentRegion" />
     <result column="accessory" jdbcType="VARCHAR" property="accessory" />
+    <result column="pdf_url" jdbcType="VARCHAR" property="pdfUrl" />
     <result column="state" jdbcType="INTEGER" property="state" />
     <result column="sent_unit" jdbcType="VARCHAR" property="sentUnit" />
     <result column="content" jdbcType="VARCHAR" property="content" />

@@ -12,6 +12,7 @@
         <result column="REASON" property="reason" />
         <result column="OBJECTID" property="objectid" />
         <result column="OBJECTNAME" property="objectname" />
+        <result column="ASSESSORYYUAN" property="assessoryyuan" />
         <result column="ASSESSORY" property="assessory" />
         <result column="ASSESSORYDESCRIBE" property="assessorydescribe" />
     </resultMap>

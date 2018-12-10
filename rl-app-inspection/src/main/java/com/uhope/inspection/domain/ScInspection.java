@@ -2,6 +2,7 @@ package com.uhope.inspection.domain;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,6 +30,9 @@ public class ScInspection implements Serializable {
     private String sentRegion;
 
     private String accessory;
+
+    @Column(name = "pdf_url")
+    private String pdfUrl;
 
     private Integer state;
 
