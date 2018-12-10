@@ -66,7 +66,12 @@ public class WaterQualityController {
     @GetMapping("/list")
     public Result<PageInfo<WaterQuality>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                                @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
-                                               String issue, String status, String createUser,Integer num) {
+                                               @RequestParam String objectid,
+                                               String issue, String status, String createUser) {
+        String num="";
+        if("市河长办".equals(waterQualityService.selectRole(objectid))){
+            num="2";
+        }
         return ResponseMsgUtil.success(waterQualityService.list(pageNumber,pageSize,issue,status,createUser,num));
     }
 
