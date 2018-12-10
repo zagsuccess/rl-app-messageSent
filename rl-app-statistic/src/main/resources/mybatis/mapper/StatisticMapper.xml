@@ -20,9 +20,223 @@
         )t_a ON mar.area_name = t_a.regionName
         WHERE mar.grade=3
     </select>
-    <!--根据期号查取各区社会监督满意度调查扣分-->
-    <select id="listSuperviseDTOs" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
-        SELECT mar.area_code AS regionId, mar.area_name AS regionName, IFNULL(t_a.num, 0) as grade
+
+    <!--1. 根据期号查询各区区域地表水成绩-->
+    <select id="listSurfaceWaterDTO" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, 0.45*IFNULL(t_b.grade,0) as grade
+        FROM md_administrative_region mar
+        LEFT JOIN
+        (
+                SELECT swg.popedom, swg.grade
+                FROM surface_water_grade swg, surface_water sw
+                WHERE swg.parentId=sw.id AND sw.`status`=0 AND sw.issue=#{date}
+        )t_b ON t_b.popedom=mar.area_name
+        WHERE mar.grade=3
+        GROUP BY mar.area_code;
+    </select>
+
+    <!--2. 河湖水生态环境质量考核成绩-->
+    <!--2.1. 河湖水质考核成绩-->
+    <select id="queryWaterQualityAssessment" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
+        SELECT t_c.regionId, t_c.regionName, 0.7*SUM(t_c.grade) AS grade
+        FROM
+        (
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, 10-IF(IFNULL(t_b.problem_deduction, 0) > 10, 10, IFNULL(t_b.problem_deduction, 0)) as grade
+        FROM md_administrative_region mar
+        LEFT JOIN
+        (
+        SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(t_a.spotcheck_region,',',b.help_topic_id+1),',',-1) AS region, t_a.problem_type_name, t_a.problem_deduction
+        FROM
+        (
+        SELECT ssp.problem_type_name, ssp.spotcheck_region, ssp.problem_deduction, ss.check_date
+        FROM sc_spotcheck_problem ssp, illegal_xize ix, sc_spotcheck ss
+        WHERE ssp.problem_type_name=ix.GRADEDETAILED
+        AND ssp.spotcheck_id=ss.ID
+        AND ss.check_date=#{date}
+        AND ssp.problem_type_name IN('水体感官色度异常', '水体有异味')
+        )t_a
+        JOIN mysql.help_topic b
+        ON b.help_topic_id <![CDATA[ < ]]> (LENGTH(t_a.spotcheck_region)-LENGTH(REPLACE(t_a.spotcheck_region, ',', ''))+1)
+        )t_b ON t_b.region=mar.area_name
+        WHERE mar.grade=3
+        GROUP BY mar.area_code
+        UNION ALL
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, 20-IF(IFNULL(t_b.problem_deduction, 0) > 20, 20, IFNULL(t_b.problem_deduction, 0)) as grade
+        FROM md_administrative_region mar
+        LEFT JOIN
+        (
+        SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(t_a.spotcheck_region,',',b.help_topic_id+1),',',-1) AS region, t_a.problem_type_name, t_a.problem_deduction
+        FROM
+        (
+        SELECT ssp.problem_type_name, ssp.spotcheck_region, ssp.problem_deduction, ss.check_date
+        FROM sc_spotcheck_problem ssp, illegal_xize ix, sc_spotcheck ss
+        WHERE ssp.problem_type_name=ix.GRADEDETAILED
+        AND ssp.spotcheck_id=ss.ID
+        AND ss.check_date=#{date}
+        AND ssp.problem_type_name IN('在市管河道设置的口门排水前，未向所在河道管理单位报告擅自排水', '在市管河道设置的口门排水后，未向口门所在河道管理单位报备实际排水情况','发现口门排放','于桥水库周边沟道排水未达到入库水质标准')
+        )t_a
+        JOIN mysql.help_topic b
+        ON b.help_topic_id <![CDATA[ < ]]> (LENGTH(t_a.spotcheck_region)-LENGTH(REPLACE(t_a.spotcheck_region, ',', ''))+1)
+        )t_b ON t_b.region=mar.area_name
+        WHERE mar.grade=3
+        GROUP BY mar.area_code
+        UNION ALL
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, 10-IFNULL(SUM(t_b.num),0) as grade
+        FROM md_administrative_region mar
+        LEFT JOIN
+        (
+        SELECT sdr.assess, IF(sdr.status = 1, 2, 0) AS num
+        FROM sewage_dispose_report sdr, sewage_dispose sd
+        WHERE sdr.parentId=sd.id AND sd.status=0 AND sdr.status=1 AND sd.issue=#{date}
+        )t_b ON t_b.assess=mar.area_name
+        WHERE mar.grade=3
+        GROUP BY mar.area_code
+        )t_c
+        GROUP BY t_c.regionId
+        ORDER BY t_c.regionId
+    </select>
+    <!--2.2. 河湖堤岸水面环境卫生考核成绩-->
+    <select id="queryWaterSurfaceSanitation" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
+        SELECT t_c.regionId, t_c.regionName, 0.15*SUM(t_c.grade) AS grade
+        FROM
+        (
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, 80-IF(IFNULL(t_b.problem_deduction, 0) > 80, 80, IFNULL(t_b.problem_deduction, 0)) as grade
+        FROM md_administrative_region mar
+        LEFT JOIN
+        (
+        SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(t_a.spotcheck_region,',',b.help_topic_id+1),',',-1) AS region, t_a.problem_type_name, t_a.problem_deduction
+        FROM
+        (
+        SELECT ssp.problem_type_name, ssp.spotcheck_region, ssp.problem_deduction, ss.check_date
+        FROM sc_spotcheck_problem ssp, illegal_xize ix, sc_spotcheck ss
+        WHERE ssp.problem_type_name=ix.GRADEDETAILED
+        AND ssp.spotcheck_id=ss.ID
+        AND ss.check_date=#{date}
+        AND ssp.problem_type_name IN('水面或堤岸有零星垃圾', '成片垃圾面积在2平方米以下', '大于2平方米小于5平方米','单体面积或累计面积大于5平方米')
+        )t_a
+        JOIN mysql.help_topic b
+        ON b.help_topic_id <![CDATA[ < ]]> (LENGTH(t_a.spotcheck_region)-LENGTH(REPLACE(t_a.spotcheck_region, ',', ''))+1)
+        )t_b ON t_b.region=mar.area_name
+        WHERE mar.grade=3
+        GROUP BY mar.area_code
+        UNION ALL
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, 10-IF(IFNULL(t_b.problem_deduction, 0) > 10, 10, IFNULL(t_b.problem_deduction, 0)) as grade
+        FROM md_administrative_region mar
+        LEFT JOIN
+        (
+        SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(t_a.spotcheck_region,',',b.help_topic_id+1),',',-1) AS region, t_a.problem_type_name, t_a.problem_deduction
+        FROM
+        (
+        SELECT ssp.problem_type_name, ssp.spotcheck_region, ssp.problem_deduction, ss.check_date
+        FROM sc_spotcheck_problem ssp, illegal_xize ix, sc_spotcheck ss
+        WHERE ssp.problem_type_name=ix.GRADEDETAILED
+        AND ssp.spotcheck_id=ss.ID
+        AND ss.check_date=#{date}
+        AND ssp.problem_type_name IN('甬路、台阶、护栏、绿化带等沿岸设施有损坏', '沿岸设施不清洁、树木有吊挂垃圾')
+        )t_a
+        JOIN mysql.help_topic b
+        ON b.help_topic_id <![CDATA[ < ]]> (LENGTH(t_a.spotcheck_region)-LENGTH(REPLACE(t_a.spotcheck_region, ',', ''))+1)
+        )t_b ON t_b.region=mar.area_name
+        WHERE mar.grade=3
+        GROUP BY mar.area_code
+        UNION ALL
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, 10-IF(IFNULL(t_b.problem_deduction, 0) > 10, 10, IFNULL(t_b.problem_deduction, 0)) as grade
+        FROM md_administrative_region mar
+        LEFT JOIN
+        (
+        SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(t_a.spotcheck_region,',',b.help_topic_id+1),',',-1) AS region, t_a.problem_type_name, t_a.problem_deduction
+        FROM
+        (
+        SELECT ssp.problem_type_name, ssp.spotcheck_region, ssp.problem_deduction, ss.check_date
+        FROM sc_spotcheck_problem ssp, illegal_xize ix, sc_spotcheck ss
+        WHERE ssp.problem_type_name=ix.GRADEDETAILED
+        AND ssp.spotcheck_id=ss.ID
+        AND ss.check_date=#{date}
+        AND ssp.problem_type_name IN('护坡上有成片枯萎杂草及未及时清理的成堆垃圾', '保洁范围内垃圾未及时清理外运')
+        )t_a
+        JOIN mysql.help_topic b
+        ON b.help_topic_id <![CDATA[ < ]]> (LENGTH(t_a.spotcheck_region)-LENGTH(REPLACE(t_a.spotcheck_region, ',', ''))+1)
+        )t_b ON t_b.region=mar.area_name
+        WHERE mar.grade=3
+        GROUP BY mar.area_code
+        )t_c
+        GROUP BY t_c.regionId
+        ORDER BY t_c.regionId
+    </select>
+    <!--2.3. 河湖岸线管理考核成绩-->
+    <select id="queryShorelineManagement" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
+        SELECT t_c.regionId, t_c.regionName, 0.15*SUM(t_c.grade) AS grade
+        FROM
+        (
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, 40-IF(IFNULL(t_b.problem_deduction, 0) > 40, 40, IFNULL(t_b.problem_deduction, 0)) as grade
+        FROM md_administrative_region mar
+        LEFT JOIN
+        (
+        SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(t_a.spotcheck_region,',',b.help_topic_id+1),',',-1) AS region, t_a.problem_type_name, t_a.problem_deduction
+        FROM
+        (
+        SELECT ssp.problem_type_name, ssp.spotcheck_region, ssp.problem_deduction, ss.check_date
+        FROM sc_spotcheck_problem ssp, illegal_xize ix, sc_spotcheck ss
+        WHERE ssp.problem_type_name=ix.GRADEDETAILED
+        AND ssp.problem_type_name='出现涉河湖违法行为，按管理权限应管理未管理或应配合联动而未配合联动'
+        AND ssp.spotcheck_id=ss.ID AND ss.check_date=#{date}
+        )t_a
+        JOIN mysql.help_topic b
+        ON b.help_topic_id <![CDATA[ < ]]> (LENGTH(t_a.spotcheck_region)-LENGTH(REPLACE(t_a.spotcheck_region, ',', ''))+1)
+        )t_b ON t_b.region=mar.area_name
+        WHERE mar.grade=3
+        GROUP BY mar.area_code
+        UNION ALL
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, 40-IF(IFNULL(t_b.problem_deduction, 0) > 40, 40, IFNULL(t_b.problem_deduction, 0)) as grade
+        FROM md_administrative_region mar
+        LEFT JOIN
+        (
+        SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(t_a.spotcheck_region,',',b.help_topic_id+1),',',-1) AS region, t_a.problem_type_name, t_a.problem_deduction
+        FROM
+        (
+        SELECT ssp.problem_type_name, ssp.spotcheck_region, ssp.problem_deduction, ss.check_date
+        FROM sc_spotcheck_problem ssp, illegal_xize ix, sc_spotcheck ss
+        WHERE ssp.problem_type_name=ix.GRADEDETAILED
+        AND ssp.problem_type_name IN('土地开发利用未按照蓝线、红线等有关法律法规和技术标准要求')
+        AND ssp.spotcheck_id=ss.ID AND ss.check_date=#{date}
+        )t_a
+        JOIN mysql.help_topic b
+        ON b.help_topic_id <![CDATA[ < ]]> (LENGTH(t_a.spotcheck_region)-LENGTH(REPLACE(t_a.spotcheck_region, ',', ''))+1)
+        )t_b ON t_b.region=mar.area_name
+        WHERE mar.grade=3
+        GROUP BY mar.area_code
+        UNION ALL
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, 20-IF(IFNULL(t_b.problem_deduction, 0) > 20, 20, IFNULL(t_b.problem_deduction, 0)) as grade
+        FROM md_administrative_region mar
+        LEFT JOIN
+        (
+        SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(t_a.spotcheck_region,',',b.help_topic_id+1),',',-1) AS region, t_a.problem_type_name, t_a.problem_deduction
+        FROM
+        (
+        SELECT ssp.problem_type_name, ssp.spotcheck_region, ssp.problem_deduction, ss.check_date
+        FROM sc_spotcheck_problem ssp, illegal_xize ix, sc_spotcheck ss
+        WHERE ssp.problem_type_name=ix.GRADEDETAILED
+        AND ssp.problem_type_name IN('未建立并及时更新历史遗留问题台账','非法挤占的建设项目未依法限期退出')
+        AND ssp.spotcheck_id=ss.ID AND ss.check_date=#{date}
+        )t_a
+        JOIN mysql.help_topic b
+        ON b.help_topic_id <![CDATA[ < ]]> (LENGTH(t_a.spotcheck_region)-LENGTH(REPLACE(t_a.spotcheck_region, ',', ''))+1)
+        )t_b ON t_b.region=mar.area_name
+        WHERE mar.grade=3
+        GROUP BY mar.area_code
+        )t_c
+        GROUP BY t_c.regionId
+        ORDER BY t_c.regionId
+    </select>
+    <!--2.4. 河长巡河情况扣分成绩-->
+    <select id="queryPatrolSituation" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
+
+    </select>
+
+    <!--3. 社会监督评价考核成绩-->
+    <!--3.1. 社会监督员满意度调查成绩-->
+    <select id="querySupervisorSatisfaction" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, 50-IFNULL(t_a.num, 0) as grade
         FROM md_administrative_region mar
         LEFT JOIN
         (
@@ -38,38 +252,10 @@
         WHERE mar.grade=3
         ORDER BY mar.area_code
     </select>
-    <!--根据期号查询各区区域地表水成绩-->
-    <select id="listSurfaceWaterDTO" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SurfaceWaterDTO">
-        SELECT mar.area_code, mar.area_name, IFNULL(t_a.grade, 0) as num
-        FROM md_administrative_region mar
-        LEFT JOIN
-        (
-                SELECT sw.issue, swg.popedom, swg.grade
-                FROM surface_water_grade swg, surface_water sw
-                WHERE swg.parentId=sw.id AND sw.issue=#{date}
-        )t_a ON t_a.popedom=mar.area_name
-        WHERE mar.grade=3
-        ORDER BY mar.area_code
-    </select>
-    <!--根据期号查取各区社会监督网络舆情处置扣分成绩-->
-    <select id="listSuperviseSentiment" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
-        SELECT mar.area_code, mar.area_name, IFNULL(t_a.num, 0) as num
-        FROM md_administrative_region mar
-        LEFT JOIN
-        (
-            SELECT ssr.region_name, IF((5*COUNT(0) <![CDATA[ < ]]> 25), 5*COUNT(0), 25) AS num
-            FROM sh_social_report ssr
-            WHERE ssr.processing_status = '未处理' AND ssr.report_evaluate='2' AND CURRENT_TIMESTAMP() > ssr.over_time
-            AND ssr.report_source= '微信公众号' OR ssr.report_source='河长门户'
-            AND DATE_FORMAT(ssr.report_date, '%Y-%m')=#{date}
-            GROUP BY ssr.region_name
-        )t_a ON t_a.region_name=mar.area_name
-        WHERE mar.grade=3
-        ORDER BY mar.area_code
-    </select>
-    <!--根据期号查取各区社会监督电话举报扣分-->
-    <select id="listSuperviseTelephone" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
-        SELECT mar.area_code, mar.area_name, IFNULL(t_a.num, 0) as num
+    <!--3.2. 社会监督举报-->
+    <!--3.2.1. 河长制社会监督电话受理事项处置情况-->
+    <select id="querySupervisionPhone" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, 25-IFNULL(t_a.num, 0) as grade
         FROM md_administrative_region mar
         LEFT JOIN
         (
@@ -83,45 +269,20 @@
         WHERE mar.grade=3
         ORDER BY mar.area_code
     </select>
-    <!--根据期号查取各区河湖堤岸水面环境卫生扣分成绩-->
-    <select id="listWaterSanitation" resultType="com.uhope.statistic.dto.SuperviseDTO">
-
+    <!--3.2.2. 网络舆情等网络受理事项处置情况-->
+    <select id="queryNetworkAcceptance" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, 25-IFNULL(t_a.num, 0) as grade
+        FROM md_administrative_region mar
+        LEFT JOIN
+        (
+            SELECT ssr.region_name, IF((5*COUNT(0) <![CDATA[ < ]]> 25), 5*COUNT(0), 25) AS num
+            FROM sh_social_report ssr
+            WHERE ssr.processing_status = '未处理' AND ssr.report_evaluate='2' AND CURRENT_TIMESTAMP() > ssr.over_time
+            AND ssr.report_source= '微信公众号' OR ssr.report_source='河长门户'
+            AND DATE_FORMAT(ssr.report_date, '%Y-%m')=#{date}
+            GROUP BY ssr.region_name
+        )t_a ON t_a.region_name=mar.area_name
+        WHERE mar.grade=3
+        ORDER BY mar.area_code
     </select>
-    <!--根据期号查取各区河湖岸线管理扣分成绩-->
-    <select id="listShoreLineManage" resultType="com.uhope.statistic.dto.SuperviseDTO">
-
-    </select>
-    <!--&lt;!&ndash;根据期号查取各区河长巡河情况扣分项&ndash;&gt;-->
-    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
-
-    <!--</select>-->
-    <!--&lt;!&ndash;根据期号查取各区河湖水质感官情况成绩&ndash;&gt;-->
-    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
-
-    <!--</select>-->
-    <!--&lt;!&ndash;根据期号查取各区河湖口门排水情况成绩&ndash;&gt;-->
-    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
-
-    <!--</select>-->
-    <!--&lt;!&ndash;根据期号查取各区污水处理厂达标排放成绩&ndash;&gt;-->
-    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
-
-    <!--</select>-->
-    <!--&lt;!&ndash;根据期号查取各区堤岸卫生考核成绩&ndash;&gt;-->
-    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
-
-    <!--</select>-->
-    <!--&lt;!&ndash;根据期号查取各区岸线管理考核成绩&ndash;&gt;-->
-    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
-
-    <!--</select>-->
-    <!--&lt;!&ndash;根据期号查取各区河长巡河情况成绩&ndash;&gt;-->
-    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
-
-    <!--</select>-->
-    <!--&lt;!&ndash;根据期号查取各区河湖水生态成绩&ndash;&gt;-->
-    <!--<select id="listRiverPatrol" resultType="com.uhope.statistic.dto.SuperviseDTO">-->
-
-    <!--</select>-->
-
 </mapper>

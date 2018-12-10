@@ -17,27 +17,27 @@ public class RiverStatisticDTO implements Serializable {
     private String regionName;
 
     /**
-     * 河湖水质评分
+     * 河湖水质(70%)
      */
     private Double riverScore;
 
     /**
-     * 河湖堤岸水面环境卫生
+     * 河湖堤岸水面环境卫生(15%)
      */
     private Double hygieneScore;
 
     /**
-     * 河湖岸线管理
+     * 河湖岸线管理(15%)
      */
     private Double shorelineScore;
 
     /**
-     * 河长巡河扣分
+     * 河长巡河扣分成绩
      */
     private Double deductionScore;
 
     /**
-     * 考核结果
+     * 河湖水质考核成绩
      */
     private Double resultScore;
 }
