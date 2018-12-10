@@ -8,6 +8,7 @@
         <result column="ISSUE" property="issue" />
         <result column="CREATEUSER" property="createuser" />
         <result column="CONTENT" property="content" />
+        <result column="ASSESSORYYUAN" property="assessoryyuan" />
         <result column="ASSESSORY" property="assessory" />
         <result column="BULLETINID" property="bulletinid" />
     </resultMap>
@@ -23,7 +24,7 @@
             <if test="issue != null and issue !='' ">
                 and ISSUE = #{issue}
             </if>
-        </where>
+        </where>order by issue desc
     </select>
 
 

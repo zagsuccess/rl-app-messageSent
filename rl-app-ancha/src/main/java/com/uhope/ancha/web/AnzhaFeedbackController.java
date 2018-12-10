@@ -6,6 +6,7 @@ import com.uhope.ancha.service.AnzhaBulletinService;
 import com.uhope.ancha.service.AnzhaFeedbackService;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
+import com.uhope.converter.client.Converter;
 import com.uhope.uip.dto.UserDTO;
 import com.uhope.uip.fm.config.FmConfig;
 import com.uhope.uip.service.UserService;
@@ -33,6 +34,8 @@ public class AnzhaFeedbackController {
     private AnzhaBulletinService anzhaBulletinService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private Converter converter;
 
     @PostMapping("/add")
     public Result<AnzhaFeedback> add(@RequestParam String whether,
@@ -44,7 +47,14 @@ public class AnzhaFeedbackController {
         anzhaFeedback.setWhether(whether);
         anzhaFeedback.setFeedbacktime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(feedbackTime));
         anzhaFeedback.setDescription(describe);
-        anzhaFeedback.setAssessory(filePath);
+        //anzhaFeedback.setAssessory(filePath);
+        anzhaFeedback.setAssessoryyuan(filePath);
+        String tempString = filePath.substring(filePath.lastIndexOf(".") + 1);
+        String url =filePath;
+        if (tempString.contains("doc")){
+            url = converter.startConverter(filePath);
+        }
+        anzhaFeedback.setAssessory(url);
         anzhaFeedback.setBulletinid(bulletinid);
         anzhaFeedback.setObjectid(objectid);
         anzhaFeedback.setStatus("1");
@@ -58,7 +68,8 @@ public class AnzhaFeedbackController {
         List<AnzhaFeedbackDTO> anzhaFeedback = anzhaFeedbackService.selectOneById(bulletinid,objectid);
         if (anzhaFeedback!=null && anzhaFeedback.size()>0 ){
             for (AnzhaFeedbackDTO anzhaFeedbackDTO:anzhaFeedback) {
-                anzhaFeedbackDTO.setAssessory(FmConfig.getFmUrl() + anzhaFeedbackDTO.getAssessory());
+                anzhaFeedbackDTO.setAssessory(FmConfig.getAgentUrl() + anzhaFeedbackDTO.getAssessory());
+                anzhaFeedbackDTO.setAssessoryyuan(FmConfig.getAgentUrl()+anzhaFeedbackDTO.getAssessoryyuan());
                 Result<UserDTO> id = userService.getById(anzhaFeedbackDTO.getObjectid());
                 if(id.getData()!=null){
                     anzhaFeedbackDTO.setObjectname(id.getData().getName());

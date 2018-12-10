@@ -13,8 +13,12 @@ public class AnzhaSchemeDTO extends AnzhaScheme {
     public AnzhaSchemeDTO() {
     }
 
-    public AnzhaSchemeDTO(String title, String issue, String createuser, String content, String assessory, String bulletinid, String bulletinName) {
-        super(title, issue, createuser, content, assessory, bulletinid);
+    public AnzhaSchemeDTO(String bulletinName) {
+        this.bulletinName = bulletinName;
+    }
+
+    public AnzhaSchemeDTO(String title, String issue, String createuser, String content, String assessoryyuan, String assessory, String bulletinid, String bulletinName) {
+        super(title, issue, createuser, content, assessoryyuan, assessory, bulletinid);
         this.bulletinName = bulletinName;
     }
 

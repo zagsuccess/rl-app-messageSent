@@ -13,8 +13,12 @@ public class AnzhaFeedbackDTO extends AnzhaFeedback {
     public AnzhaFeedbackDTO() {
     }
 
-    public AnzhaFeedbackDTO(Date feedbackTime, String objectid, String whether, String describe, String assessory, String bulletinid, String status, String objectname) {
-        super(feedbackTime, objectid, whether, describe, assessory, bulletinid, status);
+    public AnzhaFeedbackDTO(String objectname) {
+        this.objectname = objectname;
+    }
+
+    public AnzhaFeedbackDTO(Date feedbacktime, String objectid, String whether, String description, String assessoryyuan, String assessory, String bulletinid, String status, String objectname) {
+        super(feedbacktime, objectid, whether, description, assessoryyuan, assessory, bulletinid, status);
         this.objectname = objectname;
     }
 

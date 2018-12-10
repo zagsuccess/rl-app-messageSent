@@ -7,6 +7,7 @@
         <result column="TITLE" property="title" />
         <result column="MONTH" property="month" />
         <result column="CONTENT" property="content" />
+        <result column="ASSESSORYYUAN" property="assessoryyuan" />
         <result column="ACCESSORY" property="accessory" />
         <result column="FEEDBACKAREAID" property="feedbackareaid" />
         <result column="FEEDBACKAREANAME" property="feedbackareaname" />

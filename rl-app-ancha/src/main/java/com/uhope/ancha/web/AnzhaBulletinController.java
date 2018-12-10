@@ -7,6 +7,7 @@ import com.uhope.ancha.service.AnzhaBulletinService;
 import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
+import com.uhope.converter.client.Converter;
 import com.uhope.uip.dto.UserDTO;
 import com.uhope.uip.fm.config.FmConfig;
 import com.uhope.uip.service.UserService;
@@ -31,6 +32,8 @@ public class AnzhaBulletinController {
     private AnzhaBulletinService anzhaBulletinService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private Converter converter;
 
     //当暗查暗访计划创建完的时候就会创建一个通报
     /*@PostMapping("/add")
@@ -57,7 +60,8 @@ public class AnzhaBulletinController {
     @GetMapping("/detail")
     public Result<AnzhaBulletin> detail(@RequestParam String id) {
         AnzhaBulletin anzhaBulletin = anzhaBulletinService.get(id);
-        anzhaBulletin.setAccessory(FmConfig.getFmUrl()+anzhaBulletin.getAccessory());
+        anzhaBulletin.setAccessory(FmConfig.getAgentUrl()+anzhaBulletin.getAccessory());
+        anzhaBulletin.setAssessoryyuan(FmConfig.getAgentUrl()+anzhaBulletin.getAssessoryyuan());
         return ResponseMsgUtil.success(anzhaBulletin);
     }
 
@@ -72,11 +76,19 @@ public class AnzhaBulletinController {
         anzhaBulletin.setId(id);
         anzhaBulletin.setTitle(title);
         anzhaBulletin.setMonth(month);
-        anzhaBulletin.setAccessory(accessory);
+        anzhaBulletin.setAssessoryyuan(accessory);
+        String tempString = accessory.substring(accessory.lastIndexOf(".") + 1);
+        String url =accessory;
+        if (tempString.contains("doc")){
+            url = converter.startConverter(accessory);
+        }
+        anzhaBulletin.setAccessory(url);
         anzhaBulletin.setContent(content);
         anzhaBulletin.setFeedbackareaid(feedbackareaid);
         anzhaBulletin.setFeedbackareaname(feedbackareaname);
-        anzhaBulletin.setDeadlinetime(new SimpleDateFormat("yyyy-MM-dd").parse(deadlinetime));
+        if(deadlinetime!=null && "".equals(deadlinetime)){
+            anzhaBulletin.setDeadlinetime(new SimpleDateFormat("yyyy-MM-dd").parse(deadlinetime));
+        }
         anzhaBulletinService.update(anzhaBulletin);
         return ResponseMsgUtil.success(anzhaBulletin);
     }

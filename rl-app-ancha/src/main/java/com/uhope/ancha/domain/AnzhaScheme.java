@@ -26,6 +26,10 @@ public class AnzhaScheme implements Serializable {
      */
     private String content;
     /**
+     * 原文件路径
+     */
+    private String assessoryyuan;
+    /**
      * 附件
      */
     private String assessory;
@@ -34,13 +38,22 @@ public class AnzhaScheme implements Serializable {
         super();
     }
 
-    public AnzhaScheme(String title, String issue, String createuser, String content, String assessory, String bulletinid) {
+    public AnzhaScheme(String title, String issue, String createuser, String content, String assessoryyuan, String assessory, String bulletinid) {
         this.title = title;
         this.issue = issue;
         this.createuser = createuser;
         this.content = content;
+        this.assessoryyuan = assessoryyuan;
         this.assessory = assessory;
         this.bulletinid = bulletinid;
+    }
+
+    public String getAssessoryyuan() {
+        return assessoryyuan;
+    }
+
+    public void setAssessoryyuan(String assessoryyuan) {
+        this.assessoryyuan = assessoryyuan;
     }
 
     public String getId() {
@@ -107,6 +120,7 @@ public class AnzhaScheme implements Serializable {
                 ", issue='" + issue + '\'' +
                 ", createuser='" + createuser + '\'' +
                 ", content='" + content + '\'' +
+                ", assessoryyuan='" + assessoryyuan + '\'' +
                 ", assessory='" + assessory + '\'' +
                 ", bulletinid='" + bulletinid + '\'' +
                 '}';
