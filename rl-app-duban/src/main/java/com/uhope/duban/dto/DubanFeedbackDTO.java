@@ -14,8 +14,12 @@ public class DubanFeedbackDTO extends ScDubanFeedback {
     public DubanFeedbackDTO() {
     }
 
-    public DubanFeedbackDTO(Date feedbacktime, String objectid, String whetherlocale, String whether, String description, String assessory, String supervisionid, String status, Date createtime, String objectname) {
-        super(feedbacktime, objectid, whetherlocale, whether, description, assessory, supervisionid, status, createtime);
+    public DubanFeedbackDTO(String objectname) {
+        this.objectname = objectname;
+    }
+
+    public DubanFeedbackDTO(Date feedbacktime, String objectid, String whetherlocale, String whether, String description, String assessoryyuan, String assessory, String supervisionid, String status, Date createtime, String objectname) {
+        super(feedbacktime, objectid, whetherlocale, whether, description, assessoryyuan, assessory, supervisionid, status, createtime);
         this.objectname = objectname;
     }
 

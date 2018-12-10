@@ -50,6 +50,10 @@ public class ScDubanSupervision implements Serializable {
      */
     private String objectname;
     /**
+     * 原文件路径
+     */
+    private String assessoryyuan;
+    /**
      * 附件
      */
     private String assessory;
@@ -77,6 +81,29 @@ public class ScDubanSupervision implements Serializable {
         this.assessory = assessory;
         this.assessorydescribe = assessorydescribe;
         this.status = status;
+    }
+
+    public ScDubanSupervision(String title, String project, String type, Date issuedtime, Date deadlinedate, String reason, String objectid, String objectname, String assessoryyuan, String assessory, String assessorydescribe, String status) {
+        this.title = title;
+        this.project = project;
+        this.type = type;
+        this.issuedtime = issuedtime;
+        this.deadlinedate = deadlinedate;
+        this.reason = reason;
+        this.objectid = objectid;
+        this.objectname = objectname;
+        this.assessoryyuan = assessoryyuan;
+        this.assessory = assessory;
+        this.assessorydescribe = assessorydescribe;
+        this.status = status;
+    }
+
+    public String getAssessoryyuan() {
+        return assessoryyuan;
+    }
+
+    public void setAssessoryyuan(String assessoryyuan) {
+        this.assessoryyuan = assessoryyuan;
     }
 
     public String getId() {
@@ -187,6 +214,7 @@ public class ScDubanSupervision implements Serializable {
                 ", reason='" + reason + '\'' +
                 ", objectid='" + objectid + '\'' +
                 ", objectname='" + objectname + '\'' +
+                ", assessoryyuan='" + assessoryyuan + '\'' +
                 ", assessory='" + assessory + '\'' +
                 ", assessorydescribe='" + assessorydescribe + '\'' +
                 ", status='" + status + '\'' +

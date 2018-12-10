@@ -63,6 +63,14 @@ public class DubanSupervisionController {
             }
         }*/
         dubanSupervision.setStatus("1");
+        String detailUrl = dubanSupervision.getAssessory();
+        dubanSupervision.setAssessoryyuan(detailUrl);
+        String tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
+        String url =detailUrl;
+        if (tempString.contains("doc")){
+            url = converter.startConverter(detailUrl);
+        }
+        dubanSupervision.setAssessory(url);
         dubanSupervisionService.insert(dubanSupervision);
         for(int i=0;i<str.length;i++){
             ScDubanFeedback scDubanFeedback=new ScDubanFeedback();
@@ -82,7 +90,8 @@ public class DubanSupervisionController {
     public Result<ScDubanSupervision> detail(@RequestParam String id) {
         ScDubanSupervision dubanSupervision = dubanSupervisionService.get(id);
         if(dubanSupervision!=null){
-            dubanSupervision.setAssessory(FmConfig.getFmUrl() + dubanSupervision.getAssessory());
+            dubanSupervision.setAssessory(FmConfig.getAgentUrl() + dubanSupervision.getAssessory());
+            dubanSupervision.setAssessoryyuan(FmConfig.getAgentUrl() + dubanSupervision.getAssessoryyuan());
         }
         return ResponseMsgUtil.success(dubanSupervision);
     }
@@ -135,7 +144,14 @@ public class DubanSupervisionController {
         scDubanFeedback.setFeedbacktime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(feedbacktime));
         scDubanFeedback.setWhether(whether);
         scDubanFeedback.setDescription(description);
-        scDubanFeedback.setAssessory(assessory);
+        //scDubanFeedback.setAssessory(assessory);
+        scDubanFeedback.setAssessoryyuan(assessory);
+        String tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
+        String url =assessory;
+        if (tempString.contains("doc")){
+            url = converter.startConverter(assessory);
+        }
+        scDubanFeedback.setAssessory(url);
         scDubanFeedback.setStatus("1");
         dubanFeedbackService.update(scDubanFeedback);
         return ResponseMsgUtil.success(scDubanFeedback);
@@ -149,6 +165,14 @@ public class DubanSupervisionController {
         dubanFeedback.setWhether(dubanFeedback.getWhether());
         dubanFeedback.setDescription(dubanFeedback.getDescription());
         dubanFeedback.setAssessory(dubanFeedback.getAssessory());
+        String detailUrl = dubanFeedback.getAssessory();
+        dubanFeedback.setAssessoryyuan(detailUrl);
+        String tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
+        String url =detailUrl;
+        if (tempString.contains("doc")){
+            url = converter.startConverter(detailUrl);
+        }
+        dubanFeedback.setAssessory(url);
         dubanFeedback.setStatus("2");
         dubanFeedback.setCreatetime(new Date());
         dubanFeedbackService.insert(dubanFeedback);
@@ -197,7 +221,8 @@ public class DubanSupervisionController {
         List<DubanFeedbackDTO> scDubanFeedback = dubanFeedbackService.selectFeedbackByobjectid(dubanFeedback);
         if (scDubanFeedback!=null && scDubanFeedback.size()>0 ){
             for (DubanFeedbackDTO scDubanFeedback1:scDubanFeedback) {
-                scDubanFeedback1.setAssessory(FmConfig.getFmUrl() + scDubanFeedback1.getAssessory());
+                scDubanFeedback1.setAssessory(FmConfig.getAgentUrl() + scDubanFeedback1.getAssessory());
+                scDubanFeedback1.setAssessoryyuan(FmConfig.getAgentUrl()+ scDubanFeedback1.getAssessoryyuan());
                 Result<UserDTO> id = userService.getById(scDubanFeedback1.getObjectid());
                 if(id.getData()!=null){
                     scDubanFeedback1.setObjectname(id.getData().getName());
@@ -215,7 +240,8 @@ public class DubanSupervisionController {
         dubanFeedback.setStatus("2");
         ScDubanFeedback scDubanFeedback = dubanFeedbackService.selectFeedback(dubanFeedback);
         if(scDubanFeedback!=null){
-            scDubanFeedback.setAssessory(FmConfig.getFmUrl() + scDubanFeedback.getAssessory());
+            scDubanFeedback.setAssessory(FmConfig.getAgentUrl() + scDubanFeedback.getAssessory());
+            scDubanFeedback.setAssessoryyuan(FmConfig.getAgentUrl()+scDubanFeedback.getAssessoryyuan());
         }
         return ResponseMsgUtil.success(scDubanFeedback);
     }
@@ -253,9 +279,9 @@ public class DubanSupervisionController {
             String lastName = fileName.substring(fileName.lastIndexOf(".") + 1);
             FileItem fileItem = fileManagerClient.upload(bytes, fileName).getData();
             String filePath = fileItem.getVirtualPath();
-            if (lastName.contains("doc")|| lastName.contains("xls")){
+            /*if (lastName.contains("doc")|| lastName.contains("xls")){
                 filePath = converter.startConverter(fileItem.getVirtualPath());
-            }
+            }*/
             list.add(filePath);
         }
         return ResponseMsgUtil.success(list);
