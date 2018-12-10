@@ -17,5 +17,7 @@
         <result column="contact_type" jdbcType="VARCHAR" property="contactType" />
         <result column="creator" jdbcType="VARCHAR" property="creator" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="longitude" jdbcType="DOUBLE" property="longitude" />
+        <result column="latitude" jdbcType="DOUBLE" property="latitude" />
     </resultMap>
 </mapper>
