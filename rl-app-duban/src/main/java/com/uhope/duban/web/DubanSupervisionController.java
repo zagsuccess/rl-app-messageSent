@@ -66,7 +66,7 @@ public class DubanSupervisionController {
         String detailUrl = dubanSupervision.getAssessory();
         dubanSupervision.setAssessoryyuan(detailUrl);
         String tempString="";
-        if(detailUrl!= null && "".equals(detailUrl)) {
+        if(detailUrl!= null && !"".equals(detailUrl)) {
             tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
         }
         String url =detailUrl;
@@ -150,7 +150,7 @@ public class DubanSupervisionController {
         //scDubanFeedback.setAssessory(assessory);
         scDubanFeedback.setAssessoryyuan(assessory);
         String tempString="";
-        if(assessory!= null && "".equals(assessory)) {
+        if(assessory!= null && !"".equals(assessory)) {
             tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
         }
         String url =assessory;
@@ -174,7 +174,7 @@ public class DubanSupervisionController {
         String detailUrl = dubanFeedback.getAssessory();
         dubanFeedback.setAssessoryyuan(detailUrl);
         String tempString="";
-        if(detailUrl!= null && "".equals(detailUrl)){
+        if(detailUrl!= null && !"".equals(detailUrl)){
              tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
         }
         String url =detailUrl;
