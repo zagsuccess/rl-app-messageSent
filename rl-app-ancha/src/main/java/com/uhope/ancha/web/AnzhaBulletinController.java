@@ -68,7 +68,7 @@ public class AnzhaBulletinController {
     @PutMapping("/update")
     public Result<AnzhaBulletin> update(@RequestParam String id,
                                          String title, String month,
-                                        String accessory,String content,
+                                        String assessory,String content,
                                         String feedbackareaid,
                                         String feedbackareaname,
                                         String deadlinetime) throws ParseException {
@@ -76,14 +76,14 @@ public class AnzhaBulletinController {
         anzhaBulletin.setId(id);
         anzhaBulletin.setTitle(title);
         anzhaBulletin.setMonth(month);
-        anzhaBulletin.setAssessoryyuan(accessory);
+        anzhaBulletin.setAssessoryyuan(assessory);
         String tempString="";
-        if(accessory!= null && !"".equals(accessory)) {
-            tempString = accessory.substring(accessory.lastIndexOf(".") + 1);
+        if(assessory!= null && !"".equals(assessory)) {
+            tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
         }
-        String url =accessory;
+        String url =assessory;
         if (tempString.contains("doc")){
-            url = converter.startConverter(accessory);
+            url = converter.startConverter(assessory);
         }
         anzhaBulletin.setAccessory(url);
         anzhaBulletin.setContent(content);
