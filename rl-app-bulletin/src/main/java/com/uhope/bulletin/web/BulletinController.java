@@ -65,7 +65,7 @@ public class    BulletinController {
         bulletin.setCreate_time(new Date());
         String detailUrl = bulletin.getAttand_url();
         String tempString="";
-        if(detailUrl!= null && "".equals(detailUrl)) {
+        if(detailUrl!= null && !"".equals(detailUrl)) {
             tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
         }
         String url =detailUrl;
