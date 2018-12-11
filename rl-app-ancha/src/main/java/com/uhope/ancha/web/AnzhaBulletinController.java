@@ -89,7 +89,7 @@ public class AnzhaBulletinController {
         anzhaBulletin.setContent(content);
         anzhaBulletin.setFeedbackareaid(feedbackareaid);
         anzhaBulletin.setFeedbackareaname(feedbackareaname);
-        if(deadlinetime!=null && "".equals(deadlinetime)){
+        if(deadlinetime!=null && !"".equals(deadlinetime)){
             anzhaBulletin.setDeadlinetime(new SimpleDateFormat("yyyy-MM-dd").parse(deadlinetime));
         }
         anzhaBulletinService.update(anzhaBulletin);
