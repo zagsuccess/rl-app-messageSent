@@ -78,7 +78,7 @@ public class AnzhaBulletinController {
         anzhaBulletin.setMonth(month);
         anzhaBulletin.setAssessoryyuan(accessory);
         String tempString="";
-        if(accessory!= null && "".equals(accessory)) {
+        if(accessory!= null && !"".equals(accessory)) {
             tempString = accessory.substring(accessory.lastIndexOf(".") + 1);
         }
         String url =accessory;

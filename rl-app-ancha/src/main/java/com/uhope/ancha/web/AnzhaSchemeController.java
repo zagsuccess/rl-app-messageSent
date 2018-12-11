@@ -53,7 +53,7 @@ public class AnzhaSchemeController {
         //anzhaScheme.setAssessory(assessory);
         anzhaScheme.setAssessoryyuan(assessory);
         String tempString="";
-        if(assessory!= null && "".equals(assessory)){
+        if(assessory!= null && !"".equals(assessory)){
             tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
         }
         String url =assessory;
@@ -91,7 +91,7 @@ public class AnzhaSchemeController {
         anzhaScheme.setContent(content);
         anzhaScheme.setAssessoryyuan(assessory);
         String tempString="";
-        if(assessory!= null && "".equals(assessory)) {
+        if(assessory!= null && !"".equals(assessory)) {
             tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
         }
         String url =assessory;

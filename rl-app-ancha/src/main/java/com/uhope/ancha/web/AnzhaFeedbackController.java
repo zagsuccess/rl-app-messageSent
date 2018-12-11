@@ -50,7 +50,7 @@ public class AnzhaFeedbackController {
         //anzhaFeedback.setAssessory(filePath);
         anzhaFeedback.setAssessoryyuan(filePath);
         String tempString="";
-        if(filePath!= null && "".equals(filePath)) {
+        if(filePath!= null && !"".equals(filePath)) {
             tempString = filePath.substring(filePath.lastIndexOf(".") + 1);
         }
         String url =filePath;
