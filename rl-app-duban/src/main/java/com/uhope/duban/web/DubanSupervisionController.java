@@ -65,7 +65,10 @@ public class DubanSupervisionController {
         dubanSupervision.setStatus("1");
         String detailUrl = dubanSupervision.getAssessory();
         dubanSupervision.setAssessoryyuan(detailUrl);
-        String tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
+        String tempString="";
+        if(detailUrl!= null && "".equals(detailUrl)) {
+            tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
+        }
         String url =detailUrl;
         if (tempString.contains("doc")){
             url = converter.startConverter(detailUrl);
@@ -146,7 +149,10 @@ public class DubanSupervisionController {
         scDubanFeedback.setDescription(description);
         //scDubanFeedback.setAssessory(assessory);
         scDubanFeedback.setAssessoryyuan(assessory);
-        String tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
+        String tempString="";
+        if(assessory!= null && "".equals(assessory)) {
+            tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
+        }
         String url =assessory;
         if (tempString.contains("doc")){
             url = converter.startConverter(assessory);
@@ -167,7 +173,10 @@ public class DubanSupervisionController {
         dubanFeedback.setAssessory(dubanFeedback.getAssessory());
         String detailUrl = dubanFeedback.getAssessory();
         dubanFeedback.setAssessoryyuan(detailUrl);
-        String tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
+        String tempString="";
+        if(detailUrl!= null && "".equals(detailUrl)){
+             tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
+        }
         String url =detailUrl;
         if (tempString.contains("doc")){
             url = converter.startConverter(detailUrl);
