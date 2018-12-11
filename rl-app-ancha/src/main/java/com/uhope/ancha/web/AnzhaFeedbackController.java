@@ -49,7 +49,10 @@ public class AnzhaFeedbackController {
         anzhaFeedback.setDescription(describe);
         //anzhaFeedback.setAssessory(filePath);
         anzhaFeedback.setAssessoryyuan(filePath);
-        String tempString = filePath.substring(filePath.lastIndexOf(".") + 1);
+        String tempString="";
+        if(filePath!= null && "".equals(filePath)) {
+            tempString = filePath.substring(filePath.lastIndexOf(".") + 1);
+        }
         String url =filePath;
         if (tempString.contains("doc")){
             url = converter.startConverter(filePath);
