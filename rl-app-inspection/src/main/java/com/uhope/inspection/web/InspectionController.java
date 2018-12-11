@@ -319,8 +319,8 @@ public class InspectionController {
         ScInspection scInspection=inspectionService.get(id);
         String url=scInspection.getAccessory();
         String url1=scInspection.getPdfUrl();
-        scInspection.setAccessory(FmConfig.getFmUrl()+url);
-        scInspection.setPdfUrl(FmConfig.getFmUrl()+url1);
+        scInspection.setAccessory(FmConfig.getAgentUrl()+url);
+        scInspection.setPdfUrl(FmConfig.getAgentUrl()+url1);
         return ResponseMsgUtil.success(scInspection);
     }
 

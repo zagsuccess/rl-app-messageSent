@@ -78,7 +78,9 @@ public class TrafficListController {
     public Result<ScTrafficList> selectById(@RequestParam String inspectionId) {
         ScTrafficList scTrafficList=trafficListService.selectById(inspectionId);
         String url=scTrafficList.getAccessory();
+        String url1=scTrafficList.getPdfUrl();
         scTrafficList.setAccessory(FmConfig.getAgentUrl()+url);
+        scTrafficList.setPdfUrl(FmConfig.getAgentUrl()+url1);
         return ResponseMsgUtil.success(scTrafficList);
     }
 
@@ -87,8 +89,8 @@ public class TrafficListController {
         ScTrafficList scTrafficList=trafficListService.get(id);
         String url=scTrafficList.getAccessory();
         String url1=scTrafficList.getPdfUrl();
-        scTrafficList.setAccessory(FmConfig.getFmUrl()+url);
-        scTrafficList.setPdfUrl(FmConfig.getFmUrl()+url1);
+        scTrafficList.setAccessory(FmConfig.getAgentUrl()+url);
+        scTrafficList.setPdfUrl(FmConfig.getAgentUrl()+url1);
         return ResponseMsgUtil.success(scTrafficList);
     }
 

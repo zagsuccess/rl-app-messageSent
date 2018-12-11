@@ -72,8 +72,8 @@ public class ProblemHandleController {
         ScProblemHandle scProblemHandle=problemHandleService.get(id);
         String url=scProblemHandle.getAccessory();
         String url1=scProblemHandle.getPdfUrl();
-        scProblemHandle.setAccessory(FmConfig.getFmUrl()+url);
-        scProblemHandle.setPdfUrl(FmConfig.getFmUrl()+url1);
+        scProblemHandle.setAccessory(FmConfig.getAgentUrl()+url);
+        scProblemHandle.setPdfUrl(FmConfig.getAgentUrl()+url1);
         return ResponseMsgUtil.success(scProblemHandle);
     }
 
@@ -83,7 +83,9 @@ public class ProblemHandleController {
     public Result<ScProblemHandle> selectById(@RequestParam String inspectionId) {
         ScProblemHandle scProblemHandle=problemHandleService.selectById(inspectionId);
         String url=scProblemHandle.getAccessory();
+        String url1=scProblemHandle.getPdfUrl();
         scProblemHandle.setAccessory(FmConfig.getAgentUrl()+url);
+        scProblemHandle.setPdfUrl(FmConfig.getAgentUrl()+url1);
         return ResponseMsgUtil.success(scProblemHandle);
     }
     @PostMapping("/upload")
