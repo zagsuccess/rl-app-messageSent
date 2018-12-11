@@ -122,6 +122,30 @@ public class InspectionController {
             PageInfo pageInfo = new PageInfo(list);
             return ResponseMsgUtil.success(pageInfo);
         }
+        if("河长办".equals(inspectionService.selectRole(userDTO.getId()))){
+            PageHelper.startPage(pageNumber, pageSize);
+            Condition condition = new Condition(ScInspection.class);
+            Example.Criteria criteria = condition.createCriteria();
+            String sentUnit=inspectionService.selectRegion(userDTO.getRegionId());
+            if (title != null && title != "") {
+                criteria.andCondition("title like '%" + title+"%'");
+            }
+            if (printDate != null && printDate != "") {
+                criteria.andCondition("print_date like '%" + printDate+"%'");
+            }
+            if (renumber != null && renumber != "") {
+                criteria.andCondition("renumber = " + renumber);
+            }
+            if (state != null) {
+                criteria.andCondition("state = " + state);
+            }
+            criteria.andCondition("sent_region like '%" + sentUnit+"%'");
+            condition.orderBy("print_date").desc();
+            List<ScInspection> list = inspectionService.findByCondition(condition);
+
+            PageInfo pageInfo = new PageInfo(list);
+            return ResponseMsgUtil.success(pageInfo);
+        }
         if ("市环保局".equals(inspectionService.selectRole(userDTO.getId()))){
             PageHelper.startPage(pageNumber, pageSize);
             Condition condition = new Condition(ScInspection.class);

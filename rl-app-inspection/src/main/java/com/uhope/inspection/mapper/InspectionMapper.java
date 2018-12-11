@@ -11,4 +11,6 @@ public interface InspectionMapper extends Mapper<ScInspection> {
 
 
     List<ScInspection> selectBelong(@Param("sentUnit")String sentUnit);
+
+    String selectRegion(@Param("regionId")Long regionId);
 }
