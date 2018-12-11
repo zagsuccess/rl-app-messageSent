@@ -66,12 +66,14 @@ public class InspectionController {
         ScInspection scInspection = new ScInspection();
         scInspection.setContent(content);
         scInspection.setAccessory(accessory);
-        String tempString=accessory.substring(accessory.lastIndexOf(".")+1);
-        String pdfUrl=accessory;
-        if(tempString.contains("doc")){
-            pdfUrl=converter.startConverter(accessory);
+        if (accessory!=null&&accessory!=""){
+            String tempString=accessory.substring(accessory.lastIndexOf(".")+1);
+            String pdfUrl=accessory;
+            if(tempString.contains("doc")){
+                pdfUrl=converter.startConverter(accessory);
+            }
+            scInspection.setPdfUrl(pdfUrl);
         }
-        scInspection.setPdfUrl(pdfUrl);
         scInspection.setInspectType(inspectType);
         scInspection.setPrintDate(printDate);
         scInspection.setRenumber(renumber);
@@ -425,5 +427,8 @@ public class InspectionController {
         }
         return ResponseMsgUtil.success(list);
     }
+
+
+
 
 }
