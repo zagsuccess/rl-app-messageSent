@@ -3,6 +3,7 @@ package com.uhope.duban.mapper;
 import com.uhope.core.Mapper;
 import com.uhope.duban.domain.ScDubanSupervision;
 import com.uhope.duban.dto.DeadlineDTO;
+import com.uhope.duban.dto.RegionDTO;
 import com.uhope.template.domain.Template;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,4 +20,5 @@ public interface DubanSupervisionMapper extends Mapper<ScDubanSupervision> {
                                   @Param("objectname") String objectname,
                                   @Param("status") String status);
 
+    List<RegionDTO> districtlist();
 }
