@@ -68,7 +68,7 @@ public class AnzhaBulletinController {
     @PutMapping("/update")
     public Result<AnzhaBulletin> update(@RequestParam String id,
                                          String title, String month,
-                                        String accessory,String content,
+                                        String assessory,String content,
                                         String feedbackareaid,
                                         String feedbackareaname,
                                         String deadlinetime) throws ParseException {
@@ -76,17 +76,20 @@ public class AnzhaBulletinController {
         anzhaBulletin.setId(id);
         anzhaBulletin.setTitle(title);
         anzhaBulletin.setMonth(month);
-        anzhaBulletin.setAssessoryyuan(accessory);
-        String tempString = accessory.substring(accessory.lastIndexOf(".") + 1);
-        String url =accessory;
+        anzhaBulletin.setAssessoryyuan(assessory);
+        String tempString="";
+        if(assessory!= null && !"".equals(assessory)) {
+            tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
+        }
+        String url =assessory;
         if (tempString.contains("doc")){
-            url = converter.startConverter(accessory);
+            url = converter.startConverter(assessory);
         }
         anzhaBulletin.setAccessory(url);
         anzhaBulletin.setContent(content);
         anzhaBulletin.setFeedbackareaid(feedbackareaid);
         anzhaBulletin.setFeedbackareaname(feedbackareaname);
-        if(deadlinetime!=null && "".equals(deadlinetime)){
+        if(deadlinetime!=null && !"".equals(deadlinetime)){
             anzhaBulletin.setDeadlinetime(new SimpleDateFormat("yyyy-MM-dd").parse(deadlinetime));
         }
         anzhaBulletinService.update(anzhaBulletin);

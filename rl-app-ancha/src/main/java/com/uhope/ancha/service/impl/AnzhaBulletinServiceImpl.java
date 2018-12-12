@@ -45,8 +45,10 @@ public class AnzhaBulletinServiceImpl extends AbstractService<AnzhaBulletin, Anz
                 if (anzhaScheme != null) {
                     anzhaBulletinDTO.setSchemeName(anzhaScheme.getTitle());
                 }
-                String[] str=anzhaBulletinDTO.getFeedbackareaid()== null ? null:anzhaBulletinDTO.getFeedbackareaid().split(",");
+                String[] str=anzhaBulletinDTO.getFeedbackareaid()==null ? null:anzhaBulletinDTO.getFeedbackareaid().split(",");
+                System.out.println(str);
                 if (str!=null && str.length>0){
+                    System.out.println(str.length);
                     anzhaBulletinDTO.setXunum(str.length);
                 }
                 int yicount=anzhaFeedbackMapper.selectcountByyinum(anzhaBulletinDTO.getId());

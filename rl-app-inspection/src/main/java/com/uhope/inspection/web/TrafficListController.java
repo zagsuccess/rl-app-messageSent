@@ -57,12 +57,14 @@ public class TrafficListController {
         inspectionService.update(scInspection);
         ScTrafficList scTrafficList =new ScTrafficList();
         scTrafficList.setAccessory(accessory);
-        String tempString=accessory.substring(accessory.lastIndexOf(".")+1);
-        String pdfUrl=accessory;
-        if(tempString.contains("doc")){
-            pdfUrl=converter.startConverter(accessory);
+        if (accessory!=null&&accessory!=""){
+            String tempString=accessory.substring(accessory.lastIndexOf(".")+1);
+            String pdfUrl=accessory;
+            if(tempString.contains("doc")){
+                pdfUrl=converter.startConverter(accessory);
+            }
+            scTrafficList.setPdfUrl(pdfUrl);
         }
-        scTrafficList.setPdfUrl(pdfUrl);
         scTrafficList.setInspectionId(inspectionId);
         scTrafficList.setOneregion(oneregion);
         scTrafficList.setRegion(region);

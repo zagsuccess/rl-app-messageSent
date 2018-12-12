@@ -5,6 +5,7 @@ import com.uhope.core.Service;
 import com.uhope.duban.domain.ScDubanSupervision;
 import com.uhope.duban.dto.DeadlineDTO;
 import com.uhope.duban.dto.DubanSupervisionDTO;
+import com.uhope.duban.dto.RegionDTO;
 import com.uhope.template.domain.Template;
 import com.uhope.template.dto.TemplateDTO;
 
@@ -23,6 +24,7 @@ public interface DubanSupervisionService extends Service<ScDubanSupervision, Dub
 
     List<ScDubanSupervision> selectDeadlineUserh();
 
-    PageInfo<ScDubanSupervision> list(Integer pageNumber, Integer pageSize, String issuedtime, String objectname, String status,String objectid);
+    PageInfo<ScDubanSupervision> list(Integer pageNumber, Integer pageSize, String issuedtime, String objectname, String status,String objectid,String regionid);
 
+    public List<RegionDTO> districtlist();
 }

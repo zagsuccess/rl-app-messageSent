@@ -8,6 +8,7 @@ import com.uhope.converter.client.Converter;
 import com.uhope.duban.domain.ScDubanFeedback;
 import com.uhope.duban.domain.ScDubanSupervision;
 import com.uhope.duban.dto.DubanFeedbackDTO;
+import com.uhope.duban.dto.RegionDTO;
 import com.uhope.duban.service.DubanFeedbackService;
 import com.uhope.duban.service.DubanSupervisionService;
 import com.uhope.duban.utils.CommonUtil;
@@ -65,7 +66,10 @@ public class DubanSupervisionController {
         dubanSupervision.setStatus("1");
         String detailUrl = dubanSupervision.getAssessory();
         dubanSupervision.setAssessoryyuan(detailUrl);
-        String tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
+        String tempString="";
+        if(detailUrl!= null && !"".equals(detailUrl)) {
+            tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
+        }
         String url =detailUrl;
         if (tempString.contains("doc")){
             url = converter.startConverter(detailUrl);
@@ -99,28 +103,18 @@ public class DubanSupervisionController {
 
     //查询所有的区河长办
     @GetMapping("/selectPersonnel")
-    public Result<List<UserDTO>> selectPersonnel(){
-        String roleId=dubanSupervisionService.selectRoleId("河长办");
-        Result<PageInfo<UserDTO>> pageInfoResult = userService.queryUserList(null, null, null, roleId, 0, 0);
-        List<UserDTO> userDTOList=new ArrayList<>();
-        if (pageInfoResult.getData()!=null){
-            for (UserDTO userDTO:pageInfoResult.getData().getRecords()){
-                if (userDTO.getRegionId()%(1000 * 1000)==0 && userDTO.getRegionId()%(10000 * 10000)!=0){
-                    userDTOList.add(userDTO);
-                }
-            }
-        }
+    public Result<List<RegionDTO>> selectPersonnel(){
 
-        return ResponseMsgUtil.success(userDTOList);
+        return ResponseMsgUtil.success(dubanSupervisionService.districtlist());
     }
 
 
     @GetMapping("/list")
     public Result<com.github.pagehelper.PageInfo<ScDubanSupervision>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                                                            @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
-                                                                           String issuedtime,String objectname,String status,String objectid) {
+                                                                           String issuedtime,String objectname,String status,String objectid,String regionid) {
 
-        return ResponseMsgUtil.success(dubanSupervisionService.list(pageNumber,pageSize,issuedtime,objectname,status,objectid));
+        return ResponseMsgUtil.success(dubanSupervisionService.list(pageNumber,pageSize,issuedtime,objectname,status,objectid,regionid));
     }
 
     /*//添加处理信息
@@ -146,7 +140,10 @@ public class DubanSupervisionController {
         scDubanFeedback.setDescription(description);
         //scDubanFeedback.setAssessory(assessory);
         scDubanFeedback.setAssessoryyuan(assessory);
-        String tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
+        String tempString="";
+        if(assessory!= null && !"".equals(assessory)) {
+            tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
+        }
         String url =assessory;
         if (tempString.contains("doc")){
             url = converter.startConverter(assessory);
@@ -167,7 +164,10 @@ public class DubanSupervisionController {
         dubanFeedback.setAssessory(dubanFeedback.getAssessory());
         String detailUrl = dubanFeedback.getAssessory();
         dubanFeedback.setAssessoryyuan(detailUrl);
-        String tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
+        String tempString="";
+        if(detailUrl!= null && !"".equals(detailUrl)){
+             tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
+        }
         String url =detailUrl;
         if (tempString.contains("doc")){
             url = converter.startConverter(detailUrl);

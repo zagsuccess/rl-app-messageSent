@@ -52,7 +52,10 @@ public class AnzhaSchemeController {
         anzhaScheme.setContent(content);
         //anzhaScheme.setAssessory(assessory);
         anzhaScheme.setAssessoryyuan(assessory);
-        String tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
+        String tempString="";
+        if(assessory!= null && !"".equals(assessory)){
+            tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
+        }
         String url =assessory;
         if (tempString.contains("doc")){
             url = converter.startConverter(assessory);
@@ -87,7 +90,10 @@ public class AnzhaSchemeController {
         anzhaScheme.setIssue(issue);
         anzhaScheme.setContent(content);
         anzhaScheme.setAssessoryyuan(assessory);
-        String tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
+        String tempString="";
+        if(assessory!= null && !"".equals(assessory)) {
+            tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
+        }
         String url =assessory;
         if (tempString.contains("doc")){
             url = converter.startConverter(assessory);

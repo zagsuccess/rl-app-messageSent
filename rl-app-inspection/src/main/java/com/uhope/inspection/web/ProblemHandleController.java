@@ -51,12 +51,14 @@ public class ProblemHandleController {
         inspectionService.update(scInspection);
         ScProblemHandle scProblemHandle =new ScProblemHandle();
         scProblemHandle.setAccessory(accessory);
-        String tempString=accessory.substring(accessory.lastIndexOf(".")+1);
-        String pdfUrl=accessory;
-        if(tempString.contains("doc")){
-            pdfUrl=converter.startConverter(accessory);
+        if (accessory!=null&&accessory!=""){
+            String tempString=accessory.substring(accessory.lastIndexOf(".")+1);
+            String pdfUrl=accessory;
+            if(tempString.contains("doc")){
+                pdfUrl=converter.startConverter(accessory);
+            }
+            scProblemHandle.setPdfUrl(pdfUrl);
         }
-        scProblemHandle.setPdfUrl(pdfUrl);
         scProblemHandle.setDescription(description);
         scProblemHandle.setSentDate(sentDate);
         scProblemHandle.setState(state);

@@ -36,5 +36,10 @@ public class InspectionServiceImpl extends AbstractService<ScInspection, ScInspe
         return inspectionMapper.selectBelong(sentUnit);
     }
 
+    @Override
+    public String selectRegion(Long regionId) {
+        return inspectionMapper.selectRegion(regionId);
+    }
+
 
 }

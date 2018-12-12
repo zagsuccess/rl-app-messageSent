@@ -19,8 +19,10 @@ public class AddTokenFilter implements Filter {
     /**
      * superAdmin
      */
-    private static final String DEFAULT_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJsb2dpblRpbWUiOjE1MzAyNjA4NzUzNTgsImFwcElkIjoiMTIzNDU2IiwidXNlcklkIjoiOGQ2YmQ1NmMyNmIzMTFlOGFiMTFhYTZhMGNhYmU4YmEifQ.wiAEKBPrRVxLXgrMsfiZMRz-VSyO8qDONnLfncTYXbc";
+    //private static final String DEFAULT_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJsb2dpblRpbWUiOjE1MzAyNjA4NzUzNTgsImFwcElkIjoiMTIzNDU2IiwidXNlcklkIjoiOGQ2YmQ1NmMyNmIzMTFlOGFiMTFhYTZhMGNhYmU4YmEifQ.wiAEKBPrRVxLXgrMsfiZMRz-VSyO8qDONnLfncTYXbc";
 
+    //河北区河长办
+    private static final String DEFAULT_TOKEN="eyJhbGciOiJIUzI1NiJ9.eyJsb2dpblRpbWUiOjE1NDM5MDczNzk1MzcsImFwcElkIjoiN2MzOWI0MzFkOTBjNGY5YTgxYTMxN2I3ODdjODQ3NzAiLCJ1c2VySWQiOiIzZTE3ZjNmMjRhYmU0ZTIwYWMxNjAxYjUzNTZmMGY2NyIsInRlcm1pbmFsVHlwZSI6IldFQiJ9.ZdDqBRX1TICMtWkXdY5MgIYiTXNrM963Jl8Ukenz0VY";
     private String profilesActive;
 
     public AddTokenFilter(String profilesActive) {
