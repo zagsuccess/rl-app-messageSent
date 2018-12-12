@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.messageSent.mapper.MsWorkBulletinMapper">
+    <resultMap id="BaseResultMap" type="com.uhope.messageSent.domain.MsWorkBulletin">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="region" jdbcType="VARCHAR" property="region" />
+        <result column="initiator" jdbcType="VARCHAR" property="initiator" />
+        <result column="report_time" jdbcType="VARCHAR" property="reportTime" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="accessory_url" jdbcType="VARCHAR" property="accessoryURL" />
+        <result column="pdf_url" jdbcType="VARCHAR" property="pdfURL" />
+        <result column="sent_state" jdbcType="INTEGER" property="sentState" />
+        <result column="accept_state" jdbcType="INTEGER" property="acceptState" />
+    </resultMap>
+
+    <select id="selectList" parameterType="java.lang.String" resultType="java.util.HashMap">
+        select area_code, area_name from md_administrative_region mr where mr.grade=#{grade}
+    </select>
+
+    <select id="selectDetail" parameterType="java.lang.String" resultType="java.util.HashMap">
+        select area_code, area_name, grade from md_administrative_region mr where mr.id=#{id}
+    </select>
+
+
+</mapper>
