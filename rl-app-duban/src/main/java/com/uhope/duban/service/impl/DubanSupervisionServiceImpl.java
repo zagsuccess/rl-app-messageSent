@@ -7,6 +7,7 @@ import com.uhope.core.AbstractService;
 import com.uhope.duban.domain.ScDubanSupervision;
 import com.uhope.duban.dto.DeadlineDTO;
 import com.uhope.duban.dto.DubanSupervisionDTO;
+import com.uhope.duban.dto.RegionDTO;
 import com.uhope.duban.mapper.DubanSupervisionMapper;
 import com.uhope.duban.service.DubanSupervisionService;
 import com.uhope.duban.utils.PageUtil;
@@ -42,7 +43,7 @@ public class DubanSupervisionServiceImpl extends AbstractService<ScDubanSupervis
     }
 
     @Override
-    public PageInfo<ScDubanSupervision> list(Integer pageNumber, Integer pageSize, String issuedtime, String objectname, String status,String objectid) {
+    public PageInfo<ScDubanSupervision> list(Integer pageNumber, Integer pageSize, String issuedtime, String objectname, String status,String objectid,String regionid) {
         List<ScDubanSupervision> dubanlist= Lists.newArrayList();
         if(objectid==null || "".equals(objectid)){
             PageHelper.startPage(pageNumber, pageSize);
@@ -54,7 +55,7 @@ public class DubanSupervisionServiceImpl extends AbstractService<ScDubanSupervis
             List<ScDubanSupervision> list = dubanSupervisionMapper.list(issuedtime,objectname,status);
             if(list!=null && list.size()>0){
                 for (ScDubanSupervision scDubanSupervision:list) {
-                    if (scDubanSupervision.getObjectid().contains(objectid)) {
+                    if (scDubanSupervision.getObjectid().contains(regionid)) {
                         dubanlist.add(scDubanSupervision);
                     }
                 }
@@ -63,6 +64,11 @@ public class DubanSupervisionServiceImpl extends AbstractService<ScDubanSupervis
             pageInfo.setTotal(dubanlist.size());
             return pageInfo;
         }
+    }
+
+    @Override
+    public List<RegionDTO> districtlist() {
+        return dubanSupervisionMapper.districtlist();
     }
 
 }
