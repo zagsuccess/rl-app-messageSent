@@ -15,7 +15,6 @@ import com.uhope.messageSent.utils.CommonUtil;
 import com.uhope.messageSent.utils.DateUtil;
 import com.uhope.uip.dto.UserDTO;
 import com.uhope.uip.fm.client.FileManagerClient;
-import com.uhope.uip.fm.config.FmConfig;
 import com.uhope.uip.fm.model.FileItem;
 import com.uhope.uip.service.TokenService;
 import org.springframework.beans.BeanUtils;
@@ -145,16 +144,33 @@ public class MsWorkBulletinController  {
         String ren = "";
         String accessoryURL = "";
         String pdfURL = "";
+        List<Map<String, String>> fileList = new ArrayList<Map<String, String>>();
+
         if (msWorkBulletinDTO.getAccessoryURL() != null && !"".equals(msWorkBulletinDTO.getAccessoryURL())) {
             String[] str = msWorkBulletinDTO.getAccessoryURL().split("_");
             ren = str[1];
             accessoryURL = url;
             pdfURL = pdf;
+
+            // 将文件的预览地址与下载地址对应
+            String[] accessoryURLArr = accessoryURL.split(",");
+            String[] pdfURLArr = pdfURL.split(",");
+
+            int totalLength = accessoryURLArr.length <= pdfURLArr.length ? accessoryURLArr.length : pdfURLArr.length;
+
+            for (int i = 0; i < totalLength; i++) {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("previewURL", pdfURLArr[i]);
+                map.put("downloadURL", accessoryURLArr[i]);
+                fileList.add(map);
+            }
+
         }
 
         msWorkBulletinDTO.setAccessoryURL(accessoryURL);
         msWorkBulletinDTO.setPdfURL(pdfURL);
         msWorkBulletinDTO.setRen(ren);
+        msWorkBulletinDTO.setFileList(fileList);
 
         return ResponseMsgUtil.success(msWorkBulletinDTO);
     }
