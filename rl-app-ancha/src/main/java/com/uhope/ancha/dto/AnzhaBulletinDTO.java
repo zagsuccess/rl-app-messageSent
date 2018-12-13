@@ -33,8 +33,9 @@ public class AnzhaBulletinDTO extends AnzhaBulletin {
         this.yinum = yinum;
     }
 
-    public AnzhaBulletinDTO(String title, Date issuetime, String month, String content, String accessory, String status, String feedbackareaid, String feedbackareaname, Date deadlinetime, String schemeid, String schemeName, String or, int xunum, int yinum) {
-        super(title, issuetime, month, content, accessory, status, feedbackareaid, feedbackareaname, deadlinetime, schemeid);
+
+    public AnzhaBulletinDTO(String title, Date issuetime, String month, String content, String assessoryyuan, String accessory, String status, String feedbackareaid, String feedbackareaname, Date deadlinetime, String schemeid, String schemeName, String or, int xunum, int yinum) {
+        super(title, issuetime, month, content, assessoryyuan, accessory, status, feedbackareaid, feedbackareaname, deadlinetime, schemeid);
         this.schemeName = schemeName;
         this.or = or;
         this.xunum = xunum;

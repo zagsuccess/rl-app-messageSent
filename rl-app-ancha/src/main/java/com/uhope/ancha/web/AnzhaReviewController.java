@@ -7,6 +7,7 @@ import com.uhope.ancha.service.AnzhaBulletinService;
 import com.uhope.ancha.service.AnzhaReviewService;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
+import com.uhope.converter.client.Converter;
 import com.uhope.uip.fm.config.FmConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,8 @@ public class AnzhaReviewController {
     private AnzhaReviewService anzhaReviewService;
     @Autowired
     private AnzhaBulletinService anzhaBulletinService;
+    @Autowired
+    private Converter converter;
 
     @PostMapping("/add")
     public Result<AnzhaReview> add(@RequestParam String whether,
@@ -43,6 +46,16 @@ public class AnzhaReviewController {
         anzhaReview.setReviewTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(reviewTime));
         anzhaReview.setDescription(describe);
         anzhaReview.setAssessory(filePath);
+        anzhaReview.setAssessoryyuan(filePath);
+        String tempString="";
+        if(filePath!= null && !"".equals(filePath)) {
+            tempString = filePath.substring(filePath.lastIndexOf(".") + 1);
+        }
+        String url =filePath;
+        if (tempString.contains("doc")){
+            url = converter.startConverter(filePath);
+        }
+        anzhaReview.setAssessory(url);
         anzhaReview.setCreatetime(new Date());
         anzhaReview.setBulletinid(bulletinid);
         anzhaReviewService.insertAnzhaReview(anzhaReview);
@@ -56,7 +69,8 @@ public class AnzhaReviewController {
     @GetMapping("/detail")
     public Result<AnzhaReview> detail(@RequestParam String id) {
         AnzhaReview anzhaReview = anzhaReviewService.selectOneById(id);
-        anzhaReview.setAssessory(FmConfig.getFmUrl() + anzhaReview.getAssessory());
+        anzhaReview.setAssessory(FmConfig.getAgentUrl() + anzhaReview.getAssessory());
+        anzhaReview.setAssessoryyuan(FmConfig.getAgentUrl()+anzhaReview.getAssessoryyuan());
         return ResponseMsgUtil.success(anzhaReview);
     }
 }

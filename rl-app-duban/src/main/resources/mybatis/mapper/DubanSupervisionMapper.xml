@@ -45,5 +45,10 @@
             </if>
         </where>
     </select>
+    <select id="districtlist" resultType="com.uhope.duban.dto.RegionDTO">
+        select distinct area_name as  regionName, id as regionId
+        from md_administrative_region
+        where grade=3
+    </select>
 
 </mapper>

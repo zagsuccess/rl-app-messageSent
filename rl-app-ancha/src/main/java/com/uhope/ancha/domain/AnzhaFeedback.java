@@ -27,6 +27,10 @@ public class AnzhaFeedback implements Serializable {
      */
     private String description;
     /**
+     * 原文件路径
+     */
+    private String assessoryyuan;
+    /**
      * 反馈附件
      */
     private String assessory;
@@ -39,14 +43,23 @@ public class AnzhaFeedback implements Serializable {
         super();
     }
 
-    public AnzhaFeedback(Date feedbacktime, String objectid, String whether, String description, String assessory, String bulletinid, String status) {
+    public AnzhaFeedback(Date feedbacktime, String objectid, String whether, String description, String assessoryyuan, String assessory, String bulletinid, String status) {
         this.feedbacktime = feedbacktime;
         this.objectid = objectid;
         this.whether = whether;
         this.description = description;
+        this.assessoryyuan = assessoryyuan;
         this.assessory = assessory;
         this.bulletinid = bulletinid;
         this.status = status;
+    }
+
+    public String getAssessoryyuan() {
+        return assessoryyuan;
+    }
+
+    public void setAssessoryyuan(String assessoryyuan) {
+        this.assessoryyuan = assessoryyuan;
     }
 
     public String getId() {
@@ -121,6 +134,7 @@ public class AnzhaFeedback implements Serializable {
                 ", objectid='" + objectid + '\'' +
                 ", whether='" + whether + '\'' +
                 ", description='" + description + '\'' +
+                ", assessoryyuan='" + assessoryyuan + '\'' +
                 ", assessory='" + assessory + '\'' +
                 ", bulletinid='" + bulletinid + '\'' +
                 ", status='" + status + '\'' +

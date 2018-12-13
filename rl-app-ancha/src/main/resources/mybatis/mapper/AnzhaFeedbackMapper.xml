@@ -8,6 +8,7 @@
         <result column="OBJECTID" property="objectid" />
         <result column="WHETHER" property="whether" />
         <result column="DESCRIPTION" property="description" />
+        <result column="ASSESSORYYUAN" property="assessoryyuan" />
         <result column="ASSESSORY" property="assessory" />
         <result column="BULLETINID" property="bulletinid" />
     </resultMap>

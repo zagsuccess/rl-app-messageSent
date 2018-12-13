@@ -13,4 +13,6 @@ public interface InspectionService extends Service<ScInspection, ScInspectionDTO
 
 
     List<ScInspection> selectBelong(String sentUnit);
+
+    String selectRegion(Long regionId);
 }

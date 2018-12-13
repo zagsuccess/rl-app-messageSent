@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface WaterQualityMapper extends Mapper<WaterQuality> {
     public List<WaterQuality> selectList(@Param("issue") String issue, @Param("status") String status,
-                                         @Param("createUser") String createUser, @Param("num") Integer num);
+                                         @Param("createUser") String createUser, @Param("num") String num);
 
 
     WaterQuality get1(String id);

@@ -64,7 +64,10 @@ public class    BulletinController {
         bulletin.setType(bulletin.getType());
         bulletin.setCreate_time(new Date());
         String detailUrl = bulletin.getAttand_url();
-        String tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
+        String tempString="";
+        if(detailUrl!= null && !"".equals(detailUrl)) {
+            tempString = detailUrl.substring(detailUrl.lastIndexOf(".") + 1);
+        }
         String url =detailUrl;
         if (tempString.contains("doc")){
             url = converter.startConverter(bulletin.getAttand_url());

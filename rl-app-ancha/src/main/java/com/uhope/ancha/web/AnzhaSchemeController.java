@@ -9,6 +9,7 @@ import com.uhope.ancha.service.AnzhaSchemeService;
 import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
+import com.uhope.converter.client.Converter;
 import com.uhope.uip.fm.config.FmConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,8 @@ public class AnzhaSchemeController {
 
     @Autowired
     private AnzhaBulletinService anzhaBulletinService;
+    @Autowired
+    private Converter converter;
 
     @PostMapping("/add")
     public Result<AnzhaScheme> add(@RequestParam String title,
@@ -47,7 +50,17 @@ public class AnzhaSchemeController {
         anzhaScheme.setCreateuser(createuser);
         anzhaScheme.setIssue(issue);
         anzhaScheme.setContent(content);
-        anzhaScheme.setAssessory(assessory);
+        //anzhaScheme.setAssessory(assessory);
+        anzhaScheme.setAssessoryyuan(assessory);
+        String tempString="";
+        if(assessory!= null && !"".equals(assessory)){
+            tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
+        }
+        String url =assessory;
+        if (tempString.contains("doc")){
+            url = converter.startConverter(assessory);
+        }
+        anzhaScheme.setAssessory(url);
         anzhaScheme.setBulletinid(anzhaBulletin.getId());
         anzhaSchemeService.insert(anzhaScheme);
         anzhaBulletin.setSchemeid(anzhaScheme.getId());
@@ -58,7 +71,8 @@ public class AnzhaSchemeController {
     @GetMapping("/detail")
     public Result<AnzhaScheme> detail(@RequestParam String id) {
         AnzhaScheme anzhaScheme = anzhaSchemeService.get(id);
-        anzhaScheme.setAssessory(FmConfig.getFmUrl()+anzhaScheme.getAssessory());
+        anzhaScheme.setAssessory(FmConfig.getAgentUrl()+anzhaScheme.getAssessory());
+        anzhaScheme.setAssessoryyuan(FmConfig.getAgentUrl()+anzhaScheme.getAssessoryyuan());
         return ResponseMsgUtil.success(anzhaScheme);
     }
 
@@ -75,7 +89,17 @@ public class AnzhaSchemeController {
         anzhaScheme.setCreateuser(createuser);
         anzhaScheme.setIssue(issue);
         anzhaScheme.setContent(content);
-        anzhaScheme.setAssessory(assessory);
+        anzhaScheme.setAssessoryyuan(assessory);
+        String tempString="";
+        if(assessory!= null && !"".equals(assessory)) {
+            tempString = assessory.substring(assessory.lastIndexOf(".") + 1);
+        }
+        String url =assessory;
+        if (tempString.contains("doc")){
+            url = converter.startConverter(assessory);
+        }
+        anzhaScheme.setAssessory(url);
+        //anzhaScheme.setAssessory(assessory);
         anzhaSchemeService.update(anzhaScheme);
         return ResponseMsgUtil.success(anzhaScheme);
     }

@@ -27,6 +27,10 @@ public class AnzhaBulletin implements Serializable {
      */
     private String content;
     /**
+     * 原文件路径
+     */
+    private String assessoryyuan;
+    /**
      * 通报附件
      */
     private String accessory;
@@ -54,17 +58,26 @@ public class AnzhaBulletin implements Serializable {
         super();
     }
 
-    public AnzhaBulletin(String title, Date issuetime, String month, String content, String accessory, String status, String feedbackareaid, String feedbackareaname, Date deadlinetime, String schemeid) {
+    public AnzhaBulletin(String title, Date issuetime, String month, String content, String assessoryyuan, String accessory, String status, String feedbackareaid, String feedbackareaname, Date deadlinetime, String schemeid) {
         this.title = title;
         this.issuetime = issuetime;
         this.month = month;
         this.content = content;
+        this.assessoryyuan = assessoryyuan;
         this.accessory = accessory;
         this.status = status;
         this.feedbackareaid = feedbackareaid;
         this.feedbackareaname = feedbackareaname;
         this.deadlinetime = deadlinetime;
         this.schemeid = schemeid;
+    }
+
+    public String getAssessoryyuan() {
+        return assessoryyuan;
+    }
+
+    public void setAssessoryyuan(String assessoryyuan) {
+        this.assessoryyuan = assessoryyuan;
     }
 
     public String getId() {
@@ -163,6 +176,7 @@ public class AnzhaBulletin implements Serializable {
                 ", issuetime=" + issuetime +
                 ", month='" + month + '\'' +
                 ", content='" + content + '\'' +
+                ", assessoryyuan='" + assessoryyuan + '\'' +
                 ", accessory='" + accessory + '\'' +
                 ", status='" + status + '\'' +
                 ", feedbackareaid='" + feedbackareaid + '\'' +

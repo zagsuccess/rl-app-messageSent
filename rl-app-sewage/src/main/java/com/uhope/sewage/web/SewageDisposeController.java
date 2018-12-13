@@ -64,7 +64,12 @@ public class SewageDisposeController {
     @GetMapping("/list")
     public Result<PageInfo<SewageDispose>> list(@RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber,
                                                @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize,
-                                               String issue, String status, String createUser,Integer num) {
+                                                @RequestParam String objectid,
+                                                String issue, String status, String createUser) {
+        String num="";
+        if("市河长办".equals(sewageDisposeService.selectRole(objectid))){
+            num="2";
+        }
         return ResponseMsgUtil.success(sewageDisposeService.list(pageNumber,pageSize,issue,status,createUser,num));
     }
 

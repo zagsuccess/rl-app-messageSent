@@ -23,6 +23,10 @@ public class AnzhaReview implements Serializable {
      */
     private String description;
     /**
+     * 原文件路径
+     */
+    private String assessoryyuan;
+    /**
      * 复查附件
      */
     private String assessory;
@@ -37,24 +41,25 @@ public class AnzhaReview implements Serializable {
     public AnzhaReview() {
         super();
     }
-    public AnzhaReview(String id,java.util.Date reviewTime,String whether,String description,String assessory,String bulletinid) {
-        super();
-        this.id = id;
-        this.reviewTime = reviewTime;
-        this.whether = whether;
-        this.description = description;
-        this.assessory = assessory;
-        this.bulletinid = bulletinid;
-    }
 
-    public AnzhaReview(Date reviewTime, String whether, String description, String assessory, Date createtime, String bulletinid) {
+    public AnzhaReview(Date reviewTime, String whether, String description, String assessoryyuan, String assessory, Date createtime, String bulletinid) {
         this.reviewTime = reviewTime;
         this.whether = whether;
         this.description = description;
+        this.assessoryyuan = assessoryyuan;
         this.assessory = assessory;
         this.createtime = createtime;
         this.bulletinid = bulletinid;
     }
+
+    public String getAssessoryyuan() {
+        return assessoryyuan;
+    }
+
+    public void setAssessoryyuan(String assessoryyuan) {
+        this.assessoryyuan = assessoryyuan;
+    }
+
 
     public String getId() {
         return this.id;
@@ -119,6 +124,7 @@ public class AnzhaReview implements Serializable {
                 ", reviewTime=" + reviewTime +
                 ", whether='" + whether + '\'' +
                 ", description='" + description + '\'' +
+                ", assessoryyuan='" + assessoryyuan + '\'' +
                 ", assessory='" + assessory + '\'' +
                 ", createtime=" + createtime +
                 ", bulletinid='" + bulletinid + '\'' +

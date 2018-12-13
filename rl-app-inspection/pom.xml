@@ -8,7 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <description>rl-template project for Spring Boot</description>
+    <description>rl-template project for Spr541900ing Boot</description>
 
     <parent>
         <groupId>com.uhope</groupId>

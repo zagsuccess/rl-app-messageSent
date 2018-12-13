@@ -6,7 +6,7 @@ import com.uhope.sewage.domain.SewageDispose;
 import com.uhope.sewage.dto.SewageDisposeDTO;
 
 public interface SewageDisposeService extends Service<SewageDispose, SewageDisposeDTO,String> {
-    public PageInfo<SewageDispose> list(Integer pageNumber, Integer pageSize, String issue, String status, String createUser, Integer num);
+    public PageInfo<SewageDispose> list(Integer pageNumber, Integer pageSize, String issue, String status, String createUser, String num);
 
     String selectRole(String id);
 
