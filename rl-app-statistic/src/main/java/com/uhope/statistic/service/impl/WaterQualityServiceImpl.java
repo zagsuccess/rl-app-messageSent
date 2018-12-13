@@ -12,4 +12,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class WaterQualityServiceImpl extends AbstractService<AmWaterQuality, AmWaterQuality, String> implements WaterQualityService {
+
+    @Override
+    public int update(AmWaterQuality model) {
+        return mapper.updateByPrimaryKey(model);
+    }
 }

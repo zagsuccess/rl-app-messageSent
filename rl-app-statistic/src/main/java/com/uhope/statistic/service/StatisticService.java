@@ -1,11 +1,7 @@
 package com.uhope.statistic.service;
 
-import com.uhope.statistic.dto.RegionStatisticDTO;
-import com.uhope.statistic.dto.RiverStatisticDTO;
-import com.uhope.statistic.dto.SuperviseDTO;
-import com.uhope.statistic.dto.WaterQualityDTO;
+import com.uhope.statistic.dto.*;
 
-import javax.swing.plaf.synth.Region;
 import java.util.List;
 
 /**
@@ -104,4 +100,41 @@ public interface StatisticService {
      * @return
      */
     List<RegionStatisticDTO> getRegionStatistic(String date);
+
+    /**
+     * 获得水质数据得分
+     * @param date
+     */
+    List<SuperviseDTO> getWaterQualityStatistic(String date);
+    /**
+     * 根据k值列表统计得到n值列表
+     * @param paramType 参数类型
+     * @param ruleName 评分规则类型
+     * @param value k值
+     * @return
+     */
+    Double queryNByK(String ruleName, String paramType, Double value);
+
+    /**
+     * 根据平均浓度c值计算水质等级
+     * @param ruleName 参数类型
+     * @param paramType 评分规则类型
+     * @param value 起止断面平均浓度
+     * @return
+     */
+    Integer queryLevelByC(String ruleName, String paramType, Double value);
+
+    /**
+     * 查询k值列表
+     * @param date
+     * @return
+     */
+    List<KValueDTO> queryKValueList(String date);
+
+    /**
+     * 查询河段浓度列表
+     * @param date
+     * @return
+     */
+    List<KValueDTO> queryCValueList(String date);
 }

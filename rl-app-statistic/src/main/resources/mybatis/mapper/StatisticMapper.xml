@@ -36,9 +36,9 @@
     </select>
 
     <!--2. 河湖水生态环境质量考核成绩-->
-    <!--2.1. 河湖水质考核成绩-->
+    <!--2.1. 河湖水质考核成绩(40分), 不包括【河湖区界断面出入境水体水质变化情况(60分)，该分值在Service层中算出后增加】 -->
     <select id="queryWaterQualityAssessment" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
-        SELECT t_c.regionId, t_c.regionName, 0.7*SUM(t_c.grade) AS grade
+        SELECT t_c.regionId, t_c.regionName, SUM(t_c.grade) AS grade
         FROM
         (
         SELECT mar.area_code AS regionId, mar.area_name AS regionName, 10-IF(IFNULL(t_b.problem_deduction, 0) > 10, 10, IFNULL(t_b.problem_deduction, 0)) as grade
@@ -97,7 +97,7 @@
     </select>
     <!--2.2. 河湖堤岸水面环境卫生考核成绩-->
     <select id="queryWaterSurfaceSanitation" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
-        SELECT t_c.regionId, t_c.regionName, 0.15*SUM(t_c.grade) AS grade
+        SELECT t_c.regionId, t_c.regionName, SUM(t_c.grade) AS grade
         FROM
         (
         SELECT mar.area_code AS regionId, mar.area_name AS regionName, 80-IF(IFNULL(t_b.problem_deduction, 0) > 80, 80, IFNULL(t_b.problem_deduction, 0)) as grade
@@ -165,7 +165,7 @@
     </select>
     <!--2.3. 河湖岸线管理考核成绩-->
     <select id="queryShorelineManagement" parameterType="java.util.Map" resultType="com.uhope.statistic.dto.SuperviseDTO">
-        SELECT t_c.regionId, t_c.regionName, 0.15*SUM(t_c.grade) AS grade
+        SELECT t_c.regionId, t_c.regionName, SUM(t_c.grade) AS grade
         FROM
         (
         SELECT mar.area_code AS regionId, mar.area_name AS regionName, 40-IF(IFNULL(t_b.problem_deduction, 0) > 40, 40, IFNULL(t_b.problem_deduction, 0)) as grade
@@ -282,6 +282,108 @@
             AND DATE_FORMAT(ssr.report_date, '%Y-%m')=#{date}
             GROUP BY ssr.region_name
         )t_a ON t_a.region_name=mar.area_name
+        WHERE mar.grade=3
+        ORDER BY mar.area_code
+    </select>
+
+    <!--根据K值查询对应的n值-->
+    <select id="queryNByK" parameterType="java.util.Map" resultType="java.lang.Double">
+    SELECT
+        IFNULL(MAX(15 - (
+        CASE WHEN IF(awq.min_value IS NULL, awq.max_value <![CDATA[ > ]]> #{value}, #{value} <![CDATA[ < ]]> awq.min_value AND #{value} <![CDATA[ < ]]> awq.max_value) THEN awq.deduct_value
+        WHEN IF(awq.max_value IS NULL, awq.min_value <![CDATA[ < ]]> #{value}, #{value} <![CDATA[ < ]]> awq.min_value AND #{value} <![CDATA[ < ]]> awq.max_value) THEN awq.deduct_value
+        WHEN awq.max_value = #{value} AND awq.min_value=#{value} THEN awq.deduct_value
+        END
+    )),0) AS do_score
+    FROM am_water_quality awq, am_water_quality_rule awqr
+    WHERE awq.param_type=#{paramType} AND awqr.rule_name=#{ruleName}
+    </select>
+
+    <!--根据平均浓度查找得到对应水质等级-->
+    <select id="queryLevelByC" parameterType="java.util.Map" resultType="java.lang.Double">
+    SELECT
+        IFNULL(MAX(
+        CASE WHEN IF(awa.min_value IS NULL, awa.max_value <![CDATA[ > ]]> #{value}, #{value} <![CDATA[ < ]]> awa.min_value AND #{value} <![CDATA[ < ]]> awa.max_value) THEN awa.water_quality_type
+        WHEN IF(awa.max_value IS NULL, awa.min_value <![CDATA[ < ]]> #{value}, #{value} <![CDATA[ < ]]> awa.min_value AND #{value} <![CDATA[ < ]]> awa.max_value) THEN awa.water_quality_type
+        WHEN awa.max_value = #{value} AND awa.min_value=#{value} THEN awa.water_quality_type
+        END
+        ),0) AS do_score
+    FROM am_water_assess awa, am_water_quality_rule awqr
+    WHERE awa.param_type=#{paramType} AND awqr.rule_name=#{ruleName}
+    </select>
+
+    <!--查询K列表-->
+    <select id="queryKValueList" parameterType="java.lang.String" resultType="com.uhope.statistic.dto.KValueDTO">
+    SELECT t_rj.region_name AS regionName,
+        t_rj.river_name AS riverName,
+        t_rj.reach_name AS reachName,
+        t_rj.input_section AS inputSection,
+        t_cj.output_section AS outputSection,
+        t_rj.target_water_quality As targetWaterQuality,
+        t_rj.year_target_water_quality AS yearTargetWaterQuality,
+        t_rj.is_sewage_factory AS isSewageFactory,
+        t_rj.scoring_rules AS scoringRules,
+        t_rj.is_water_quality_assess AS isWaterQualityAssess,
+        t_rj.is_compensation AS isCompensation,
+        (t_rj.total_phosphorus/t_cj.total_phosphorus) AS kTp,
+        (t_rj.ammonia_nitrogen/t_cj.ammonia_nitrogen) AS kNh4n,
+        (t_rj.permanganate_index/t_cj.permanganate_index) AS kDo,
+        (t_rj.`DO`/t_cj.`DO`) AS kCodmn,
+        (t_rj.total_phosphorus+t_cj.total_phosphorus)/2 AS cTp,
+        (t_rj.ammonia_nitrogen+t_cj.ammonia_nitrogen)/2 AS cNh4n,
+        (t_rj.permanganate_index+t_cj.permanganate_index)/2 AS cDo,
+        (t_rj.`DO`+t_cj.`DO`)/2 AS cCodmn,
+        t_rj.issue AS issue
+    FROM
+    (
+        SELECT ara.*, wqg.total_phosphorus, wqg.ammonia_nitrogen, wqg.permanganate_index, wqg.`DO`, wq.issue
+        FROM am_reach_assess ara, water_quality_grade wqg, water_quality wq
+        WHERE ara.input_section=wqg.name AND wq.issue=#{date} AND wq.status=0
+    )t_rj,
+    (
+        SELECT ara.*, wqg.total_phosphorus, wqg.ammonia_nitrogen, wqg.permanganate_index, wqg.`DO`, wq.issue
+        FROM am_reach_assess ara, water_quality_grade wqg, water_quality wq
+        WHERE ara.output_section=wqg.name AND wq.issue=#{date} AND wq.status=0
+    )t_cj
+    WHERE t_rj.reach_name=t_cj.reach_name
+    ORDER BY t_rj.region_name;
+    </select>
+
+    <!--查询浓度c列表-->
+    <select id="queryCValueList" parameterType="java.lang.String" resultType="com.uhope.statistic.dto.KValueDTO">
+    SELECT t_rj.region_name AS regionName,
+        t_rj.river_name AS riverName,
+        t_rj.reach_name AS reachName,
+        t_rj.input_section AS inputSection,
+        t_cj.output_section AS outputSection,
+        t_rj.target_water_quality As targetWaterQuality,
+        t_rj.year_target_water_quality AS yearTargetWaterQuality,
+        t_rj.is_sewage_factory AS isSewageFactory,
+        t_rj.scoring_rules AS scoringRules,
+        t_rj.is_water_quality_assess AS isWaterQualityAssess,
+        t_rj.is_compensation AS isCompensation,
+        (t_rj.total_phosphorus+t_cj.total_phosphorus)/2 AS cTp,
+        (t_rj.ammonia_nitrogen+t_cj.ammonia_nitrogen)/2 AS cNh4n,
+        (t_rj.permanganate_index+t_cj.permanganate_index)/2 AS cDo,
+        (t_rj.`DO`+t_cj.`DO`)/2 AS cCodmn,
+        t_rj.issue AS issue
+    FROM
+    (
+        SELECT ara.*, wqg.total_phosphorus, wqg.ammonia_nitrogen, wqg.permanganate_index, wqg.`DO`, wq.issue
+        FROM am_reach_assess ara, water_quality_grade wqg, water_quality wq
+        WHERE ara.input_section=wqg.name AND wq.issue=#{date} AND wq.status=0
+    )t_rj,
+    (
+        SELECT ara.*, wqg.total_phosphorus, wqg.ammonia_nitrogen, wqg.permanganate_index, wqg.`DO`, wq.issue
+        FROM am_reach_assess ara, water_quality_grade wqg, water_quality wq
+        WHERE ara.output_section=wqg.name AND wq.issue=#{date} AND wq.status=0
+    )t_cj
+    WHERE t_rj.reach_name=t_cj.reach_name
+    ORDER BY t_rj.region_name;
+    </select>
+    <select id="listSuperviseDTO" resultType="com.uhope.statistic.dto.SuperviseDTO">
+        SELECT mar.area_code AS regionId, mar.area_name AS regionName, 0 AS grade
+        FROM md_administrative_region mar
         WHERE mar.grade=3
         ORDER BY mar.area_code
     </select>

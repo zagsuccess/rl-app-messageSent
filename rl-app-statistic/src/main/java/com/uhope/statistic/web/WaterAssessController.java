@@ -1,8 +1,6 @@
 package com.uhope.statistic.web;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.uhope.base.constants.Constant;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
 import com.uhope.statistic.domain.AmWaterAssess;
@@ -31,6 +29,12 @@ public class WaterAssessController {
     @Autowired
     private TokenService tokenService;
 
+    /**
+     * 新增水质评分细则
+     * @param request
+     * @param waterAssess
+     * @return
+     */
     @PostMapping("/addWaterAssess")
     public Result<AmWaterAssess> addWaterAssess(HttpServletRequest request, AmWaterAssess waterAssess) {
         waterAssess.setCreateTime(new Date());
@@ -39,27 +43,41 @@ public class WaterAssessController {
         return ResponseMsgUtil.success(waterAssess);
     }
 
+    /**
+     * 删除水质评分细则
+     * @param id
+     * @return
+     */
     @DeleteMapping("/deleteWaterAssess")
     public Result<String> deleteWaterAssess(String id) {
         waterAssessService.remove(id);
         return ResponseMsgUtil.success(id);
     }
 
+    /**
+     * 更新水质评分细则
+     * @param waterAssess
+     * @return
+     */
     @PutMapping("/updateWaterAssess")
     public Result<AmWaterAssess> updateWaterAssess(AmWaterAssess waterAssess) {
         waterAssessService.update(waterAssess);
         return ResponseMsgUtil.success(waterAssess);
     }
 
+    /**
+     * 水质评分细则列表
+     * @param waterQualityRule
+     * @param paramType
+     * @param waterQualityType
+     * @return
+     */
     @GetMapping("/listWaterAssess")
     public Result<PageInfo> listWaterAssess(
             @RequestParam(name = "waterQualityRule", required = true) String waterQualityRule
             , @RequestParam(name = "paramType", required = false) String paramType
             , @RequestParam(name = "waterQualityType", required = false) String waterQualityType
-            , @RequestParam(defaultValue = Constant.DEFAULT_PAGE_NUMBER) Integer pageNumber
-            , @RequestParam(defaultValue = Constant.DEFAULT_PAGE_SIZE) Integer pageSize
     ) {
-        PageHelper.startPage(pageNumber, pageSize);
         Condition condition = new Condition(AmWaterAssess.class);
         Example.Criteria criteria = condition.createCriteria();
         criteria.andCondition("rule_name= '" + waterQualityRule + "'");
@@ -73,11 +91,16 @@ public class WaterAssessController {
 
         condition.orderBy("sortOrder");
         List<AmWaterAssess> list = waterAssessService.findByCondition(condition);
-        PageInfo pageInfo = new PageInfo(list);
 
+        PageInfo pageInfo = new PageInfo(list);
         return ResponseMsgUtil.success(pageInfo);
     }
 
+    /**
+     * 根据id查找水质评分细则详情
+     * @param id
+     * @return
+     */
     @GetMapping("/findWaterAssessById")
     public Result<AmWaterAssess> findWaterAssessById(String id) {
         AmWaterAssess amWaterAssess = waterAssessService.get(id);

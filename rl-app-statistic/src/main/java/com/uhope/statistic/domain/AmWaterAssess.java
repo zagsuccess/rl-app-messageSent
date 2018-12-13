@@ -2,9 +2,8 @@ package com.uhope.statistic.domain;
 
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,25 +11,58 @@ import java.util.Date;
 public class AmWaterAssess implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT REPLACE(UUID(),\"-\",\"\")")
+    /**
+     * id
+     */
     private String id;
 
+    /**
+     * 规则名称
+     */
     private String ruleName;
 
+    /**
+     * 参数类型
+     */
     private String paramType;
 
-    private String boundaryValue;
+    /**
+     * 最大值
+     */
+    private Double maxValue;
 
-    private String matchRule;
+    /**
+     * 最小值
+     */
+    private Double minValue;
 
-    private String waterQualityType;
+    /**
+     * 水质类别
+     */
+    private Integer waterQualityType;
 
-    private String scoreCoefficient;
+    /**
+     * 得分系数
+     */
+    private Double scoreCoefficient;
 
-    private String factorCoefficient;
+    /**
+     * 修正系数
+     */
+    private Double factorCoefficient;
 
+    /**
+     * 排序
+     */
     private Integer sortOrder;
 
-    private String creator;
+    /**
+     * 创建人
+     */
+    transient private String creator;
 
-    private Date createTime;
+    /**
+     * 创建时间
+     */
+    transient private Date createTime;
 }
