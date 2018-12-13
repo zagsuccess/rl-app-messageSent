@@ -104,7 +104,6 @@ public class DubanSupervisionController {
     //查询所有的区河长办
     @GetMapping("/selectPersonnel")
     public Result<List<RegionDTO>> selectPersonnel(){
-
         return ResponseMsgUtil.success(dubanSupervisionService.districtlist());
     }
 
@@ -297,7 +296,7 @@ public class DubanSupervisionController {
     @GetMapping("/userinfo")
     public Result<String> userinfo(HttpServletRequest request){
         //获取当前用户信息
-        UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
+            UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
         if(userDTO == null ){
             return ResponseMsgUtil.failure("获取用户失败");
         }

@@ -148,8 +148,8 @@ public class MsWorkBulletinController  {
         if (msWorkBulletinDTO.getAccessoryURL() != null && !"".equals(msWorkBulletinDTO.getAccessoryURL())) {
             String[] str = msWorkBulletinDTO.getAccessoryURL().split("_");
             ren = str[1];
-            accessoryURL = FmConfig.getAgentUrl()+url;
-            pdfURL = FmConfig.getAgentUrl()+pdf;
+            accessoryURL = url;
+            pdfURL = pdf;
         }
 
         msWorkBulletinDTO.setAccessoryURL(accessoryURL);
@@ -318,7 +318,7 @@ public class MsWorkBulletinController  {
 
         String[] filesArr = accessoryUrl.split(",");
         for (String filePath : filesArr) {
-            String suffix = accessoryUrl.substring(filePath.lastIndexOf(".") + 1);
+            String suffix = filePath.substring(filePath.lastIndexOf(".") + 1);
 
             if (suffix.contains("pdf")) {
                 pdfURL.append(filePath).append(",");
