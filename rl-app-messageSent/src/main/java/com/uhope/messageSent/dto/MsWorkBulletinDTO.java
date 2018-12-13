@@ -2,6 +2,9 @@ package com.uhope.messageSent.dto;
 
 import com.uhope.messageSent.domain.MsWorkBulletin;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 工作简报表-DTO数据传输对象类
  * @author  wanglijun
@@ -26,6 +29,12 @@ public class MsWorkBulletinDTO extends MsWorkBulletin {
      */
     private String regionName;
 
+    /**
+     *  文件的 预览地址与下载地址对应
+     */
+    private List<Map<String, String>> fileList;
+
+
     public String getDownurl() {
         return downurl;
     }
@@ -48,5 +57,13 @@ public class MsWorkBulletinDTO extends MsWorkBulletin {
 
     public void setRegionName(String regionName) {
         this.regionName = regionName;
+    }
+
+    public List<Map<String, String>> getFileList() {
+        return fileList;
+    }
+
+    public void setFileList(List<Map<String, String>> fileList) {
+        this.fileList = fileList;
     }
 }
