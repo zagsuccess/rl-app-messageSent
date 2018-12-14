@@ -39,9 +39,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.lang.String;
 
 /**
@@ -71,12 +69,11 @@ public class MsSentDynamisController {
     @PostMapping("/add")
     public Result<MsSentDynamis> add(@RequestParam String title,
                                      @RequestParam String weekId,
-                                     @RequestParam String region,
                                      @RequestParam String deadline,
                                      String accessoryUrl,
-                                     @RequestParam String patrolCondition,
-                                     @RequestParam String meetingCondition,
-                                     @RequestParam String problemSolvingCondition,
+                                     String patrolCondition,
+                                     String meetingCondition,
+                                     String problemSolvingCondition,
                                      String otherCondition,
                                      HttpServletRequest request
     ) {
@@ -87,16 +84,14 @@ public class MsSentDynamisController {
         msSentDynamis.setWeekid(weekId);
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
         msSentDynamis.setBeginTime(simpleDateFormat.format(new Date()));
-        msSentDynamis.setRegion(region);
+        msSentDynamis.setRegion(msWorkReportsService.selectRegion(userDTO.getRegionId()));
         msSentDynamis.setDeadline(deadline);
         msSentDynamis.setInitiator(initiator);
-        msSentDynamis.setAccessoryUrl(accessoryUrl);
-        String tempString=accessoryUrl.substring(accessoryUrl.lastIndexOf(".")+1);
-        String pdfUrl=accessoryUrl;
-        if(tempString.contains("doc")){
-            pdfUrl=converter.startConverter(accessoryUrl);
+
+        if (accessoryUrl != null && !"".equals(accessoryUrl)) {
+            msSentDynamis.setAccessoryUrl(accessoryUrl);
+            msSentDynamis.setPdfUrl(getPdfURL(accessoryUrl));
         }
-        msSentDynamis.setPdfUrl(pdfUrl);
         msSentDynamis.setOtherCondition(otherCondition);
         msSentDynamis.setSentState(2);
         msSentDynamis.setAcceptState(3);
@@ -108,17 +103,34 @@ public class MsSentDynamisController {
         return ResponseMsgUtil.success(msSentDynamis);
     }
 
-    /*//保存且上报
+    @PutMapping("/update")
+    public Result<MsSentDynamis> update(@RequestParam String id,String title,String deadline,
+                                        String accessoryUrl,String patrolCondition,String meetingCondition,
+                                        String problemSolvingCondition,String otherCondition) {
+        MsSentDynamis msSentDynamis=new MsSentDynamis();
+        msSentDynamis.setId(id);
+        msSentDynamis.setTitle(title);
+        msSentDynamis.setDeadline(deadline);
+        msSentDynamis.setAccessoryUrl(accessoryUrl);
+        msSentDynamis.setPatrolCondition(patrolCondition);
+        msSentDynamis.setMeetingCondition(meetingCondition);
+        msSentDynamis.setProblemSolvingCondition(problemSolvingCondition);
+        msSentDynamis.setOtherCondition(otherCondition);
+        msSentDynamisService.update(msSentDynamis);
+        return ResponseMsgUtil.success(msSentDynamis);
+    }
+
+    //保存且上报
     @PostMapping("/addAndSave")
     public Result<MsSentDynamis> addAndSave(@RequestParam String title,
-                                     @RequestParam String weekId,
-                                     @RequestParam String region,
-                                     @RequestParam String deadline,
-                                     String accessoryUrl,
-                                     @RequestParam String patrolCondition,
-                                     @RequestParam String meetingCondition,
-                                     @RequestParam String problemSolvingCondition,
-                                     HttpServletRequest request
+                                            @RequestParam String weekId,
+                                            @RequestParam String deadline,
+                                                          String accessoryUrl,
+                                                          String patrolCondition,
+                                                          String meetingCondition,
+                                                          String problemSolvingCondition,
+                                                          String otherCondition,
+                                                          HttpServletRequest request
     ) {
         UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
         String initiator=userDTO.getName();
@@ -127,18 +139,25 @@ public class MsSentDynamisController {
         msSentDynamis.setWeekid(weekId);
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
         msSentDynamis.setBeginTime(simpleDateFormat.format(new Date()));
-        msSentDynamis.setRegion(region);
+        msSentDynamis.setRegion(msWorkReportsService.selectRegion(userDTO.getRegionId()));
         msSentDynamis.setDeadline(deadline);
         msSentDynamis.setInitiator(initiator);
-        msSentDynamis.setAccessoryUrl(accessoryUrl);
+
+        if (accessoryUrl != null && !"".equals(accessoryUrl)) {
+            msSentDynamis.setAccessoryUrl(accessoryUrl);
+            msSentDynamis.setPdfUrl(getPdfURL(accessoryUrl));
+        }
+
         msSentDynamis.setSentState(1);
         msSentDynamis.setAcceptState(3);
+        msSentDynamis.setReplyState(2);
+        msSentDynamis.setOtherCondition(otherCondition);
         msSentDynamis.setPatrolCondition(patrolCondition);
         msSentDynamis.setMeetingCondition(meetingCondition);
         msSentDynamis.setProblemSolvingCondition(problemSolvingCondition);
         msSentDynamisService.insert(msSentDynamis);
         return ResponseMsgUtil.success(msSentDynamis);
-    }*/
+    }
 
     @PostMapping("/upload")
     public Result<List<String>> upload(@RequestParam(required = true) MultipartFile files[]) throws IOException {
@@ -206,28 +225,42 @@ public class MsSentDynamisController {
         return ResponseMsgUtil.success(null);
     }
 
-
-    @PutMapping("/update")
-    public Result<MsSentDynamis> update(MsSentDynamis msSentDynamis) {
-        msSentDynamisService.update(msSentDynamis);
-        return ResponseMsgUtil.success(msSentDynamis);
-    }
-
-
-
-
     @GetMapping("/detail")
     public Result<MsSentDynamisDTO> detail(@RequestParam String id) {
         MsSentDynamis msSentDynamis = msSentDynamisService.get(id);
-        String url=msSentDynamis.getAccessoryUrl();
-        String pdf=msSentDynamis.getPdfUrl();
         MsSentDynamisDTO msSentDynamisDTO =new MsSentDynamisDTO();
+        String url = msSentDynamis.getAccessoryUrl();
+        String pdf = msSentDynamis.getPdfUrl();
         BeanUtils.copyProperties(msSentDynamis,msSentDynamisDTO);
-        String[] str=msSentDynamisDTO.getAccessoryUrl().split("_");
-        String ren = str[1];
-        msSentDynamisDTO.setAccessoryUrl(FmConfig.getAgentUrl()+url);
-        msSentDynamisDTO.setPdfUrl(FmConfig.getAgentUrl()+pdf);
+        String ren = "";
+        String accessoryUrl = "";
+        String pdfUrl = "";
+        List<Map<String, String>> fileList = new ArrayList<Map<String, String>>();
+        if (msSentDynamisDTO.getAccessoryUrl() != null && !"".equals(msSentDynamisDTO.getAccessoryUrl())) {
+            String[] str = msSentDynamisDTO.getAccessoryUrl().split("_");
+            ren = str[1];
+            accessoryUrl = url;
+            pdfUrl = pdf;
+
+            // 将文件的预览地址与下载地址对应
+            String[] accessoryURLArr = accessoryUrl.split(",");
+            String[] pdfURLArr = pdfUrl.split(",");
+
+            int totalLength = accessoryURLArr.length <= pdfURLArr.length ? accessoryURLArr.length : pdfURLArr.length;
+
+            for (int i = 0; i < totalLength; i++) {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("previewURL", pdfURLArr[i]);
+                map.put("downloadURL", accessoryURLArr[i]);
+                fileList.add(map);
+            }
+
+        }
+
+        msSentDynamisDTO.setAccessoryUrl(accessoryUrl);
+        msSentDynamisDTO.setPdfUrl(pdfUrl);
         msSentDynamisDTO.setRen(ren);
+        msSentDynamisDTO.setFileList(fileList);
         return ResponseMsgUtil.success(msSentDynamisDTO);
     }
 
@@ -280,7 +313,7 @@ public class MsSentDynamisController {
 
     //合并提醒
     @GetMapping("/judge")
-    public Result<String>judge(@RequestParam String reportId,
+    public Result<Integer>judge(@RequestParam String reportId,
                                Integer sentState,
                                String region,
                                Integer acceptState){
@@ -299,10 +332,10 @@ public class MsSentDynamisController {
             criteria.andCondition("weekid like '%" + reportId+"%'");
         }
         List<MsSentDynamis> list = msSentDynamisService.findByCondition(condition);
-        String judgeResult="各区域已上报";
+        Integer judgeResult=1;
         for (MsSentDynamis msSentDynamis:list){
             if (msSentDynamis.getSentState()==2){
-                judgeResult="存在未上报区域";
+                judgeResult=2;
                 return ResponseMsgUtil.success(judgeResult);
             }
         }
@@ -445,6 +478,34 @@ public class MsSentDynamisController {
             document.close();
         }
         return ResponseMsgUtil.success();
+    }
+
+    /**
+     *  获取对应的 pdfURL 字段值
+     * @param accessoryUrl
+     * @return
+     */
+    public String getPdfURL(String accessoryUrl) {
+
+        String pdfURLStr = "";
+        StringBuffer pdfURL = new StringBuffer();
+
+        String[] filesArr = accessoryUrl.split(",");
+        for (String filePath : filesArr) {
+            String suffix = filePath.substring(filePath.lastIndexOf(".") + 1);
+
+            if (suffix.contains("pdf")) {
+                pdfURL.append(filePath).append(",");
+            } else {
+                pdfURL.append(converter.startConverter(filePath)).append(",");
+            }
+        }
+
+        if (pdfURL.length() > 0) {
+            pdfURLStr = pdfURL.substring(0, pdfURL.length() - 1);
+        }
+
+        return pdfURLStr;
     }
 }
 

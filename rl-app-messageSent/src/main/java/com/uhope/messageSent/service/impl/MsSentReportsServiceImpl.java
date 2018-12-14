@@ -8,6 +8,7 @@ import com.uhope.core.AbstractService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.lang.String;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -30,5 +31,10 @@ public class MsSentReportsServiceImpl extends AbstractService<MsSentReports, MsS
     @Override
     public MsSentReports findByWorkId(String id) {
         return msSentReportsMapper.findByWorkId(id);
+    }
+
+    @Override
+    public List<MsSentReports> selectByRegion(String region) {
+        return msSentReportsMapper.selectByRegion(region);
     }
 }

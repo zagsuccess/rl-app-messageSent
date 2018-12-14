@@ -117,7 +117,7 @@ public class MsWeekDynamicController {
             Condition condition = new Condition(MsWorkReports.class);
             Example.Criteria criteria = condition.createCriteria();
             if (beginTime != null && beginTime != "") {
-                criteria.andLike("begionTime",beginTime);
+                criteria.andLike("beginTime",beginTime);
             }
             if (deadline != null && deadline != "") {
                 criteria.andLike("deadline",deadline);
@@ -129,8 +129,8 @@ public class MsWeekDynamicController {
             if (title != null && title !="") {
                 criteria.andLike("title",title);
             }
-            criteria.andLike("initiator",userDTO.getName());
             List<MsWeekDynamic> list = msWeekDynamicService.findByCondition(condition);
+
             for (MsWeekDynamic msWeekDynamic:list
             ) {
                 msWeekDynamic.setDirection("发起");
@@ -154,10 +154,8 @@ public class MsWeekDynamicController {
             if (deadline != null && deadline != "") {
                 criteria.andLike("deadline",deadline);
             }
-            //String sentUnit2="天津市"+sentUnit;
             if (sentUnit != null && sentUnit !="") {
                 criteria.andCondition("sent_region like '%" + sentUnit+"%'");
-                /*criteria.andLike("sentRegion",sentUnit);*/
             }
             //查询得到下发区域包含目前登录账号区域的list
             List<MsWeekDynamic> list = msWeekDynamicService.findByCondition(condition);
@@ -173,36 +171,63 @@ public class MsWeekDynamicController {
                 if (msSentDynamis==null){
                     //weatherSend(1.已上报  2.未上报 3.已退回)
                     msWeekDynamic.setWeatherSent(2);
-                    msWeekDynamic.setReplyState(2);
+                    msWeekDynamic.setReplyState(3);
                     if (sentState != null && sentState==2){
                         list1.add(msWeekDynamic);
                     }
                 }
                 if (msSentDynamis!=null){
+                    //getAcceptState(1.已采纳  2.未采纳 3.无操作)
+                    Integer i=msSentDynamis.getAcceptState();
                     msWeekDynamic.setReplyState(1);
                     //weatherSend(1.已上报  2.未上报 3.已退回)
                     //sentState(1.已上报  2.未上报 3.已退回)
                     if (msSentDynamis.getSentState()==1){
                         msWeekDynamic.setWeatherSent(1);
+                        if (i==1){
+                            msWeekDynamic.setWeatherAccept(1);
+                        }
+                        if (i==2){
+                            msWeekDynamic.setWeatherAccept(2);
+                        }
+                        if (i==3){
+                            msWeekDynamic.setWeatherAccept(3);
+                        }
                         if (sentState!= null && sentState ==1){
+
                             list1.add(msWeekDynamic);
                         }
                     }
                     if (msSentDynamis.getSentState()==3){
                         msWeekDynamic.setWeatherSent(3);
+                        if (i==1){
+                            msWeekDynamic.setWeatherAccept(1);
+                        }
+                        if (i==2){
+                            msWeekDynamic.setWeatherAccept(2);
+                        }
+                        if (i==3){
+                            msWeekDynamic.setWeatherAccept(3);
+                        }
                         if (sentState!= null && sentState ==3){
                             list1.add(msWeekDynamic);
                         }
                     }
-                    //getAcceptState(1.已采纳  2.未采纳 3.无操作)
-                    Integer i=msSentDynamis.getAcceptState();
-                    if (i==1){
-                        msWeekDynamic.setWeatherAccept(1);
+                    if (msSentDynamis.getSentState()==2){
+                        msWeekDynamic.setWeatherSent(2);
+                        if (i==1){
+                            msWeekDynamic.setWeatherAccept(1);
+                        }
+                        if (i==2){
+                            msWeekDynamic.setWeatherAccept(2);
+                        }
+                        if (i==3){
+                            msWeekDynamic.setWeatherAccept(3);
+                        }
+                        if (sentState!= null && sentState ==2){
+                            list1.add(msWeekDynamic);
+                        }
                     }
-                    if (i==2){
-                        msWeekDynamic.setWeatherAccept(2);
-                    }
-                    //weatherAccpect(1.已采纳  2.未采纳 3.无操作)
                 }
             }
             if (list1.size()==0){

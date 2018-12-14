@@ -28,9 +28,7 @@ import tk.mybatis.mapper.entity.Example;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.lang.String;
 
 /**
@@ -57,32 +55,59 @@ public class MsSentReportsController {
 
     //仅仅保存不上报
     @PostMapping("/add")
-    public Result<MsSentReports> add(@RequestParam String title,
+    public Result<MsSentReports> add(
                                      @RequestParam String reportId,
-                                     @RequestParam String region,
-                                     @RequestParam String deadline,
                                       String accessoryUrl,
                                      @RequestParam String briefDescription,
                                      HttpServletRequest request
                                      ) {
         UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
         String initiator=userDTO.getName();
+        MsWorkReports msWorkReports=msWorkReportsService.get(reportId);
         MsSentReports msSentReports=new MsSentReports();
-        msSentReports.setTitle(title);
+        msSentReports.setTitle(msWorkReports.getTitle());
         msSentReports.setReportId(reportId);
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
-        msSentReports.setBeginTime(simpleDateFormat.format(new Date()));
-        msSentReports.setRegion(region);
-        msSentReports.setDeadline(deadline);
+        msSentReports.setBeginTime(new Date());
+        msSentReports.setRegion(msWorkReportsService.selectRegion(userDTO.getRegionId()));
+        msSentReports.setDeadline(msWorkReports.getDeadline());
         msSentReports.setInitiator(initiator);
-        msSentReports.setAccessoryUrl(accessoryUrl);
-        String tempString=accessoryUrl.substring(accessoryUrl.lastIndexOf(".")+1);
-        String pdfUrl=accessoryUrl;
-        if(tempString.contains("doc")){
-            pdfUrl=converter.startConverter(accessoryUrl);
+
+        if (accessoryUrl != null && !"".equals(accessoryUrl)) {
+            msSentReports.setAccessoryUrl(accessoryUrl);
+            msSentReports.setPdfUrl(getPdfURL(accessoryUrl));
         }
-        msSentReports.setPdfUrl(pdfUrl);
         msSentReports.setSentState(2);
+        msSentReports.setAcceptState(3);
+        msSentReports.setReplyState(1);
+        msSentReports.setBriefDescription(briefDescription);
+        msSentReportsService.insert(msSentReports);
+        return ResponseMsgUtil.success(msSentReports);
+    }
+
+    //保存且上报
+    @PostMapping("/addAndSave")
+    public Result<MsSentReports> addAndSave(
+            @RequestParam String reportId,
+            String accessoryUrl,
+            @RequestParam String briefDescription,
+            HttpServletRequest request
+    ) {
+        UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
+        String initiator=userDTO.getName();
+        MsWorkReports msWorkReports=msWorkReportsService.get(reportId);
+        MsSentReports msSentReports=new MsSentReports();
+        msSentReports.setTitle(msWorkReports.getTitle());
+        msSentReports.setReportId(reportId);
+        msSentReports.setBeginTime(new Date());
+        msSentReports.setRegion(msWorkReportsService.selectRegion(userDTO.getRegionId()));
+        msSentReports.setDeadline(msWorkReports.getDeadline());
+        msSentReports.setInitiator(initiator);
+
+        if (accessoryUrl != null && !"".equals(accessoryUrl)) {
+            msSentReports.setAccessoryUrl(accessoryUrl);
+            msSentReports.setPdfUrl(getPdfURL(accessoryUrl));
+        }
+        msSentReports.setSentState(1);
         msSentReports.setAcceptState(3);
         msSentReports.setReplyState(1);
         msSentReports.setBriefDescription(briefDescription);
@@ -104,33 +129,7 @@ public class MsSentReportsController {
     }
 
 
-    //保存且上报
-    @PostMapping("/addAndSave")
-    public Result<MsSentReports> addAndSave(@RequestParam String title,
-                                     @RequestParam String reportId,
-                                     @RequestParam String region,
-                                     @RequestParam String deadline,
-                                     String accessoryUrl,
-                                     @RequestParam String briefDescription,
-                                     HttpServletRequest request
-    ) {
-        UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
-        String initiator=userDTO.getName();
-        MsSentReports msSentReports=new MsSentReports();
-        msSentReports.setTitle(title);
-        msSentReports.setReportId(reportId);
-        msSentReports.setRegion(region);
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
-        msSentReports.setBeginTime(simpleDateFormat.format(new Date()));
-        msSentReports.setDeadline(deadline);
-        msSentReports.setInitiator(initiator);
-        msSentReports.setAccessoryUrl(accessoryUrl);
-        msSentReports.setSentState(1);
-        msSentReports.setAcceptState(3);
-        msSentReports.setBriefDescription(briefDescription);
-        msSentReportsService.insert(msSentReports);
-        return ResponseMsgUtil.success(msSentReports);
-    }
+
 
 
     @DeleteMapping("/delete")
@@ -163,15 +162,39 @@ public class MsSentReportsController {
     @GetMapping("/detail")
     public Result<MsSentReportsDTO> detail(@RequestParam String id) {
         MsSentReports msSentReports = msSentReportsService.get(id);
-        String url=msSentReports.getAccessoryUrl();
-        String pdf=msSentReports.getPdfUrl();
         MsSentReportsDTO msSentReportsDTO =new MsSentReportsDTO();
+        String url = msSentReports.getAccessoryUrl();
+        String pdf = msSentReports.getPdfUrl();
         BeanUtils.copyProperties(msSentReports,msSentReportsDTO);
-        String[] str=msSentReportsDTO.getAccessoryUrl().split("_");
-        String ren = str[1];
-        msSentReportsDTO.setAccessoryUrl(FmConfig.getAgentUrl()+url);
-        msSentReportsDTO.setPdfUrl(FmConfig.getAgentUrl()+pdf);
+
+        String ren = "";
+        String accessoryUrl = "";
+        String pdfUrl = "";
+        List<Map<String, String>> fileList = new ArrayList<Map<String, String>>();
+        if (msSentReportsDTO.getAccessoryUrl() != null && !"".equals(msSentReportsDTO.getAccessoryUrl())) {
+            String[] str = msSentReportsDTO.getAccessoryUrl().split("_");
+            ren = str[1];
+            accessoryUrl = url;
+            pdfUrl = pdf;
+
+            // 将文件的预览地址与下载地址对应
+            String[] accessoryURLArr = accessoryUrl.split(",");
+            String[] pdfURLArr = pdfUrl.split(",");
+
+            int totalLength = accessoryURLArr.length <= pdfURLArr.length ? accessoryURLArr.length : pdfURLArr.length;
+
+            for (int i = 0; i < totalLength; i++) {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("previewURL", pdfURLArr[i]);
+                map.put("downloadURL", accessoryURLArr[i]);
+                fileList.add(map);
+            }
+
+        }
+        msSentReportsDTO.setAccessoryUrl(accessoryUrl);
+        msSentReportsDTO.setPdfUrl(pdfUrl);
         msSentReportsDTO.setRen(ren);
+        msSentReportsDTO.setFileList(fileList);
         return ResponseMsgUtil.success(msSentReportsDTO);
     }
 
@@ -246,10 +269,7 @@ public class MsSentReportsController {
     }
 
     @PutMapping("/updateAcceptState")
-    public Result<MsSentReports> updateAcceptState(@RequestParam String id,@RequestParam Integer acceptState
-                                                   /*HttpServletRequest request*/) {
-        /*UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
-        String region =msWorkReportsService.selectRegion(userDTO.getRegionId());*/
+    public Result<MsSentReports> updateAcceptState(@RequestParam String id,@RequestParam Integer acceptState) {
         MsSentReports msSentReports = msSentReportsService.get(id);
         msSentReports.setAcceptState(acceptState);
         msSentReportsService.update(msSentReports);
@@ -268,5 +288,33 @@ public class MsSentReportsController {
             list.add(filePath);
         }
         return ResponseMsgUtil.success(list);
+    }
+
+    /**
+     *  获取对应的 pdfURL 字段值
+     * @param accessoryUrl
+     * @return
+     */
+    public String getPdfURL(String accessoryUrl) {
+
+        String pdfURLStr = "";
+        StringBuffer pdfURL = new StringBuffer();
+
+        String[] filesArr = accessoryUrl.split(",");
+        for (String filePath : filesArr) {
+            String suffix = filePath.substring(filePath.lastIndexOf(".") + 1);
+
+            if (suffix.contains("pdf")) {
+                pdfURL.append(filePath).append(",");
+            } else {
+                pdfURL.append(converter.startConverter(filePath)).append(",");
+            }
+        }
+
+        if (pdfURL.length() > 0) {
+            pdfURLStr = pdfURL.substring(0, pdfURL.length() - 1);
+        }
+
+        return pdfURLStr;
     }
 }

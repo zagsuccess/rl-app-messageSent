@@ -2,6 +2,7 @@ package com.uhope.messageSent.web;
 import com.uhope.base.constants.Constant;
 import com.uhope.converter.client.Converter;
 import com.uhope.messageSent.domain.MsMeetingCondition;
+import com.uhope.messageSent.dto.MsMeetingConditionDTO;
 import com.uhope.messageSent.service.MsMeetingConditionService;
 import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
@@ -10,15 +11,18 @@ import com.github.pagehelper.PageInfo;
 import com.uhope.messageSent.utils.CommonUtil;
 import com.uhope.uip.dto.UserDTO;
 import com.uhope.uip.fm.client.FileManagerClient;
+import com.uhope.uip.fm.model.FileItem;
 import com.uhope.uip.service.TokenService;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 import tk.mybatis.mapper.entity.Condition;
 import tk.mybatis.mapper.entity.Example;
 
@@ -30,8 +34,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.lang.String;
 
 /**
@@ -80,6 +83,7 @@ public class MsMeetingConditionController {
                                           @RequestParam String meetingTime,
                                           @RequestParam String topic,
                                           @RequestParam String content,
+                                          String accessoryUrl,
                                           String remark,
                                           HttpServletRequest request
     ) throws ParseException {
@@ -94,6 +98,12 @@ public class MsMeetingConditionController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date utilDate = sdf.parse(meetingTime);
         msMeetingCondition.setMeetingTime(utilDate);
+
+        if (accessoryUrl != null && !"".equals(accessoryUrl)) {
+            msMeetingCondition.setAccessoryUrl(accessoryUrl);
+            msMeetingCondition.setPdfUrl(getPdfURL(accessoryUrl));
+        }
+
         msMeetingCondition.setTopic(topic);
         msMeetingCondition.setContent(content);
         msMeetingCondition.setRemark(remark);
@@ -112,6 +122,7 @@ public class MsMeetingConditionController {
                                              @RequestParam String meetingTime,
                                              @RequestParam String topic,
                                              @RequestParam String content,
+                                             String accessoryUrl,
                                              String remark,
                                              HttpServletRequest request
     ) throws ParseException {
@@ -126,6 +137,14 @@ public class MsMeetingConditionController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date utilDate = sdf.parse(meetingTime);
         msMeetingCondition.setMeetingTime(utilDate);
+
+
+        if (accessoryUrl != null && !"".equals(accessoryUrl)) {
+            msMeetingCondition.setAccessoryUrl(accessoryUrl);
+            msMeetingCondition.setPdfUrl(getPdfURL(accessoryUrl));
+        }
+
+
         msMeetingCondition.setTopic(topic);
         msMeetingCondition.setContent(content);
         msMeetingCondition.setRemark(remark);
@@ -153,7 +172,42 @@ public class MsMeetingConditionController {
     @GetMapping("/detail")
     public Result<MsMeetingCondition> detail(@RequestParam String id) {
         MsMeetingCondition msMeetingCondition = msMeetingConditionService.get(id);
-        return ResponseMsgUtil.success(msMeetingCondition);
+        String url = msMeetingCondition.getAccessoryUrl();
+        String pdf = msMeetingCondition.getPdfUrl();
+        MsMeetingConditionDTO msMeetingConditionDTO = new MsMeetingConditionDTO();
+        BeanUtils.copyProperties(msMeetingCondition, msMeetingConditionDTO);
+        String ren = "";
+        String accessoryUrl = "";
+        String pdfUrl = "";
+        List<Map<String, String>> fileList = new ArrayList<Map<String, String>>();
+
+        if (msMeetingConditionDTO.getAccessoryUrl() != null && !"".equals(msMeetingConditionDTO.getAccessoryUrl())) {
+            String[] str = msMeetingConditionDTO.getAccessoryUrl().split("_");
+            ren = str[1];
+            accessoryUrl = url;
+            pdfUrl = pdf;
+
+            // 将文件的预览地址与下载地址对应
+            String[] accessoryURLArr = accessoryUrl.split(",");
+            String[] pdfURLArr = pdfUrl.split(",");
+
+            int totalLength = accessoryURLArr.length <= pdfURLArr.length ? accessoryURLArr.length : pdfURLArr.length;
+
+            for (int i = 0; i < totalLength; i++) {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("previewURL", pdfURLArr[i]);
+                map.put("downloadURL", accessoryURLArr[i]);
+                fileList.add(map);
+            }
+
+        }
+
+        msMeetingConditionDTO.setAccessoryUrl(accessoryUrl);
+        msMeetingConditionDTO.setPdfUrl(pdfUrl);
+        msMeetingConditionDTO.setRen(ren);
+        msMeetingConditionDTO.setFileList(fileList);
+
+        return ResponseMsgUtil.success(msMeetingConditionDTO);
     }
 
     /**
@@ -331,5 +385,47 @@ public class MsMeetingConditionController {
         }
         return ResponseMsgUtil.success(null);
 
+    }
+
+
+    @PostMapping("/upload")
+    public Result<List<String>> upload(@RequestParam(required = true) MultipartFile files[]) throws IOException {
+        List<String>list=new ArrayList<>();
+        for (int i=0;i<files.length;i++){
+            byte[] bytes = files[i].getBytes();
+            String fileName = files[i].getOriginalFilename();
+            FileItem fileItem = fileManagerClient.upload(bytes, fileName).getData();
+            String filePath = fileItem.getVirtualPath();
+            list.add(filePath);
+        }
+        return ResponseMsgUtil.success(list);
+    }
+
+    /**
+     *  获取对应的 pdfURL 字段值
+     * @param accessoryUrl
+     * @return
+     */
+    public String getPdfURL(String accessoryUrl) {
+
+        String pdfURLStr = "";
+        StringBuffer pdfURL = new StringBuffer();
+
+        String[] filesArr = accessoryUrl.split(",");
+        for (String filePath : filesArr) {
+            String suffix = filePath.substring(filePath.lastIndexOf(".") + 1);
+
+            if (suffix.contains("pdf")) {
+                pdfURL.append(filePath).append(",");
+            } else {
+                pdfURL.append(converter.startConverter(filePath)).append(",");
+            }
+        }
+
+        if (pdfURL.length() > 0) {
+            pdfURLStr = pdfURL.substring(0, pdfURL.length() - 1);
+        }
+
+        return pdfURLStr;
     }
 }

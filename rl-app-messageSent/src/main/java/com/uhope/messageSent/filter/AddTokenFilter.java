@@ -24,7 +24,7 @@ public class AddTokenFilter implements Filter {
     //天津市河长办
     private static final String DEFAULT_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJsb2dpblRpbWUiOjE1NDM4MzI2NTM3NzIsImFwcElkIjoiN2MzOWI0MzFkOTBjNGY5YTgxYTMxN2I3ODdjODQ3NzAiLCJ1c2VySWQiOiJlNGYxMzBhN2FhY2E0MDY1ODhmMWY4NTEyZmI1YjY2YiIsInRlcm1pbmFsVHlwZSI6IldFQiJ9.9Ma-qbm6fgucYSjb5ogRxIGlVa-K3Q1Ca3f_uPVwoKk";
     //河北区河长办
-    /*private static final String DEFAULT_TOKEN="eyJhbGciOiJIUzI1NiJ9.eyJsb2dpblRpbWUiOjE1NDM5MDczNzk1MzcsImFwcElkIjoiN2MzOWI0MzFkOTBjNGY5YTgxYTMxN2I3ODdjODQ3NzAiLCJ1c2VySWQiOiIzZTE3ZjNmMjRhYmU0ZTIwYWMxNjAxYjUzNTZmMGY2NyIsInRlcm1pbmFsVHlwZSI6IldFQiJ9.ZdDqBRX1TICMtWkXdY5MgIYiTXNrM963Jl8Ukenz0VY";*/
+    //private static final String DEFAULT_TOKEN="eyJhbGciOiJIUzI1NiJ9.eyJsb2dpblRpbWUiOjE1NDM5MDczNzk1MzcsImFwcElkIjoiN2MzOWI0MzFkOTBjNGY5YTgxYTMxN2I3ODdjODQ3NzAiLCJ1c2VySWQiOiIzZTE3ZjNmMjRhYmU0ZTIwYWMxNjAxYjUzNTZmMGY2NyIsInRlcm1pbmFsVHlwZSI6IldFQiJ9.ZdDqBRX1TICMtWkXdY5MgIYiTXNrM963Jl8Ukenz0VY";
     private String profilesActive;
 
     public AddTokenFilter(String profilesActive) {

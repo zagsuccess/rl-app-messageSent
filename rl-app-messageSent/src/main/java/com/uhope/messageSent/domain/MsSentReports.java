@@ -1,6 +1,10 @@
 package com.uhope.messageSent.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "ms_sent_reports")
@@ -27,7 +31,9 @@ public class MsSentReports implements Serializable {
     private Integer sentState;
 
     @Column(name = "begin_time")
-    private String beginTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JSONField(format = "yyyy-MM-dd")
+    private Date beginTime;
 
     @Column(name = "accept_state")
     private Integer acceptState;
@@ -245,11 +251,11 @@ public class MsSentReports implements Serializable {
         return sb.toString();
     }
 
-    public String getBeginTime() {
+    public Date getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(String beginTime) {
+    public void setBeginTime(Date beginTime) {
         this.beginTime = beginTime;
     }
 

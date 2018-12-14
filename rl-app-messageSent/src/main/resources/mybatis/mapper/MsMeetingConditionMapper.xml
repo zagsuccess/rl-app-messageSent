@@ -13,6 +13,8 @@
     <result column="category" jdbcType="VARCHAR" property="category" />
     <result column="meeting_time" jdbcType="TIMESTAMP" property="meetingTime" />
     <result column="topic" jdbcType="VARCHAR" property="topic" />
+    <result column="accessory_url" jdbcType="VARCHAR" property="accessoryUrl" />
+    <result column="pdf_url" jdbcType="VARCHAR" property="pdfUrl" />
     <result column="sent_state" jdbcType="INTEGER" property="sentState" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
     <result column="remark" jdbcType="LONGVARCHAR" property="remark" />

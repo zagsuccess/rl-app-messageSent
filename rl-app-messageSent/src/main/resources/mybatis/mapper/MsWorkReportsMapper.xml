@@ -14,12 +14,14 @@
     <result column="initiator" jdbcType="VARCHAR" property="initiator" />
     <result column="send_region" jdbcType="VARCHAR" property="sendRegion" />
     <result column="accrpt_region" jdbcType="VARCHAR" property="accrptRegion" />
+    <result column="brief_description" jdbcType="VARCHAR" property="briefDescription" />
     <result column="weather_sent" jdbcType="INTEGER" property="weatherSent" />
     <result column="weather_accept" jdbcType="INTEGER" property="weatherAccept" />
     <result column="reply_state" jdbcType="INTEGER" property="replyState" />
     <result column="direction" jdbcType="VARCHAR" property="direction" />
     <result column="begin_time" jdbcType="VARCHAR" property="beginTime" />
     <result column="accessory_url" jdbcType="VARCHAR" property="accessoryUrl" />
+    <result column="pdf_url" jdbcType="VARCHAR" property="pdfUrl" />
   </resultMap>
   <select id="selectRegion" resultType="java.lang.String">
     select area_name from md_administrative_region mr where mr.id=#{regionId}

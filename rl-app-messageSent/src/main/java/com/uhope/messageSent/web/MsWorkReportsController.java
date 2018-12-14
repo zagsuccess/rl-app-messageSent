@@ -50,6 +50,9 @@ public class MsWorkReportsController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private Converter converter;
+
 
     @GetMapping("/userinfo")
     public Result<String> userinfo(HttpServletRequest request){
@@ -82,6 +85,7 @@ public class MsWorkReportsController {
                                      @RequestParam String sentTimeStart,
                                      @RequestParam String sentTimeEnd,
                                      @RequestParam String deadline,
+                                     String briefDescription,
                                      String accessoryUrl,
                                      HttpServletRequest request) {
         UserDTO userDTO = CommonUtil.getFeigionServiceResultData(tokenService.getUserDTOByRequest(request));
@@ -93,7 +97,13 @@ public class MsWorkReportsController {
         msWorkReports.setSentRegion(sentRegion);
         msWorkReports.setSentTimeStart(sentTimeStart);
         msWorkReports.setSentTimeEnd(sentTimeEnd);
-        msWorkReports.setAccessoryUrl(accessoryUrl);
+        msWorkReports.setBriefDescription(briefDescription);
+
+        if (accessoryUrl != null && !"".equals(accessoryUrl)) {
+            msWorkReports.setAccessoryUrl(accessoryUrl);
+            msWorkReports.setPdfUrl(getPdfURL(accessoryUrl));
+        }
+
         msWorkReports.setDeadline(deadline);
         msWorkReports.setInitiator(initiator);
         msWorkReportsService.insert(msWorkReports);
@@ -118,15 +128,42 @@ public class MsWorkReportsController {
     @GetMapping("/detail")
     public Result<MsWorkReportsDTO> detail(@RequestParam String id) {
         MsWorkReports msWorkReports = msWorkReportsService.get(id);
-        String url=msWorkReports.getAccessoryUrl();
-        //undercover.setAttand_url(FmConfig.getFmUrl() + name);
+        String url = msWorkReports.getAccessoryUrl();
+        String pdf = msWorkReports.getPdfUrl();
         MsWorkReportsDTO msWorkReportsDTO =new MsWorkReportsDTO();
+        String ren = "";
+        String accessoryUrl = "";
+        String pdfUrl = "";
         BeanUtils.copyProperties(msWorkReports,msWorkReportsDTO);
-        String[] str=msWorkReportsDTO.getAccessoryUrl().split("_");
-        String ren = str[1];
-        msWorkReportsDTO.setAccessoryUrl(FmConfig.getAgentUrl()+url);
-        msWorkReportsDTO.setDownurl(FmConfig.getAgentUrl()+url);
+        List<Map<String, String>> fileList = new ArrayList<Map<String, String>>();
+        if (msWorkReportsDTO.getAccessoryUrl() != null && !"".equals(msWorkReportsDTO.getAccessoryUrl())) {
+            String[] str = msWorkReportsDTO.getAccessoryUrl().split("_");
+            ren = str[1];
+            accessoryUrl = url;
+            pdfUrl = pdf;
+
+            // 将文件的预览地址与下载地址对应
+            String[] accessoryURLArr = accessoryUrl.split(",");
+            String[] pdfURLArr = pdfUrl.split(",");
+
+            int totalLength = accessoryURLArr.length <= pdfURLArr.length ? accessoryURLArr.length : pdfURLArr.length;
+
+            for (int i = 0; i < totalLength; i++) {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("previewURL", pdfURLArr[i]);
+                map.put("downloadURL", accessoryURLArr[i]);
+                fileList.add(map);
+            }
+
+        }
+
+        msWorkReportsDTO.setAccessoryUrl(accessoryUrl);
+        msWorkReportsDTO.setPdfUrl(pdfUrl);
         msWorkReportsDTO.setRen(ren);
+        msWorkReportsDTO.setFileList(fileList);
+
+
+
         return ResponseMsgUtil.success(msWorkReportsDTO);
     }
 
@@ -269,5 +306,33 @@ public class MsWorkReportsController {
             return ResponseMsgUtil.success(pageInfo);
         }
         return ResponseMsgUtil.success(null);
+    }
+
+    /**
+     *  获取对应的 pdfURL 字段值
+     * @param accessoryUrl
+     * @return
+     */
+    public String getPdfURL(String accessoryUrl) {
+
+        String pdfURLStr = "";
+        StringBuffer pdfURL = new StringBuffer();
+
+        String[] filesArr = accessoryUrl.split(",");
+        for (String filePath : filesArr) {
+            String suffix = filePath.substring(filePath.lastIndexOf(".") + 1);
+
+            if (suffix.contains("pdf")) {
+                pdfURL.append(filePath).append(",");
+            } else {
+                pdfURL.append(converter.startConverter(filePath)).append(",");
+            }
+        }
+
+        if (pdfURL.length() > 0) {
+            pdfURLStr = pdfURL.substring(0, pdfURL.length() - 1);
+        }
+
+        return pdfURLStr;
     }
 }

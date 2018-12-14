@@ -13,6 +13,9 @@ public class MsWorkReports implements Serializable {
 
     private String direction;
 
+    @Column(name = "brief_description")
+    private String briefDescription;
+
     @Column(name = "weather_sent")
     private Integer weatherSent;
 
@@ -46,6 +49,9 @@ public class MsWorkReports implements Serializable {
 
     @Column(name = "accessory_url")
     private String accessoryUrl;
+
+    @Column(name = "pdf_url")
+    private String pdfUrl;
 
     private static final long serialVersionUID = 1L;
 
@@ -280,5 +286,21 @@ public class MsWorkReports implements Serializable {
 
     public void setAccessoryUrl(String accessoryUrl) {
         this.accessoryUrl = accessoryUrl;
+    }
+
+    public String getBriefDescription() {
+        return briefDescription;
+    }
+
+    public void setBriefDescription(String briefDescription) {
+        this.briefDescription = briefDescription;
+    }
+
+    public String getPdfUrl() {
+        return pdfUrl;
+    }
+
+    public void setPdfUrl(String pdfUrl) {
+        this.pdfUrl = pdfUrl;
     }
 }

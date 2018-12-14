@@ -36,6 +36,12 @@ public class MsMeetingCondition implements Serializable {
     @Column(name = "sent_state")
     private Integer sentState;
 
+    @Column(name = "accessory_url")
+    private String accessoryUrl;
+
+    @Column(name = "pdf_url")
+    private String pdfUrl;
+
     private String content;
 
     private String remark;
@@ -259,5 +265,21 @@ public class MsMeetingCondition implements Serializable {
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
+    }
+
+    public String getAccessoryUrl() {
+        return accessoryUrl;
+    }
+
+    public void setAccessoryUrl(String accessoryUrl) {
+        this.accessoryUrl = accessoryUrl;
+    }
+
+    public String getPdfUrl() {
+        return pdfUrl;
+    }
+
+    public void setPdfUrl(String pdfUrl) {
+        this.pdfUrl = pdfUrl;
     }
 }

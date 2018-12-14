@@ -55,6 +55,6 @@
     </select>
 
     <select id="selectGradeDedetailed" resultType="string">
-    select GRADEDETAILED from illegal_xize group by GRADEDETAILED
+    select GRADEDETAILED from illegal_xize where GRADEDETAILED is not null group by GRADEDETAILED
   </select>
 </mapper>

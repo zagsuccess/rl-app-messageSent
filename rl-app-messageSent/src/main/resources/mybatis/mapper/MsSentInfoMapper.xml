@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.messageSent.mapper.MsSentInfoMapper">
+    <resultMap id="BaseResultMap" type="com.uhope.messageSent.domain.MsSentInfo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="region" jdbcType="VARCHAR" property="region" />
+        <result column="sent_number" jdbcType="INTEGER" property="sentNumber" />
+        <result column="accept_number" jdbcType="INTEGER" property="acceptNumber" />
+        <result column="return_number" jdbcType="INTEGER" property="returnNumber" />
+    </resultMap>
+    <select id="selectRegion" resultType="java.lang.String">
+        select area_name from md_administrative_region mr where mr.grade=3
+    </select>
+</mapper>

@@ -1,36 +1,39 @@
 package com.uhope.messageSent.dto;
-import com.uhope.messageSent.domain.MsMeetingCondition;
+import com.uhope.messageSent.domain.MsTownstreetCondition;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * 会议制度执行情况表-DTO数据传输对象类
- * @author mengaoran on 2018/11/27
+ * 镇街制度情况表-DTO数据传输对象类
+ * @author zhangaiguo on 2018/12/10
  */
-public class MsMeetingConditionDTO extends MsMeetingCondition {
+public class MsTownstreetConditionDTO extends MsTownstreetCondition {
+    public MsTownstreetConditionDTO() {
+
+    }
 
     /**
      * 下载地址
      */
-    private String downurl;
+    // private String downurl;
     /**
      * 原文件名
      */
-    private String ren;
+    // private String ren;
+
     /**
      * 机构号对应的机构名称
      */
-    private String regionName;
+    // private String regionName;
 
     /**
-     *  文件的 预览地址与下载地址对应
+     *  文件的预览地址与下载地址对应
      */
     private List<Map<String, String>> fileList;
-    public MsMeetingConditionDTO() {
-    }
 
-    public String getDownurl() {
+
+   /* public String getDownurl() {
         return downurl;
     }
 
@@ -52,7 +55,7 @@ public class MsMeetingConditionDTO extends MsMeetingCondition {
 
     public void setRegionName(String regionName) {
         this.regionName = regionName;
-    }
+    }*/
 
     public List<Map<String, String>> getFileList() {
         return fileList;

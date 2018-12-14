@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uhope.messageSent.mapper.MsTownstreetConditionMapper">
+    <resultMap id="BaseResultMap" type="com.uhope.messageSent.domain.MsTownstreetCondition">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="administration_region" jdbcType="VARCHAR" property="administrationRegion" />
+        <result column="administration_level" jdbcType="VARCHAR" property="administrationLevel" />
+        <result column="information_system" jdbcType="INTEGER" property="informationSystem" />
+        <result column="sent_time" jdbcType="TIMESTAMP" property="sentTime" />
+        <result column="execute_circumstance" jdbcType="VARCHAR" property="executeCircumstance" />
+        <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+        <result column="sent_state" jdbcType="INTEGER" property="sentState" />
+        <result column="accessory_url" jdbcType="VARCHAR" property="accessoryURL" />
+        <result column="pdf_url" jdbcType="VARCHAR" property="pdfURL" />
+    </resultMap>
+    <select id="selectRole" resultType="java.lang.String">
+        select name from sm_role sr inner join (select sur.role_id from sm_user_role sur where sur.user_id=#{id}) s on
+     sr.id=s.role_id
+    </select>
+    <select id="selectRegion" resultType="java.lang.String">
+        select area_name from md_administrative_region mr where mr.id=#{regionId}
+    </select>
+    <select id="selectGrade" resultType="java.lang.String">
+        select concat(grade, '') from md_administrative_region mr where mr.id=#{regionId}
+    </select>
+</mapper>

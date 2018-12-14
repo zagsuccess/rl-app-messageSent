@@ -16,7 +16,7 @@
     <result column="sent_state" jdbcType="INTEGER" property="sentState" />
     <result column="accept_state" jdbcType="INTEGER" property="acceptState" />
     <result column="reply_state" jdbcType="INTEGER" property="replyState" />
-    <result column="begin_time" jdbcType="VARCHAR" property="beginTime"/>
+    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime"/>
     <result column="brief_description" jdbcType="LONGVARCHAR" property="briefDescription" />
   </resultMap>
   <select id="findByReportId" resultMap="BaseResultMap">
@@ -24,5 +24,8 @@
   </select>
   <select id="findByWorkId" resultMap="BaseResultMap">
     select * from ms_sent_reports mr where mr.report_id=#{id}
+  </select>
+  <select id="selectByRegion" resultMap="BaseResultMap">
+    select * from ms_sent_reports mr where mr.region=#{region}
   </select>
 </mapper>
