@@ -3,10 +3,12 @@ package com.uhope.supervise.domain;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -87,6 +89,7 @@ public class ShSocialEvaluation implements Serializable {
     /**
      * 联系方式
      */
+    @Transient
     private String contactType;
 
     /**
@@ -103,4 +106,14 @@ public class ShSocialEvaluation implements Serializable {
      * 具体位置
      */
     private String problemPosition;
+
+    /**
+     * 经度
+     */
+    private Double longitude;
+
+    /**
+     * 纬度
+     */
+    private Double latitude;
 }

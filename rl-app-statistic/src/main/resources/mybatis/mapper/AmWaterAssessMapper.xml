@@ -2,16 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.uhope.statistic.mapper.AmWaterAssessMapper" >
   <resultMap id="BaseResultMap" type="com.uhope.statistic.domain.AmWaterAssess" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="rule_name" property="ruleName" jdbcType="VARCHAR" />
-    <result column="param_type" property="paramType" jdbcType="VARCHAR" />
-    <result column="boundary_value" property="boundaryValue" jdbcType="VARCHAR" />
-    <result column="match_rule" property="matchRule" jdbcType="VARCHAR" />
-    <result column="water_quality_type" property="waterQualityType" jdbcType="VARCHAR" />
-    <result column="score_coefficient" property="scoreCoefficient" jdbcType="VARCHAR" />
-    <result column="factor_coefficient" property="factorCoefficient" jdbcType="VARCHAR" />
-    <result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="rule_name" jdbcType="VARCHAR" property="ruleName" />
+    <result column="param_type" jdbcType="VARCHAR" property="paramType" />
+    <result column="max_value" jdbcType="DOUBLE" property="maxValue" />
+    <result column="min_value" jdbcType="DOUBLE" property="minValue" />
+    <result column="water_quality_type" jdbcType="INTEGER" property="waterQualityType" />
+    <result column="score_coefficient" jdbcType="DOUBLE" property="scoreCoefficient" />
+    <result column="factor_coefficient" jdbcType="DOUBLE" property="factorCoefficient" />
+    <result column="sort_order" jdbcType="INTEGER" property="sortOrder" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
 </mapper>

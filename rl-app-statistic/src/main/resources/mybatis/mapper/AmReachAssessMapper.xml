@@ -8,8 +8,8 @@
     <result column="reach_name" property="reachName" jdbcType="VARCHAR" />
     <result column="input_section" property="inputSection" jdbcType="VARCHAR" />
     <result column="output_section" property="outputSection" jdbcType="VARCHAR" />
-    <result column="target_water_quality" property="targetWaterQuality" jdbcType="VARCHAR" />
-    <result column="year_target_water_quality" property="yearTargetWaterQuality" jdbcType="VARCHAR" />
+    <result column="target_water_quality" property="targetWaterQuality" jdbcType="INTEGER" />
+    <result column="year_target_water_quality" property="yearTargetWaterQuality" jdbcType="INTEGER" />
     <result column="is_sewage_factory" property="isSewageFactory" jdbcType="INTEGER" />
     <result column="is_compensation" property="isCompensation" jdbcType="INTEGER" />
     <result column="scoring_rules" property="scoringRules" jdbcType="VARCHAR" />

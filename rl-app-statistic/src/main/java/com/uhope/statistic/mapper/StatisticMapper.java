@@ -1,13 +1,9 @@
 package com.uhope.statistic.mapper;
 
-import com.uhope.statistic.dto.RiverStatisticDTO;
-import com.uhope.statistic.dto.SuperviseDTO;
-import com.uhope.statistic.dto.SurfaceWaterDTO;
-import com.uhope.statistic.dto.WaterQualityDTO;
+import com.uhope.statistic.dto.*;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author: Yang Jiaheng
@@ -84,4 +80,28 @@ public interface StatisticMapper {
      * @return
      */
     List<SuperviseDTO> queryNetworkAcceptance(HashMap<String, Object> hashMap);
+
+    /**
+     * 根据k值列表统计得到n值列表
+     * @param hashMap
+     * @return
+     */
+    Double queryNByK(HashMap<String, Object> hashMap);
+
+    /**
+     * 根据平均浓度查找得到对应水质等级
+     * @param hashMap
+     * @return
+     */
+    Integer queryLevelByC(HashMap<String, Object> hashMap);
+
+    List<KValueDTO> queryKValueList(HashMap<String, Object> hashMap);
+
+    List<KValueDTO> queryCValueList(HashMap<String, Object> hashMap);
+
+    /**
+     * 找一个空的对象列表，用来存放统计的数值
+     * @return
+     */
+    List<SuperviseDTO> listSuperviseDTO();
 }

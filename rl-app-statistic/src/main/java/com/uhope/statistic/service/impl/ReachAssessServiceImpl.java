@@ -35,4 +35,14 @@ public class ReachAssessServiceImpl extends AbstractService<AmReachAssess, AmRea
     public List<String> listSections() {
         return reachAssessMapper.listSections();
     }
+
+    /**
+     * 重写update方法，对象值为null也绑定到数据库中，此方法需要前端传回对象的所有参数
+     * @param model
+     * @return
+     */
+    @Override
+    public int update(AmReachAssess model) {
+        return mapper.updateByPrimaryKey(model);
+    }
 }

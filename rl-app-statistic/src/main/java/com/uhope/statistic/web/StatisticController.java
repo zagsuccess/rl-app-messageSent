@@ -4,9 +4,6 @@ import com.uhope.base.result.ResponseMsgUtil;
 import com.uhope.base.result.Result;
 import com.uhope.statistic.dto.*;
 import com.uhope.statistic.service.StatisticService;
-import com.uhope.uip.service.RoleService;
-import com.uhope.uip.service.TokenService;
-import com.uhope.uip.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,12 +22,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/statistic")
 public class StatisticController {
-    @Autowired
-    private TokenService tokenService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private RoleService roleService;
     @Autowired
     private StatisticService statisticService;
 
