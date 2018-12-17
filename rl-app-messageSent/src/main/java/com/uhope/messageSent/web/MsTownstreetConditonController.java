@@ -141,7 +141,7 @@ public class MsTownstreetConditonController {
         }
 
         msTownstreetCondition.setSentState(1);     // 保存而且上报
-        System.out.println("222222222:"+accessoryUrl+"!!!!!!!!!!!!");
+        // System.out.println("222222222:"+accessoryUrl+"!!!!!!!!!!!!");
         msTownstreetConditionService.insert(msTownstreetCondition);
         return ResponseMsgUtil.success(msTownstreetCondition);
     }
